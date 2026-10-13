@@ -53,8 +53,8 @@ Collegati alla tua stampante tramite SSH ed esegui i seguenti comandi:
 
 ```bash
 cd ~
-git clone https://github.com/mattiadev/klipper-configurator.git
-cd klipper-configurator
+git clone https://github.com/sedimenti-hub/KlifigUI.git
+cd KlifigUI
 chmod +x install.sh
 ./install.sh
 ```
@@ -76,10 +76,10 @@ Puoi abilitare gli aggiornamenti con 1 clic direttamente dall'interfaccia di Mai
 Aggiungi questo blocco in fondo al tuo file `~/printer_data/config/moonraker.conf`:
 
 ```ini
-[update_manager klipper-configurator]
+[update_manager KlifigUI]
 type: git_repo
-path: ~/klipper-configurator
-origin: https://github.com/mattiadev/klipper-configurator.git
+path: ~/KlifigUI
+origin: https://github.com/sedimenti-hub/KlifigUI.git
 primary_branch: main
 is_system_service: False
 ```
@@ -91,7 +91,7 @@ is_system_service: False
 Se desideri rimuovere il configuratore:
 
 ```bash
-cd ~/klipper-configurator
+cd ~/KlifigUI
 chmod +x uninstall.sh
 ./uninstall.sh
 ```

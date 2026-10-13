@@ -3,9 +3,9 @@
 # per abilitare gli aggiornamenti con 1 clic direttamente da Mainsail
 # ====================================================================
 
-[update_manager klipper-configurator]
+[update_manager KlifigUI]
 type: git_repo
-path: ~/klipper-configurator
-origin: https://github.com/mattiadev/klipper-configurator.git
+path: ~/KlifigUI
+origin: https://github.com/sedimenti-hub/KlifigUI.git
 primary_branch: main
 is_system_service: False
