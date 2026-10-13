@@ -91,6 +91,8 @@ if [ -n "$NGINX_CONF_TARGET" ]; then
             print "        alias /var/www/klipper-configurator;"
             print "        index index.html;"
             print "        try_files $uri $uri/ /configurator/index.html;"
+            print "        add_header Cache-Control \"no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0\";"
+            print "        expires -1;"
             print "    }"
             print ""
             inserted=1

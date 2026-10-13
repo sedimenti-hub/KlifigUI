@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=0.3.0">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -1490,10 +1493,10 @@
     <!-- Container Toast Notifiche -->
     <div id="toast-container"></div>
 
-    <!-- Script JS -->
-    <script src="js/klipper-parser.js"></script>
-    <script src="js/default-config.js"></script>
-    <script src="js/moonraker-client.js"></script>
-    <script src="js/app.js"></script>
+    <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
+    <script src="js/klipper-parser.js?v=0.3.0"></script>
+    <script src="js/default-config.js?v=0.3.0"></script>
+    <script src="js/moonraker-client.js?v=0.3.0"></script>
+    <script src="js/app.js?v=0.3.0"></script>
 </body>
 </html>
