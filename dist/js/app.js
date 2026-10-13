@@ -5,10 +5,13 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const APP_VERSION = 'v0.3.0';
+
     // -------------------------------------------------------------------------
     // Stato Applicazione
     // -------------------------------------------------------------------------
     const state = {
+        version: APP_VERSION,
         parser: new KlipperConfigParser(),
         moonraker: new MoonrakerClient(localStorage.getItem('moonraker_url') || ''),
         currentConfigFile: 'printer.cfg',
@@ -23,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     const dom = {
         // Status & Navbar
+        appVersionBadge: document.getElementById('app-version-badge'),
         statusDot: document.getElementById('status-dot'),
         statusText: document.getElementById('status-text'),
         btnConnSettings: document.getElementById('btn-conn-settings'),
@@ -109,6 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Toast
         toastContainer: document.getElementById('toast-container')
     };
+
+    if (dom.appVersionBadge) {
+        dom.appVersionBadge.textContent = APP_VERSION;
+    }
 
     // -------------------------------------------------------------------------
     // Notifiche Floating Toast

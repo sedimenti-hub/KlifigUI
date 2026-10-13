@@ -106,6 +106,31 @@ body {
     text-transform: uppercase;
 }
 
+.version-badge {
+    background-color: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.12);
+}
+
+.version-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #34d399;
+    box-shadow: 0 0 6px #34d399;
+}
+
 .nav-actions {
     display: flex;
     align-items: center;
