@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.0">
+    <link rel="stylesheet" href="css/style.css?v=0.7.1">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -19,7 +19,7 @@
             <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span class="nav-title">Klipper Configurator</span>
                 <span class="nav-badge">Mainsail WebUI</span>
-                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.0</span>
+                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.1</span>
             </div>
         </div>
 
@@ -1109,9 +1109,19 @@
 
                     <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
 
-                    <!-- Parametri PID Hotend -->
-                    <div class="card-title" style="margin-bottom: 0.5rem;">Controllo Temperatura (PID)</div>
-                    <div class="form-row">
+                    <!-- Parametri Controllo Temperatura Hotend -->
+                    <div class="card-title" style="margin-bottom: 0.5rem;">Controllo Temperatura</div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="extruder-control-type">Tipologia di Controllo (control):</label>
+                        <select class="form-control" id="extruder-control-type">
+                            <option value="pid">PID (Regolazione continua proporzionale-integrale-derivativa)</option>
+                            <option value="watermark">Watermark (Controllo isteresi bang-bang on/off)</option>
+                        </select>
+                        <div class="form-helper">Seleziona PID per mantenere una temperatura costante e precisa sull'hotend.</div>
+                    </div>
+
+                    <div class="form-row" id="extruder-pid-fields">
                         <div class="form-group">
                             <label class="form-label" for="extruder-pid-kp">pid_Kp:</label>
                             <input type="number" step="0.001" class="form-control" id="extruder-pid-kp" placeholder="21.527">
@@ -1123,6 +1133,17 @@
                         <div class="form-group">
                             <label class="form-label" for="extruder-pid-kd">pid_Kd:</label>
                             <input type="number" step="0.001" class="form-control" id="extruder-pid-kd" placeholder="108.982">
+                        </div>
+                    </div>
+
+                    <div id="extruder-watermark-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="extruder-max-delta">Tolleranza Isteresi (max_delta):</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.1" class="form-control" id="extruder-max-delta" placeholder="2.0" value="2.0">
+                                <span class="input-unit">°C</span>
+                            </div>
+                            <div class="form-helper">Default di Klipper: 2.0°C. Il riscaldatore viene disattivato quando supera la temperatura target + max_delta.</div>
                         </div>
                     </div>
                 </div>
@@ -1352,7 +1373,7 @@
                         </select>
                     </div>
 
-                    <div class="form-row">
+                    <div class="form-row" id="bed-pid-fields">
                         <div class="form-group">
                             <label class="form-label" for="bed-pid-kp">pid_Kp:</label>
                             <input type="number" step="0.001" class="form-control" id="bed-pid-kp" placeholder="54.027">
@@ -1364,6 +1385,17 @@
                         <div class="form-group">
                             <label class="form-label" for="bed-pid-kd">pid_Kd:</label>
                             <input type="number" step="0.001" class="form-control" id="bed-pid-kd" placeholder="948.182">
+                        </div>
+                    </div>
+
+                    <div id="bed-watermark-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" for="bed-max-delta">Tolleranza Isteresi (max_delta):</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.1" class="form-control" id="bed-max-delta" placeholder="2.0" value="2.0">
+                                <span class="input-unit">°C</span>
+                            </div>
+                            <div class="form-helper">Default di Klipper: 2.0°C. Spegne il piatto quando supera la temperatura target + max_delta.</div>
                         </div>
                     </div>
 
@@ -1858,9 +1890,9 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.7.0"></script>
-    <script src="js/default-config.js?v=0.7.0"></script>
-    <script src="js/moonraker-client.js?v=0.7.0"></script>
-    <script src="js/app.js?v=0.7.0"></script>
+    <script src="js/klipper-parser.js?v=0.7.1"></script>
+    <script src="js/default-config.js?v=0.7.1"></script>
+    <script src="js/moonraker-client.js?v=0.7.1"></script>
+    <script src="js/app.js?v=0.7.1"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.0';
+    const APP_VERSION = 'v0.7.1';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -145,6 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
         extruderRtdReferenceR: document.getElementById('extruder-rtd-reference-r'),
         extruderRtdNumWires: document.getElementById('extruder-rtd-num-wires'),
         extruderRtdFilter: document.getElementById('extruder-rtd-filter'),
+
+        // Controllo Temperatura (Extruder & Bed)
+        extruderControlType: document.getElementById('extruder-control-type'),
+        extruderPidFields: document.getElementById('extruder-pid-fields'),
+        extruderWatermarkFields: document.getElementById('extruder-watermark-fields'),
+        extruderMaxDelta: document.getElementById('extruder-max-delta'),
+        bedControlType: document.getElementById('bed-control-type'),
+        bedPidFields: document.getElementById('bed-pid-fields'),
+        bedWatermarkFields: document.getElementById('bed-watermark-fields'),
+        bedMaxDelta: document.getElementById('bed-max-delta'),
         
         // Calibration Multi-Z Cards
         cardZTilt: document.getElementById('card-z-tilt'),
@@ -736,6 +746,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // -------------------------------------------------------------------------
+    // Controllo Temperatura (PID vs Watermark) per Estrusore e Piatto
+    // -------------------------------------------------------------------------
+    function updateExtruderControlVisibility() {
+        const isPid = !dom.extruderControlType || dom.extruderControlType.value === 'pid';
+        if (dom.extruderPidFields) dom.extruderPidFields.style.display = isPid ? 'flex' : 'none';
+        if (dom.extruderWatermarkFields) dom.extruderWatermarkFields.style.display = isPid ? 'none' : 'block';
+    }
+
+    function updateBedControlVisibility() {
+        const isPid = !dom.bedControlType || dom.bedControlType.value === 'pid';
+        if (dom.bedPidFields) dom.bedPidFields.style.display = isPid ? 'flex' : 'none';
+        if (dom.bedWatermarkFields) dom.bedWatermarkFields.style.display = isPid ? 'none' : 'block';
+    }
+
+    if (dom.extruderControlType) {
+        dom.extruderControlType.addEventListener('change', () => {
+            updateExtruderControlVisibility();
+        });
+    }
+
+    if (dom.bedControlType) {
+        dom.bedControlType.addEventListener('change', () => {
+            updateBedControlVisibility();
+        });
+    }
+
     const probeTypeSelect = document.getElementById('probe-type-select');
     const probeConfigFields = document.getElementById('probe-config-fields');
     const groupProbeControlPin = document.getElementById('group-probe-control-pin');
@@ -1122,9 +1159,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateExtruderSensorSpiVisibility();
 
+        const extCtrl = state.parser.get(ext, 'control', 'pid');
+        if (dom.extruderControlType) dom.extruderControlType.value = extCtrl;
         document.getElementById('extruder-pid-kp').value = state.parser.get(ext, 'pid_Kp', '21.527');
         document.getElementById('extruder-pid-ki').value = state.parser.get(ext, 'pid_Ki', '1.063');
         document.getElementById('extruder-pid-kd').value = state.parser.get(ext, 'pid_Kd', '108.982');
+        if (dom.extruderMaxDelta) dom.extruderMaxDelta.value = state.parser.get(ext, 'max_delta', '2.0');
+        updateExtruderControlVisibility();
 
         // Caricamento Driver Estrusore
         const driverInfo = getDriverSectionName(ext);
@@ -1270,10 +1311,23 @@ document.addEventListener('DOMContentLoaded', () => {
             state.parser.set(ext, 'rtd_use_50Hz_filter', null);
         }
 
-        state.parser.set(ext, 'control', 'pid');
-        state.parser.set(ext, 'pid_Kp', document.getElementById('extruder-pid-kp').value.trim());
-        state.parser.set(ext, 'pid_Ki', document.getElementById('extruder-pid-ki').value.trim());
-        state.parser.set(ext, 'pid_Kd', document.getElementById('extruder-pid-kd').value.trim());
+        const ctrlType = dom.extruderControlType ? dom.extruderControlType.value : 'pid';
+        state.parser.set(ext, 'control', ctrlType);
+        if (ctrlType === 'pid') {
+            const kp = document.getElementById('extruder-pid-kp').value.trim();
+            const ki = document.getElementById('extruder-pid-ki').value.trim();
+            const kd = document.getElementById('extruder-pid-kd').value.trim();
+            state.parser.set(ext, 'pid_Kp', kp || '21.527');
+            state.parser.set(ext, 'pid_Ki', ki || '1.063');
+            state.parser.set(ext, 'pid_Kd', kd || '108.982');
+            state.parser.set(ext, 'max_delta', null);
+        } else {
+            state.parser.set(ext, 'pid_Kp', null);
+            state.parser.set(ext, 'pid_Ki', null);
+            state.parser.set(ext, 'pid_Kd', null);
+            const mDelta = dom.extruderMaxDelta ? dom.extruderMaxDelta.value.trim() : '2.0';
+            state.parser.set(ext, 'max_delta', mDelta || '2.0');
+        }
 
         // Pulisci sezioni driver pregresse per questo estrusore
         for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240', 'tmc2130', 'tmc2660']) {
@@ -1490,7 +1544,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!badge) {
                     badge = document.createElement('span');
                     badge.className = 'modified-badge';
-                    badge.textContent = 'Modificato';
+                    badge.title = 'Parametro modificato';
                     label.appendChild(badge);
                 }
             } else {
@@ -1738,6 +1792,8 @@ document.addEventListener('DOMContentLoaded', () => {
         checkExtField('extruder-pid-kp', 'pid_Kp');
         checkExtField('extruder-pid-ki', 'pid_Ki');
         checkExtField('extruder-pid-kd', 'pid_Kd');
+        checkExtField('extruder-control-type', 'control');
+        checkExtField('extruder-max-delta', 'max_delta');
         checkExtField('extruder-pressure-advance', 'pressure_advance');
 
         // Parametri Sensore SPI & RTD per Estrusore
@@ -1980,10 +2036,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('bed-sensor-pin').value = p.get('heater_bed', 'sensor_pin', '');
         document.getElementById('bed-min-temp').value = p.get('heater_bed', 'min_temp', '0');
         document.getElementById('bed-max-temp').value = p.get('heater_bed', 'max_temp', '110');
-        document.getElementById('bed-control-type').value = p.get('heater_bed', 'control', 'pid');
+        const bedCtrl = p.get('heater_bed', 'control', 'pid');
+        document.getElementById('bed-control-type').value = bedCtrl;
         document.getElementById('bed-pid-kp').value = p.get('heater_bed', 'pid_Kp', '54.027');
         document.getElementById('bed-pid-ki').value = p.get('heater_bed', 'pid_Ki', '0.770');
         document.getElementById('bed-pid-kd').value = p.get('heater_bed', 'pid_Kd', '948.182');
+        if (dom.bedMaxDelta) dom.bedMaxDelta.value = p.get('heater_bed', 'max_delta', '2.0');
+        updateBedControlVisibility();
 
         // 6. MISCELEUS
         document.getElementById('fan-part-pin').value = p.get('fan', 'pin', '');
@@ -2222,10 +2281,20 @@ document.addEventListener('DOMContentLoaded', () => {
         p.set('heater_bed', 'sensor_pin', document.getElementById('bed-sensor-pin').value.trim());
         p.set('heater_bed', 'min_temp', document.getElementById('bed-min-temp').value.trim());
         p.set('heater_bed', 'max_temp', document.getElementById('bed-max-temp').value.trim());
-        p.set('heater_bed', 'control', document.getElementById('bed-control-type').value);
-        p.set('heater_bed', 'pid_Kp', document.getElementById('bed-pid-kp').value.trim());
-        p.set('heater_bed', 'pid_Ki', document.getElementById('bed-pid-ki').value.trim());
-        p.set('heater_bed', 'pid_Kd', document.getElementById('bed-pid-kd').value.trim());
+        const bedCtrl = document.getElementById('bed-control-type').value;
+        p.set('heater_bed', 'control', bedCtrl);
+        if (bedCtrl === 'pid') {
+            p.set('heater_bed', 'pid_Kp', document.getElementById('bed-pid-kp').value.trim() || '54.027');
+            p.set('heater_bed', 'pid_Ki', document.getElementById('bed-pid-ki').value.trim() || '0.770');
+            p.set('heater_bed', 'pid_Kd', document.getElementById('bed-pid-kd').value.trim() || '948.182');
+            p.set('heater_bed', 'max_delta', null);
+        } else {
+            p.set('heater_bed', 'pid_Kp', null);
+            p.set('heater_bed', 'pid_Ki', null);
+            p.set('heater_bed', 'pid_Kd', null);
+            const bedDelta = dom.bedMaxDelta ? dom.bedMaxDelta.value.trim() : '2.0';
+            p.set('heater_bed', 'max_delta', bedDelta || '2.0');
+        }
 
         // 6. MISCELEUS
         p.set('fan', 'pin', document.getElementById('fan-part-pin').value.trim());

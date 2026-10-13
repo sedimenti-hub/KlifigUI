@@ -488,19 +488,14 @@ textarea.is-modified {
 }
 
 .modified-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: #f59e0b;
-    background: rgba(245, 158, 11, 0.16);
-    border: 1px solid rgba(245, 158, 11, 0.4);
-    padding: 0.1rem 0.45rem;
-    border-radius: 999px;
-    margin-left: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #f59e0b;
+    box-shadow: 0 0 7px #f59e0b;
+    margin-left: 0.45rem;
+    vertical-align: middle;
     animation: fadeInModified 0.2s ease-in-out;
 }
 
