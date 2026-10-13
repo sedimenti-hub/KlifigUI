@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.1';
+    const APP_VERSION = 'v0.7.2';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
         currentStepper: 'stepper_x',
         currentExtruder: 'extruder',
         extraMcus: [],
+        extraFans: [],
+        includes: [],
+        leds: [],
         macros: [],
         baselineSnapshot: null
     };
@@ -155,6 +158,43 @@ document.addEventListener('DOMContentLoaded', () => {
         bedPidFields: document.getElementById('bed-pid-fields'),
         bedWatermarkFields: document.getElementById('bed-watermark-fields'),
         bedMaxDelta: document.getElementById('bed-max-delta'),
+
+        // Misceleus Extra Fans
+        btnAddFan: document.getElementById('btn-add-fan'),
+        extraFanListContainer: document.getElementById('extra-fan-list-container'),
+
+        // Misceleus ADXL345
+        checkEnableAdxl: document.getElementById('check-enable-adxl'),
+        adxl345Fields: document.getElementById('adxl345-fields'),
+        adxlCsPin: document.getElementById('adxl-cs-pin'),
+        adxlSpiMode: document.getElementById('adxl-spi-mode'),
+        adxlSpiBusGroup: document.getElementById('adxl-spi-bus-group'),
+        adxlSpiBus: document.getElementById('adxl-spi-bus'),
+        adxlSpiSoftGroup: document.getElementById('adxl-spi-soft-group'),
+        adxlSpiSclk: document.getElementById('adxl-spi-sclk'),
+        adxlSpiMosi: document.getElementById('adxl-spi-mosi'),
+        adxlSpiMiso: document.getElementById('adxl-spi-miso'),
+        adxlAxesMap: document.getElementById('adxl-axes-map'),
+        adxlRate: document.getElementById('adxl-rate'),
+
+        // Misceleus LED
+        btnAddLed: document.getElementById('btn-add-led'),
+        ledListContainer: document.getElementById('led-list-container'),
+
+        // Tab Include
+        btnAddInclude: document.getElementById('btn-add-include'),
+        includeListContainer: document.getElementById('include-list-container'),
+        presetIncludeButtons: document.querySelectorAll('.preset-include-btn'),
+
+        // Calibration Resonance Tester & Z-Offset
+        checkEnableResonanceTester: document.getElementById('check-enable-resonance-tester'),
+        resonanceTesterFields: document.getElementById('resonance-tester-fields'),
+        resAccelChip: document.getElementById('res-accel-chip'),
+        resProbePoints: document.getElementById('res-probe-points'),
+        resAccelPerHz: document.getElementById('res-accel-per-hz'),
+        resMaxSmoothing: document.getElementById('res-max-smoothing'),
+        calibrationZOffset: document.getElementById('calibration-z-offset'),
+        probeZOffset: document.getElementById('probe-z-offset'),
         
         // Calibration Multi-Z Cards
         cardZTilt: document.getElementById('card-z-tilt'),
@@ -796,6 +836,488 @@ document.addEventListener('DOMContentLoaded', () => {
     checkEnableShaper.addEventListener('change', () => {
         shaperFields.style.display = checkEnableShaper.checked ? 'block' : 'none';
     });
+
+    // -------------------------------------------------------------------------
+    // Accelerometro ADXL345 & Resonance Tester
+    // -------------------------------------------------------------------------
+    function updateAdxlSpiModeVisibility() {
+        const isSoft = dom.adxlSpiMode && dom.adxlSpiMode.value === 'software';
+        if (dom.adxlSpiBusGroup) dom.adxlSpiBusGroup.style.display = isSoft ? 'none' : 'block';
+        if (dom.adxlSpiSoftGroup) dom.adxlSpiSoftGroup.style.display = isSoft ? 'flex' : 'none';
+    }
+
+    if (dom.checkEnableAdxl) {
+        dom.checkEnableAdxl.addEventListener('change', () => {
+            if (dom.adxl345Fields) {
+                dom.adxl345Fields.style.display = dom.checkEnableAdxl.checked ? 'block' : 'none';
+            }
+        });
+    }
+
+    if (dom.adxlSpiMode) {
+        dom.adxlSpiMode.addEventListener('change', updateAdxlSpiModeVisibility);
+    }
+
+    if (dom.checkEnableResonanceTester) {
+        dom.checkEnableResonanceTester.addEventListener('change', () => {
+            if (dom.resonanceTesterFields) {
+                dom.resonanceTesterFields.style.display = dom.checkEnableResonanceTester.checked ? 'block' : 'none';
+            }
+        });
+    }
+
+    // Sincronizzazione Z-Offset tra Calibration e Probe
+    if (dom.calibrationZOffset && dom.probeZOffset) {
+        dom.calibrationZOffset.addEventListener('input', () => {
+            dom.probeZOffset.value = dom.calibrationZOffset.value;
+        });
+        dom.probeZOffset.addEventListener('input', () => {
+            dom.calibrationZOffset.value = dom.probeZOffset.value;
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    // Gestione Ventole Aggiuntive (heater_fan, controller_fan, temperature_fan, fan_generic)
+    // -------------------------------------------------------------------------
+    function syncExtraFansFromDom() {
+        if (!dom.extraFanListContainer) return;
+        state.extraFans.forEach((fan, idx) => {
+            const typeSel = dom.extraFanListContainer.querySelector(`.fan-type-select[data-index="${idx}"]`);
+            if (typeSel) fan.type = typeSel.value;
+            const nameInp = dom.extraFanListContainer.querySelector(`.fan-name-input[data-index="${idx}"]`);
+            if (nameInp) fan.name = nameInp.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+            const pinInp = dom.extraFanListContainer.querySelector(`.fan-pin-input[data-index="${idx}"]`);
+            if (pinInp) fan.pin = pinInp.value.trim();
+            const heaterInp = dom.extraFanListContainer.querySelector(`.fan-heater-input[data-index="${idx}"]`);
+            if (heaterInp) fan.heater = heaterInp.value.trim();
+            const heaterTempInp = dom.extraFanListContainer.querySelector(`.fan-heater-temp-input[data-index="${idx}"]`);
+            if (heaterTempInp) fan.heater_temp = heaterTempInp.value.trim();
+            const stepperInp = dom.extraFanListContainer.querySelector(`.fan-stepper-input[data-index="${idx}"]`);
+            if (stepperInp) fan.stepper = stepperInp.value.trim();
+            const sensTypeInp = dom.extraFanListContainer.querySelector(`.fan-sens-type-input[data-index="${idx}"]`);
+            if (sensTypeInp) fan.sensor_type = sensTypeInp.value.trim();
+            const sensPinInp = dom.extraFanListContainer.querySelector(`.fan-sens-pin-input[data-index="${idx}"]`);
+            if (sensPinInp) fan.sensor_pin = sensPinInp.value.trim();
+            const targetTempInp = dom.extraFanListContainer.querySelector(`.fan-target-temp-input[data-index="${idx}"]`);
+            if (targetTempInp) fan.target_temp = targetTempInp.value.trim();
+            const maxPowerInp = dom.extraFanListContainer.querySelector(`.fan-max-power-input[data-index="${idx}"]`);
+            if (maxPowerInp) fan.max_power = maxPowerInp.value.trim();
+        });
+    }
+
+    function renderExtraFans() {
+        if (!dom.extraFanListContainer) return;
+        dom.extraFanListContainer.innerHTML = '';
+
+        if (state.extraFans.length === 0) {
+            dom.extraFanListContainer.innerHTML = `
+                <div style="text-align: center; padding: 1.25rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;">Nessuna ventola ausiliaria aggiuntiva configurata.</p>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-fan">
+                        + Aggiungi una ventola ausiliaria (es. dissipatore hotend, box elettronica, camera)
+                    </button>
+                </div>
+            `;
+            const btnEmpty = document.getElementById('btn-empty-add-fan');
+            if (btnEmpty) btnEmpty.addEventListener('click', addExtraFan);
+            return;
+        }
+
+        state.extraFans.forEach((fan, index) => {
+            const card = document.createElement('div');
+            card.className = 'extra-fan-card';
+            card.style.cssText = 'padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 0.75rem;';
+
+            let extraHtml = '';
+            if (fan.type === 'heater_fan') {
+                extraHtml = `
+                    <div class="form-row" style="margin-top: 0.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Riscaldatore Associato (heater):</label>
+                            <input type="text" class="form-control fan-heater-input" data-index="${index}" placeholder="extruder" value="${fan.heater || 'extruder'}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Temperatura Attivazione (heater_temp):</label>
+                            <input type="number" step="1" class="form-control fan-heater-temp-input" data-index="${index}" placeholder="50.0" value="${fan.heater_temp || '50.0'}">
+                        </div>
+                    </div>
+                `;
+            } else if (fan.type === 'controller_fan') {
+                extraHtml = `
+                    <div class="form-row" style="margin-top: 0.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Stepper da Monitorare (stepper):</label>
+                            <input type="text" class="form-control fan-stepper-input" data-index="${index}" placeholder="stepper_x, stepper_y" value="${fan.stepper || ''}">
+                            <div class="form-helper">Lascia vuoto per monitorare tutti i motori.</div>
+                        </div>
+                    </div>
+                `;
+            } else if (fan.type === 'temperature_fan') {
+                extraHtml = `
+                    <div class="form-row" style="margin-top: 0.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Tipo Sensore (sensor_type):</label>
+                            <input type="text" class="form-control fan-sens-type-input" data-index="${index}" placeholder="EPCOS 100K B57560G104F" value="${fan.sensor_type || 'EPCOS 100K B57560G104F'}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Pin Sensore (sensor_pin):</label>
+                            <input type="text" class="form-control fan-sens-pin-input" data-index="${index}" placeholder="PC5" value="${fan.sensor_pin || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Temp Target (target_temp):</label>
+                            <input type="number" class="form-control fan-target-temp-input" data-index="${index}" placeholder="45.0" value="${fan.target_temp || '45.0'}">
+                        </div>
+                    </div>
+                `;
+            } else if (fan.type === 'fan_generic') {
+                extraHtml = `
+                    <div class="form-row" style="margin-top: 0.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Potenza Massima (max_power):</label>
+                            <input type="number" step="0.1" min="0" max="1" class="form-control fan-max-power-input" data-index="${index}" placeholder="1.0" value="${fan.max_power || '1.0'}">
+                        </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                    <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem;">
+                        <span>🌀 Ventola [${fan.type} ${fan.name || 'unnamed'}]</span>
+                    </div>
+                    <button type="button" class="btn btn-secondary btn-sm btn-delete-fan" data-index="${index}" style="color: var(--danger); padding: 0.15rem 0.45rem;" title="Rimuovi ventola">
+                        ✕ Elimina
+                    </button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tipologia di Assegnazione Klipper:</label>
+                        <select class="form-control fan-type-select" data-index="${index}">
+                            <option value="heater_fan" ${fan.type === 'heater_fan' ? 'selected' : ''}>heater_fan (Dissipatore Hotend / Riscaldatori)</option>
+                            <option value="controller_fan" ${fan.type === 'controller_fan' ? 'selected' : ''}>controller_fan (Driver Motori / Elettronica)</option>
+                            <option value="temperature_fan" ${fan.type === 'temperature_fan' ? 'selected' : ''}>temperature_fan (Termoregolata con sensore)</option>
+                            <option value="fan_generic" ${fan.type === 'fan_generic' ? 'selected' : ''}>fan_generic (Ventola ausiliaria manuale M106/G-code)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Identificatore / Nome Ventola:</label>
+                        <input type="text" class="form-control fan-name-input" data-index="${index}" placeholder="hotend_fan" value="${fan.name || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pin di Controllo (pin):</label>
+                        <input type="text" class="form-control fan-pin-input" data-index="${index}" placeholder="PC6" value="${fan.pin || ''}">
+                    </div>
+                </div>
+                ${extraHtml}
+            `;
+            dom.extraFanListContainer.appendChild(card);
+        });
+
+        // Listeners
+        dom.extraFanListContainer.querySelectorAll('.fan-type-select').forEach(sel => {
+            sel.addEventListener('change', (e) => {
+                syncExtraFansFromDom();
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.extraFans[idx].type = e.target.value;
+                renderExtraFans();
+            });
+        });
+
+        dom.extraFanListContainer.querySelectorAll('.fan-name-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.extraFans[idx].name = e.target.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+            });
+        });
+
+        dom.extraFanListContainer.querySelectorAll('.fan-pin-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.extraFans[idx].pin = e.target.value.trim();
+            });
+        });
+
+        dom.extraFanListContainer.querySelectorAll('.btn-delete-fan').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                syncExtraFansFromDom();
+                const idx = parseInt(btn.dataset.index, 10);
+                const removed = state.extraFans.splice(idx, 1)[0];
+                renderExtraFans();
+                showToast(`Ventola [${removed.type} ${removed.name}] rimossa`, 'info');
+                checkDirtyState();
+            });
+        });
+    }
+
+    function addExtraFan() {
+        syncExtraFansFromDom();
+        let defaultName = 'hotend_fan';
+        if (state.extraFans.some(f => f.name === defaultName)) defaultName = 'controller_fan';
+        if (state.extraFans.some(f => f.name === defaultName)) defaultName = 'chamber_fan';
+        if (state.extraFans.some(f => f.name === defaultName)) defaultName = `fan_${state.extraFans.length + 1}`;
+
+        state.extraFans.push({
+            type: 'heater_fan',
+            name: defaultName,
+            pin: '',
+            heater: 'extruder',
+            heater_temp: '50.0',
+            fan_speed: '1.0'
+        });
+        renderExtraFans();
+        showToast(`Aggiunta nuova ventola [heater_fan ${defaultName}]`, 'success');
+        checkDirtyState();
+    }
+
+    if (dom.btnAddFan) dom.btnAddFan.addEventListener('click', addExtraFan);
+
+    // -------------------------------------------------------------------------
+    // Gestione LED (neopixel, output_pin)
+    // -------------------------------------------------------------------------
+    function syncLedsFromDom() {
+        if (!dom.ledListContainer) return;
+        state.leds.forEach((led, idx) => {
+            const typeSel = dom.ledListContainer.querySelector(`.led-type-select[data-index="${idx}"]`);
+            if (typeSel) led.type = typeSel.value;
+            const nameInp = dom.ledListContainer.querySelector(`.led-name-input[data-index="${idx}"]`);
+            if (nameInp) led.name = nameInp.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+            const pinInp = dom.ledListContainer.querySelector(`.led-pin-input[data-index="${idx}"]`);
+            if (pinInp) led.pin = pinInp.value.trim();
+            const chainInp = dom.ledListContainer.querySelector(`.led-chain-input[data-index="${idx}"]`);
+            if (chainInp) led.chain_count = chainInp.value.trim();
+            const orderSel = dom.ledListContainer.querySelector(`.led-order-select[data-index="${idx}"]`);
+            if (orderSel) led.color_order = orderSel.value;
+        });
+    }
+
+    function renderLeds() {
+        if (!dom.ledListContainer) return;
+        dom.ledListContainer.innerHTML = '';
+
+        if (state.leds.length === 0) {
+            dom.ledListContainer.innerHTML = `
+                <div style="text-align: center; padding: 1.25rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;">Nessuna striscia LED o Neopixel configurata.</p>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-led">
+                        + Aggiungi LED / Neopixel (es. StealthBurner, barre LED camera)
+                    </button>
+                </div>
+            `;
+            const btnEmpty = document.getElementById('btn-empty-add-led');
+            if (btnEmpty) btnEmpty.addEventListener('click', addLed);
+            return;
+        }
+
+        state.leds.forEach((led, index) => {
+            const card = document.createElement('div');
+            card.className = 'extra-led-card';
+            card.style.cssText = 'padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 0.75rem;';
+
+            let extraHtml = '';
+            if (led.type === 'neopixel') {
+                extraHtml = `
+                    <div class="form-row" style="margin-top: 0.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Numero LED (chain_count):</label>
+                            <input type="number" step="1" min="1" class="form-control led-chain-input" data-index="${index}" placeholder="1" value="${led.chain_count || '1'}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ordine Colori (color_order):</label>
+                            <select class="form-control led-order-select" data-index="${index}">
+                                <option value="GRB" ${led.color_order === 'GRB' ? 'selected' : ''}>GRB (Standard WS2812B)</option>
+                                <option value="RGB" ${led.color_order === 'RGB' ? 'selected' : ''}>RGB</option>
+                                <option value="GRBW" ${led.color_order === 'GRBW' ? 'selected' : ''}>GRBW (SK6812 RGBW con Bianco)</option>
+                                <option value="RGBW" ${led.color_order === 'RGBW' ? 'selected' : ''}>RGBW</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                    <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem;">
+                        <span>💡 [${led.type} ${led.name || 'unnamed'}]</span>
+                    </div>
+                    <button type="button" class="btn btn-secondary btn-sm btn-delete-led" data-index="${index}" style="color: var(--danger); padding: 0.15rem 0.45rem;" title="Rimuovi LED">
+                        ✕ Elimina
+                    </button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tipo LED:</label>
+                        <select class="form-control led-type-select" data-index="${index}">
+                            <option value="neopixel" ${led.type === 'neopixel' ? 'selected' : ''}>neopixel (Strisce indirizzabili RGB/RGBW WS2812)</option>
+                            <option value="output_pin" ${led.type === 'output_pin' ? 'selected' : ''}>output_pin (LED Monocromatico / Barra PWM)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nome LED:</label>
+                        <input type="text" class="form-control led-name-input" data-index="${index}" placeholder="caselight" value="${led.name || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pin LED:</label>
+                        <input type="text" class="form-control led-pin-input" data-index="${index}" placeholder="PB0" value="${led.pin || ''}">
+                    </div>
+                </div>
+                ${extraHtml}
+            `;
+            dom.ledListContainer.appendChild(card);
+        });
+
+        // Listeners
+        dom.ledListContainer.querySelectorAll('.led-type-select').forEach(sel => {
+            sel.addEventListener('change', (e) => {
+                syncLedsFromDom();
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].type = e.target.value;
+                renderLeds();
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.led-name-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].name = e.target.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.led-pin-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].pin = e.target.value.trim();
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.btn-delete-led').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                syncLedsFromDom();
+                const idx = parseInt(btn.dataset.index, 10);
+                const removed = state.leds.splice(idx, 1)[0];
+                renderLeds();
+                showToast(`LED [${removed.type} ${removed.name}] rimosso`, 'info');
+                checkDirtyState();
+            });
+        });
+    }
+
+    function addLed() {
+        syncLedsFromDom();
+        let defaultName = 'sb_leds';
+        if (state.leds.some(l => l.name === defaultName)) defaultName = 'caselight';
+        if (state.leds.some(l => l.name === defaultName)) defaultName = `led_${state.leds.length + 1}`;
+
+        state.leds.push({
+            type: 'neopixel',
+            name: defaultName,
+            pin: '',
+            chain_count: '1',
+            color_order: 'GRB',
+            initial_red: '0.0',
+            initial_green: '0.0',
+            initial_blue: '0.0',
+            initial_white: '0.0'
+        });
+        renderLeds();
+        showToast(`Aggiunto nuovo LED [neopixel ${defaultName}]`, 'success');
+        checkDirtyState();
+    }
+
+    if (dom.btnAddLed) dom.btnAddLed.addEventListener('click', addLed);
+
+    // -------------------------------------------------------------------------
+    // Gestione File Inclusi ([include])
+    // -------------------------------------------------------------------------
+    function syncIncludesFromDom() {
+        if (!dom.includeListContainer) return;
+        state.includes.forEach((inc, idx) => {
+            const fileInp = dom.includeListContainer.querySelector(`.include-file-input[data-index="${idx}"]`);
+            if (fileInp) inc.file = fileInp.value.trim();
+        });
+    }
+
+    function renderIncludes() {
+        if (!dom.includeListContainer) return;
+        dom.includeListContainer.innerHTML = '';
+
+        if (state.includes.length === 0) {
+            dom.includeListContainer.innerHTML = `
+                <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">Nessun file esterno [include] configurato nel file principale.</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Usa i bottoni rapidi sopra o il pulsante 'Nuovo File Include' per aggiungerne uno.</p>
+                </div>
+            `;
+            return;
+        }
+
+        state.includes.forEach((inc, index) => {
+            const card = document.createElement('div');
+            card.style.cssText = 'display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 0.5rem;';
+
+            card.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
+                    <span style="color: var(--primary-light); font-size: 1.1rem;">📄</span>
+                    <div style="flex: 1;">
+                        <input type="text" class="form-control include-file-input" data-index="${index}" value="${inc.file}" placeholder="nome_file.cfg" style="font-family: monospace;">
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="card-tag" style="margin: 0;">[include ${inc.file}]</span>
+                    <button type="button" class="btn btn-secondary btn-sm btn-delete-include" data-index="${index}" style="color: var(--danger); padding: 0.25rem 0.5rem;" title="Rimuovi include">
+                        ✕
+                    </button>
+                </div>
+            `;
+            dom.includeListContainer.appendChild(card);
+        });
+
+        dom.includeListContainer.querySelectorAll('.include-file-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.includes[idx].file = e.target.value.trim();
+                const tag = e.target.closest('div').parentElement.querySelector('.card-tag');
+                if (tag) tag.textContent = `[include ${state.includes[idx].file}]`;
+            });
+        });
+
+        dom.includeListContainer.querySelectorAll('.btn-delete-include').forEach(btn => {
+            btn.addEventListener('click', () => {
+                syncIncludesFromDom();
+                const idx = parseInt(btn.dataset.index, 10);
+                const removed = state.includes.splice(idx, 1)[0];
+                renderIncludes();
+                showToast(`Rimosso [include ${removed.file}]`, 'info');
+                checkDirtyState();
+            });
+        });
+    }
+
+    function addInclude(filename = '') {
+        syncIncludesFromDom();
+        const f = filename || `custom_${state.includes.length + 1}.cfg`;
+        if (state.includes.some(i => i.file === f)) {
+            showToast(`Il file [include ${f}] è già presente nella lista`, 'warning');
+            return;
+        }
+        state.includes.push({ file: f });
+        renderIncludes();
+        showToast(`Aggiunto [include ${f}]`, 'success');
+        checkDirtyState();
+    }
+
+    if (dom.btnAddInclude) {
+        dom.btnAddInclude.addEventListener('click', () => addInclude(''));
+    }
+
+    if (dom.presetIncludeButtons) {
+        dom.presetIncludeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const f = btn.getAttribute('data-file');
+                if (f) addInclude(f);
+            });
+        });
+    }
+
 
     // Toggle inversione pin con '!'
     const setupInvertPinToggle = (inputEl, checkEl) => {
@@ -1572,12 +2094,18 @@ document.addEventListener('DOMContentLoaded', () => {
         saveCurrentStepperToParser();
         saveCurrentExtruderToParser();
         syncExtraMcusFromDom();
+        syncExtraFansFromDom();
+        syncLedsFromDom();
+        syncIncludesFromDom();
 
         const snap = {
             fields: {},
             steppers: {},
             extruders: {},
             extraMcus: JSON.stringify(state.extraMcus),
+            extraFans: JSON.stringify(state.extraFans),
+            leds: JSON.stringify(state.leds),
+            includes: JSON.stringify(state.includes),
             macros: JSON.stringify(state.macros)
         };
 
@@ -1622,6 +2150,9 @@ document.addEventListener('DOMContentLoaded', () => {
         saveCurrentStepperToParser();
         saveCurrentExtruderToParser();
         syncExtraMcusFromDom();
+        syncExtraFansFromDom();
+        syncLedsFromDom();
+        syncIncludesFromDom();
 
         let totalModifiedCount = 0;
         const tabModified = {};
@@ -1887,7 +2418,25 @@ document.addEventListener('DOMContentLoaded', () => {
             tabModified['tab-host-mcu'] = true;
         }
 
-        // 5. Macro
+        // 5. Extra Fans
+        if (JSON.stringify(state.extraFans) !== snap.extraFans) {
+            totalModifiedCount++;
+            tabModified['tab-misc'] = true;
+        }
+
+        // 6. LEDs
+        if (JSON.stringify(state.leds) !== snap.leds) {
+            totalModifiedCount++;
+            tabModified['tab-misc'] = true;
+        }
+
+        // 7. Includes
+        if (JSON.stringify(state.includes) !== snap.includes) {
+            totalModifiedCount++;
+            tabModified['tab-include'] = true;
+        }
+
+        // 8. Macro
         if (JSON.stringify(state.macros) !== snap.macros) {
             totalModifiedCount++;
             tabModified['tab-macro'] = true;
@@ -2049,11 +2598,83 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('fan-part-kick').value = p.get('fan', 'kick_start_time', '0.5');
         document.getElementById('fan-part-off-below').value = p.get('fan', 'off_below', '0.10');
 
-        const hotendFanSec = p.hasSection('heater_fan hotend_fan') ? 'heater_fan hotend_fan' : (p.hasSection('heater_fan') ? 'heater_fan' : null);
-        if (hotendFanSec) {
-            document.getElementById('fan-hotend-pin').value = p.get(hotendFanSec, 'pin', '');
-            document.getElementById('fan-hotend-temp').value = p.get(hotendFanSec, 'heater_temp', '50.0');
+        // Ventole Aggiuntive Dinamiche (heater_fan, controller_fan, temperature_fan, fan_generic)
+        state.extraFans = [];
+        const fanPrefixes = ['heater_fan', 'controller_fan', 'temperature_fan', 'fan_generic'];
+        for (const secName of p.sectionOrder) {
+            for (const prefix of fanPrefixes) {
+                if (secName === prefix || secName.startsWith(prefix + ' ')) {
+                    const fanName = secName === prefix ? '' : secName.slice(prefix.length + 1).trim();
+                    state.extraFans.push({
+                        type: prefix,
+                        name: fanName || (prefix === 'heater_fan' ? 'hotend_fan' : 'fan_1'),
+                        pin: p.get(secName, 'pin', ''),
+                        heater: p.get(secName, 'heater', 'extruder'),
+                        heater_temp: p.get(secName, 'heater_temp', '50.0'),
+                        stepper: p.get(secName, 'stepper', ''),
+                        sensor_type: p.get(secName, 'sensor_type', 'EPCOS 100K B57560G104F'),
+                        sensor_pin: p.get(secName, 'sensor_pin', ''),
+                        target_temp: p.get(secName, 'target_temp', '45.0'),
+                        max_power: p.get(secName, 'max_power', '1.0'),
+                        fan_speed: p.get(secName, 'fan_speed', '1.0')
+                    });
+                    break;
+                }
+            }
         }
+        renderExtraFans();
+
+        // Accelerometro ADXL345
+        const hasAdxl = p.hasSection('adxl345');
+        if (dom.checkEnableAdxl) {
+            dom.checkEnableAdxl.checked = hasAdxl;
+            if (dom.adxlFields) dom.adxlFields.style.display = hasAdxl ? 'block' : 'none';
+        }
+        if (hasAdxl) {
+            if (dom.adxlCsPin) dom.adxlCsPin.value = p.get('adxl345', 'cs_pin', '');
+            const sclk = p.get('adxl345', 'spi_software_sclk_pin', '');
+            const mosi = p.get('adxl345', 'spi_software_mosi_pin', '');
+            const miso = p.get('adxl345', 'spi_software_miso_pin', '');
+            if (sclk || mosi || miso) {
+                if (dom.adxlSpiMode) dom.adxlSpiMode.value = 'software';
+                if (dom.adxlSpiSclk) dom.adxlSpiSclk.value = sclk;
+                if (dom.adxlSpiMosi) dom.adxlSpiMosi.value = mosi;
+                if (dom.adxlSpiMiso) dom.adxlSpiMiso.value = miso;
+            } else {
+                if (dom.adxlSpiMode) dom.adxlSpiMode.value = 'hardware';
+                if (dom.adxlSpiBus) dom.adxlSpiBus.value = p.get('adxl345', 'spi_bus', '');
+            }
+            if (dom.adxlAxesMap) dom.adxlAxesMap.value = p.get('adxl345', 'axes_map', 'x, y, z');
+            if (dom.adxlRate) dom.adxlRate.value = p.get('adxl345', 'rate', '3200');
+        }
+        updateAdxlSpiModeVisibility();
+
+        // Illuminazione LED & Neopixel
+        state.leds = [];
+        for (const secName of p.sectionOrder) {
+            if (secName.startsWith('neopixel ') || secName === 'neopixel') {
+                const name = secName === 'neopixel' ? 'led' : secName.slice('neopixel '.length).trim();
+                state.leds.push({
+                    type: 'neopixel',
+                    name: name,
+                    pin: p.get(secName, 'pin', ''),
+                    chain_count: p.get(secName, 'chain_count', '1'),
+                    color_order: p.get(secName, 'color_order', 'GRB'),
+                    initial_red: p.get(secName, 'initial_red', '0.0'),
+                    initial_green: p.get(secName, 'initial_green', '0.0'),
+                    initial_blue: p.get(secName, 'initial_blue', '0.0'),
+                    initial_white: p.get(secName, 'initial_white', '0.0')
+                });
+            } else if (secName.startsWith('output_pin ') && (secName.toLowerCase().includes('led') || secName.toLowerCase().includes('light'))) {
+                const name = secName.slice('output_pin '.length).trim();
+                state.leds.push({
+                    type: 'output_pin',
+                    name: name,
+                    pin: p.get(secName, 'pin', '')
+                });
+            }
+        }
+        renderLeds();
 
         document.getElementById('check-virtual-sd').checked = p.hasSection('virtual_sdcard');
         document.getElementById('virtual-sd-path').value = p.get('virtual_sdcard', 'path', '~/printer_data/gcodes');
@@ -2062,7 +2683,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('check-respond').checked = p.hasSection('respond');
         document.getElementById('idle-timeout').value = p.get('idle_timeout', 'timeout', '1800');
 
-        // 7. MACRO
+        // 7. INCLUDE
+        state.includes = [];
+        for (const secName of p.sectionOrder) {
+            if (secName.startsWith('include ') || secName.startsWith('include:')) {
+                const fileName = secName.replace(/^include[:\s]+/, '').trim();
+                if (fileName) {
+                    state.includes.push({ file: fileName });
+                }
+            }
+        }
+        renderIncludes();
+
+        // 8. MACRO
         state.macros = [];
         const macroSections = p.findSectionsByPrefix('gcode_macro');
         for (const sec of macroSections) {
@@ -2079,7 +2712,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         renderMacroList();
 
-        // 8. CALIBRATION
+        // 9. CALIBRATION
         if (p.hasSection('bltouch')) {
             probeTypeSelect.value = 'bltouch';
             document.getElementById('probe-sensor-pin').value = p.get('bltouch', 'sensor_pin', '');
@@ -2136,6 +2769,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('shaper-freq-y').value = p.get('input_shaper', 'shaper_freq_y', '42.0');
         document.getElementById('shaper-type-y').value = p.get('input_shaper', 'shaper_type_y', 'mzv');
         checkEnableShaper.dispatchEvent(new Event('change'));
+
+        // Resonance Tester
+        const hasResTester = p.hasSection('resonance_tester');
+        if (dom.checkEnableResonanceTester) {
+            dom.checkEnableResonanceTester.checked = hasResTester;
+            if (dom.resonanceTesterFields) dom.resonanceTesterFields.style.display = hasResTester ? 'block' : 'none';
+        }
+        if (hasResTester) {
+            if (dom.resAccelChip) dom.resAccelChip.value = p.get('resonance_tester', 'accel_chip', 'adxl345');
+            if (dom.resProbePoints) dom.resProbePoints.value = p.get('resonance_tester', 'probe_points', '100, 100, 20');
+            if (dom.resAccelPerHz) dom.resAccelPerHz.value = p.get('resonance_tester', 'accel_per_hz', '75');
+            if (dom.resMaxSmoothing) dom.resMaxSmoothing.value = p.get('resonance_tester', 'max_smoothing', '');
+        }
+
+        // Z-Offset rapido nello stesso box calibrazione
+        if (dom.calibrationZOffset && dom.probeZOffset) {
+            dom.calibrationZOffset.value = dom.probeZOffset.value || '2.50';
+        }
 
         // Salva snapshot iniziale della configurazione pulita
         clearAllModifiedIndicators();
@@ -2301,11 +2952,75 @@ document.addEventListener('DOMContentLoaded', () => {
         p.set('fan', 'kick_start_time', document.getElementById('fan-part-kick').value);
         p.set('fan', 'off_below', document.getElementById('fan-part-off-below').value);
 
-        const hotendPin = document.getElementById('fan-hotend-pin').value.trim();
-        if (hotendPin) {
-            p.set('heater_fan hotend_fan', 'pin', hotendPin);
-            p.set('heater_fan hotend_fan', 'heater', 'extruder');
-            p.set('heater_fan hotend_fan', 'heater_temp', document.getElementById('fan-hotend-temp').value);
+        // Salva Ventole Ausiliarie (heater_fan, controller_fan, temperature_fan, fan_generic)
+        syncExtraFansFromDom();
+        for (const prefix of ['heater_fan', 'controller_fan', 'temperature_fan', 'fan_generic']) {
+            for (const s of p.sectionOrder.filter(sec => sec === prefix || sec.startsWith(prefix + ' '))) {
+                p.removeSection(s);
+            }
+        }
+        for (const fan of state.extraFans) {
+            if (!fan.name || !fan.name.trim()) continue;
+            const secName = `${fan.type} ${fan.name.trim()}`;
+            if (fan.pin) p.set(secName, 'pin', fan.pin.trim());
+            if (fan.type === 'heater_fan') {
+                p.set(secName, 'heater', fan.heater ? fan.heater.trim() : 'extruder');
+                p.set(secName, 'heater_temp', fan.heater_temp ? fan.heater_temp.trim() : '50.0');
+            } else if (fan.type === 'controller_fan') {
+                if (fan.stepper && fan.stepper.trim()) {
+                    p.set(secName, 'stepper', fan.stepper.trim());
+                }
+            } else if (fan.type === 'temperature_fan') {
+                if (fan.sensor_type) p.set(secName, 'sensor_type', fan.sensor_type.trim());
+                if (fan.sensor_pin) p.set(secName, 'sensor_pin', fan.sensor_pin.trim());
+                if (fan.target_temp) p.set(secName, 'target_temp', fan.target_temp.trim());
+            } else if (fan.type === 'fan_generic') {
+                if (fan.max_power) p.set(secName, 'max_power', fan.max_power.trim());
+            }
+        }
+
+        // Salva Accelerometro ADXL345
+        if (dom.checkEnableAdxl && dom.checkEnableAdxl.checked) {
+            p.set('adxl345', 'cs_pin', dom.adxlCsPin.value.trim());
+            if (dom.adxlSpiMode.value === 'software') {
+                p.set('adxl345', 'spi_software_sclk_pin', dom.adxlSpiSclk.value.trim());
+                p.set('adxl345', 'spi_software_mosi_pin', dom.adxlSpiMosi.value.trim());
+                p.set('adxl345', 'spi_software_miso_pin', dom.adxlSpiMiso.value.trim());
+                p.set('adxl345', 'spi_bus', null);
+            } else {
+                p.set('adxl345', 'spi_bus', dom.adxlSpiBus.value.trim());
+                p.set('adxl345', 'spi_software_sclk_pin', null);
+                p.set('adxl345', 'spi_software_mosi_pin', null);
+                p.set('adxl345', 'spi_software_miso_pin', null);
+            }
+            if (dom.adxlAxesMap.value.trim()) {
+                p.set('adxl345', 'axes_map', dom.adxlAxesMap.value.trim());
+            }
+            if (dom.adxlRate.value.trim()) {
+                p.set('adxl345', 'rate', dom.adxlRate.value.trim());
+            }
+        } else {
+            p.removeSection('adxl345');
+        }
+
+        // Salva LED & Neopixel
+        syncLedsFromDom();
+        for (const s of p.sectionOrder.filter(sec => sec.startsWith('neopixel ') || sec === 'neopixel')) {
+            p.removeSection(s);
+        }
+        for (const led of state.leds) {
+            if (led.type === 'output_pin' && led.name) {
+                p.removeSection(`output_pin ${led.name.trim()}`);
+            }
+        }
+        for (const led of state.leds) {
+            if (!led.name || !led.name.trim()) continue;
+            const secName = `${led.type} ${led.name.trim()}`;
+            if (led.pin) p.set(secName, 'pin', led.pin.trim());
+            if (led.type === 'neopixel') {
+                if (led.chain_count) p.set(secName, 'chain_count', led.chain_count.trim());
+                if (led.color_order) p.set(secName, 'color_order', led.color_order.trim());
+            }
         }
 
         if (document.getElementById('check-virtual-sd').checked) {
@@ -2333,6 +3048,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         p.set('idle_timeout', 'timeout', document.getElementById('idle-timeout').value);
+
+        // 7. INCLUDE
+        syncIncludesFromDom();
+        for (const s of p.sectionOrder.filter(sec => sec.startsWith('include ') || sec.startsWith('include:') || sec === 'include')) {
+            p.removeSection(s);
+        }
+        for (const inc of state.includes) {
+            if (!inc.file || !inc.file.trim()) continue;
+            const secName = `include ${inc.file.trim()}`;
+            p.set(secName, '', null);
+        }
 
         // 7. MACRO
         const existingMacroSecs = p.findSectionsByPrefix('gcode_macro');
@@ -2421,6 +3147,35 @@ document.addEventListener('DOMContentLoaded', () => {
             p.set('input_shaper', 'shaper_type_y', document.getElementById('shaper-type-y').value);
         } else {
             p.removeSection('input_shaper');
+        }
+
+        // Resonance Tester
+        if (dom.checkEnableResonanceTester && dom.checkEnableResonanceTester.checked) {
+            p.set('resonance_tester', 'accel_chip', dom.resAccelChip ? dom.resAccelChip.value.trim() : 'adxl345');
+            p.set('resonance_tester', 'probe_points', dom.resProbePoints ? dom.resProbePoints.value.trim() : '100, 100, 20');
+            if (dom.resAccelPerHz && dom.resAccelPerHz.value.trim()) {
+                p.set('resonance_tester', 'accel_per_hz', dom.resAccelPerHz.value.trim());
+            }
+            if (dom.resMaxSmoothing && dom.resMaxSmoothing.value.trim()) {
+                p.set('resonance_tester', 'max_smoothing', dom.resMaxSmoothing.value.trim());
+            } else {
+                p.set('resonance_tester', 'max_smoothing', null);
+            }
+        } else {
+            p.removeSection('resonance_tester');
+        }
+
+        // Z-Offset Sonda unificato
+        if (dom.calibrationZOffset && dom.probeZOffset) {
+            const calZ = dom.calibrationZOffset.value.trim();
+            if (calZ) {
+                dom.probeZOffset.value = calZ;
+                if (p.hasSection('bltouch')) {
+                    p.set('bltouch', 'z_offset', calZ);
+                } else if (p.hasSection('probe')) {
+                    p.set('probe', 'z_offset', calZ);
+                }
+            }
         }
     }
 
