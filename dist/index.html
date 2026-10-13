@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.6.0">
+    <link rel="stylesheet" href="css/style.css?v=0.7.0">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -19,7 +19,7 @@
             <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span class="nav-title">Klipper Configurator</span>
                 <span class="nav-badge">Mainsail WebUI</span>
-                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.6.0</span>
+                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.0</span>
             </div>
         </div>
 
@@ -971,10 +971,105 @@
                             <option value="Generic 3950">Generic 3950 (Molto comune / Voron)</option>
                             <option value="ATC Semitec 104GT-2">ATC Semitec 104GT-2 (E3D V6 / Prusa)</option>
                             <option value="ATC Semitec 104NT-4-R025H42G">ATC Semitec 104NT (E3D Revo)</option>
-                            <option value="PT1000">PT1000 (Alta temperatura 450°C a 2 fili)</option>
-                            <option value="MAX31865">MAX31865 (Amplificatore SPI)</option>
+                            <option value="PT1000">PT1000 (Analogico a 2 fili su pullup 4.7K)</option>
+                            <option value="MAX31865">MAX31865 (Amplificatore SPI RTD PT100/PT1000)</option>
+                            <option value="MAX6675">MAX6675 (Termocoppia Tipo K SPI)</option>
+                            <option value="MAX31855">MAX31855 (Termocoppia SPI)</option>
+                            <option value="MAX31856">MAX31856 (Termocoppia SPI avanzata)</option>
                             <option value="SliceEngineering 450">Slice Engineering 450</option>
                         </select>
+                    </div>
+
+                    <!-- Parametri Controller Sensore SPI (es. MAX31865, MAX6675, MAX31855) -->
+                    <div id="extruder-sensor-spi-container" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
+                            🔌 Parametri Comunicazione Bus SPI Sensore
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-sensor-spi-mode">Modalità Bus SPI:</label>
+                                <select class="form-control" id="extruder-sensor-spi-mode">
+                                    <option value="hardware">Hardware SPI (Bus MCU)</option>
+                                    <option value="software">Software SPI (Bit-banging)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="extruder-sensor-spi-bus-group">
+                                <label class="form-label" for="extruder-sensor-spi-bus">Bus SPI (spi_bus):</label>
+                                <input type="text" class="form-control" id="extruder-sensor-spi-bus" placeholder="spi1">
+                                <div class="form-helper">Es: spi1, spi2, spi3a, ecc.</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-sensor-spi-speed">Velocità SPI (spi_speed):</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="extruder-sensor-spi-speed" placeholder="4000000" value="4000000">
+                                    <span class="input-unit">Hz</span>
+                                </div>
+                                <div class="form-helper">Default di Klipper: 4000000 (4 MHz).</div>
+                            </div>
+                        </div>
+
+                        <!-- Pin Software SPI (se attiva modalità software) -->
+                        <div class="form-row" id="extruder-sensor-spi-soft-group" style="display: none; margin-top: 0.5rem;">
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-sensor-spi-sclk">SCLK Pin (spi_software_sclk_pin):</label>
+                                <input type="text" class="form-control" id="extruder-sensor-spi-sclk" placeholder="PE12">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-sensor-spi-mosi">MOSI Pin (spi_software_mosi_pin):</label>
+                                <input type="text" class="form-control" id="extruder-sensor-spi-mosi" placeholder="PE14">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-sensor-spi-miso">MISO Pin (spi_software_miso_pin):</label>
+                                <input type="text" class="form-control" id="extruder-sensor-spi-miso" placeholder="PE13">
+                            </div>
+                        </div>
+
+                        <!-- Parametri RTD specifici per MAX31865 -->
+                        <div id="extruder-sensor-rtd-fields" style="display: none; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px dashed rgba(255,255,255,0.08);">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem;">
+                                🌡️ Parametri Sensore RTD (MAX31865)
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="extruder-rtd-nominal-r">Resistenza Nominale a 0°C (rtd_nominal_r):</label>
+                                    <select class="form-control" id="extruder-rtd-nominal-r">
+                                        <option value="100">100 Ω (Sonda PT100)</option>
+                                        <option value="1000">1000 Ω (Sonda PT1000)</option>
+                                    </select>
+                                    <div class="form-helper">100 Ω per PT100 standard, 1000 Ω per PT1000.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="extruder-rtd-reference-r">Resistenza di Riferimento (rtd_reference_r):</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" step="1" class="form-control" id="extruder-rtd-reference-r" placeholder="430" value="430">
+                                        <span class="input-unit">Ω</span>
+                                    </div>
+                                    <div class="form-helper">430 Ω per board PT100 (Adafruit/BTT), 4300 Ω per board PT1000.</div>
+                                </div>
+                            </div>
+
+                            <div class="form-row" style="margin-top: 0.75rem;">
+                                <div class="form-group">
+                                    <label class="form-label" for="extruder-rtd-num-wires">Numero di Fili Sonda (rtd_num_of_wires):</label>
+                                    <select class="form-control" id="extruder-rtd-num-wires">
+                                        <option value="2">2 fili</option>
+                                        <option value="3">3 fili</option>
+                                        <option value="4">4 fili (Massima accuratezza)</option>
+                                    </select>
+                                    <div class="form-helper">Numero di conduttori fisici della sonda RTD.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="extruder-rtd-filter">Filtro Rumore AC (rtd_use_50Hz_filter):</label>
+                                    <select class="form-control" id="extruder-rtd-filter">
+                                        <option value="True">50 Hz (Frequenza Rete Elettrica Italia / Europa)</option>
+                                        <option value="False">60 Hz (Frequenza Rete USA / America)</option>
+                                    </select>
+                                    <div class="form-helper">Filtra le oscillazioni introdotte dalla linea elettrica.</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-row">
@@ -983,7 +1078,7 @@
                             <input type="text" class="form-control" id="extruder-heater-pin" placeholder="PA2">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="extruder-sensor-pin">Sensor Pin:</label>
+                            <label class="form-label" for="extruder-sensor-pin" id="label-extruder-sensor-pin">Sensor Pin (CS per SPI):</label>
                             <input type="text" class="form-control" id="extruder-sensor-pin" placeholder="PA1">
                         </div>
                     </div>
@@ -1763,9 +1858,9 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.6.0"></script>
-    <script src="js/default-config.js?v=0.6.0"></script>
-    <script src="js/moonraker-client.js?v=0.6.0"></script>
-    <script src="js/app.js?v=0.6.0"></script>
+    <script src="js/klipper-parser.js?v=0.7.0"></script>
+    <script src="js/default-config.js?v=0.7.0"></script>
+    <script src="js/moonraker-client.js?v=0.7.0"></script>
+    <script src="js/app.js?v=0.7.0"></script>
 </body>
 </html>

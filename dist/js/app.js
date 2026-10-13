@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.6.0';
+    const APP_VERSION = 'v0.7.0';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -127,6 +127,24 @@ document.addEventListener('DOMContentLoaded', () => {
         extruderGroupSenseResistorField: document.getElementById('extruder-group-sense-resistor-field'),
         extruderDriverSenseResistor: document.getElementById('extruder-driver-sense-resistor'),
         extruderDriverInterpolate: document.getElementById('extruder-driver-interpolate'),
+
+        // Extruder Sensor SPI / RTD
+        extruderSensorType: document.getElementById('extruder-sensor-type'),
+        extruderSensorPinLabel: document.getElementById('label-extruder-sensor-pin'),
+        extruderSensorSpiContainer: document.getElementById('extruder-sensor-spi-container'),
+        extruderSensorSpiMode: document.getElementById('extruder-sensor-spi-mode'),
+        extruderSensorSpiBusGroup: document.getElementById('extruder-sensor-spi-bus-group'),
+        extruderSensorSpiBus: document.getElementById('extruder-sensor-spi-bus'),
+        extruderSensorSpiSpeed: document.getElementById('extruder-sensor-spi-speed'),
+        extruderSensorSpiSoftGroup: document.getElementById('extruder-sensor-spi-soft-group'),
+        extruderSensorSpiSclk: document.getElementById('extruder-sensor-spi-sclk'),
+        extruderSensorSpiMosi: document.getElementById('extruder-sensor-spi-mosi'),
+        extruderSensorSpiMiso: document.getElementById('extruder-sensor-spi-miso'),
+        extruderSensorRtdFields: document.getElementById('extruder-sensor-rtd-fields'),
+        extruderRtdNominalR: document.getElementById('extruder-rtd-nominal-r'),
+        extruderRtdReferenceR: document.getElementById('extruder-rtd-reference-r'),
+        extruderRtdNumWires: document.getElementById('extruder-rtd-num-wires'),
+        extruderRtdFilter: document.getElementById('extruder-rtd-filter'),
         
         // Calibration Multi-Z Cards
         cardZTilt: document.getElementById('card-z-tilt'),
@@ -658,6 +676,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // -------------------------------------------------------------------------
+    // Sensore di Temperatura Estrusore (SPI, MAX31865 RTD, ecc.)
+    // -------------------------------------------------------------------------
+    function isSpiSensorType(type) {
+        if (!type) return false;
+        const t = type.trim();
+        return t === 'MAX31865' || t === 'MAX6675' || t === 'MAX31855' || t === 'MAX31856';
+    }
+
+    function updateExtruderSensorSpiVisibility() {
+        const sensorType = dom.extruderSensorType ? dom.extruderSensorType.value : '';
+        const isSpi = isSpiSensorType(sensorType);
+        const isMax31865 = sensorType === 'MAX31865';
+
+        if (dom.extruderSensorSpiContainer) {
+            dom.extruderSensorSpiContainer.style.display = isSpi ? 'block' : 'none';
+        }
+
+        if (dom.extruderSensorPinLabel) {
+            dom.extruderSensorPinLabel.textContent = isSpi ? 'Sensor Pin / CS Pin (sensor_pin):' : 'Sensor Pin (sensor_pin):';
+        }
+
+        const isSoft = dom.extruderSensorSpiMode && dom.extruderSensorSpiMode.value === 'software';
+        if (dom.extruderSensorSpiBusGroup) {
+            dom.extruderSensorSpiBusGroup.style.display = isSoft ? 'none' : 'block';
+        }
+        if (dom.extruderSensorSpiSoftGroup) {
+            dom.extruderSensorSpiSoftGroup.style.display = isSoft ? 'flex' : 'none';
+        }
+
+        if (dom.extruderSensorRtdFields) {
+            dom.extruderSensorRtdFields.style.display = isMax31865 ? 'block' : 'none';
+        }
+    }
+
+    if (dom.extruderSensorType) {
+        dom.extruderSensorType.addEventListener('change', () => {
+            updateExtruderSensorSpiVisibility();
+        });
+    }
+
+    if (dom.extruderSensorSpiMode) {
+        dom.extruderSensorSpiMode.addEventListener('change', () => {
+            updateExtruderSensorSpiVisibility();
+        });
+    }
+
+    if (dom.extruderRtdNominalR) {
+        dom.extruderRtdNominalR.addEventListener('change', () => {
+            if (dom.extruderRtdReferenceR) {
+                const nom = dom.extruderRtdNominalR.value;
+                if (nom === '1000' && (dom.extruderRtdReferenceR.value === '430' || !dom.extruderRtdReferenceR.value)) {
+                    dom.extruderRtdReferenceR.value = '4300';
+                } else if (nom === '100' && (dom.extruderRtdReferenceR.value === '4300' || !dom.extruderRtdReferenceR.value)) {
+                    dom.extruderRtdReferenceR.value = '430';
+                }
+            }
+        });
+    }
+
     const probeTypeSelect = document.getElementById('probe-type-select');
     const probeConfigFields = document.getElementById('probe-config-fields');
     const groupProbeControlPin = document.getElementById('group-probe-control-pin');
@@ -997,12 +1075,52 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('extruder-filament-dia').value = state.parser.get(ext, 'filament_diameter', '1.750');
         document.getElementById('extruder-pressure-advance').value = state.parser.get(ext, 'pressure_advance', '0.040');
 
-        document.getElementById('extruder-sensor-type').value = state.parser.get(ext, 'sensor_type', 'EPCOS 100K B57560G104F');
+        const extSensorType = state.parser.get(ext, 'sensor_type', 'EPCOS 100K B57560G104F');
+        if (dom.extruderSensorType) {
+            dom.extruderSensorType.value = extSensorType;
+        } else {
+            document.getElementById('extruder-sensor-type').value = extSensorType;
+        }
         document.getElementById('extruder-heater-pin').value = state.parser.get(ext, 'heater_pin', '');
         document.getElementById('extruder-sensor-pin').value = state.parser.get(ext, 'sensor_pin', '');
         document.getElementById('extruder-min-temp').value = state.parser.get(ext, 'min_temp', '0');
         document.getElementById('extruder-max-temp').value = state.parser.get(ext, 'max_temp', '280');
         document.getElementById('extruder-min-extrude').value = state.parser.get(ext, 'min_extrude_temp', '170');
+
+        // Parametri Sensore SPI
+        const extSpiSpeed = state.parser.get(ext, 'spi_speed', '4000000');
+        if (dom.extruderSensorSpiSpeed) dom.extruderSensorSpiSpeed.value = extSpiSpeed || '4000000';
+
+        const extSpiBus = state.parser.get(ext, 'spi_bus', '');
+        const extSpiSoftSclk = state.parser.get(ext, 'spi_software_sclk_pin', '');
+        const extSpiSoftMosi = state.parser.get(ext, 'spi_software_mosi_pin', '');
+        const extSpiSoftMiso = state.parser.get(ext, 'spi_software_miso_pin', '');
+
+        if (extSpiSoftSclk || extSpiSoftMosi || extSpiSoftMiso) {
+            if (dom.extruderSensorSpiMode) dom.extruderSensorSpiMode.value = 'software';
+            if (dom.extruderSensorSpiBus) dom.extruderSensorSpiBus.value = '';
+            if (dom.extruderSensorSpiSclk) dom.extruderSensorSpiSclk.value = extSpiSoftSclk;
+            if (dom.extruderSensorSpiMosi) dom.extruderSensorSpiMosi.value = extSpiSoftMosi;
+            if (dom.extruderSensorSpiMiso) dom.extruderSensorSpiMiso.value = extSpiSoftMiso;
+        } else {
+            if (dom.extruderSensorSpiMode) dom.extruderSensorSpiMode.value = 'hardware';
+            if (dom.extruderSensorSpiBus) dom.extruderSensorSpiBus.value = extSpiBus;
+            if (dom.extruderSensorSpiSclk) dom.extruderSensorSpiSclk.value = '';
+            if (dom.extruderSensorSpiMosi) dom.extruderSensorSpiMosi.value = '';
+            if (dom.extruderSensorSpiMiso) dom.extruderSensorSpiMiso.value = '';
+        }
+
+        // Parametri Sensore RTD (MAX31865)
+        const extRtdNom = state.parser.get(ext, 'rtd_nominal_r', '100');
+        if (dom.extruderRtdNominalR) dom.extruderRtdNominalR.value = extRtdNom;
+        const extRtdRef = state.parser.get(ext, 'rtd_reference_r', extRtdNom === '1000' ? '4300' : '430');
+        if (dom.extruderRtdReferenceR) dom.extruderRtdReferenceR.value = extRtdRef;
+        const extRtdWires = state.parser.get(ext, 'rtd_num_of_wires', '2');
+        if (dom.extruderRtdNumWires) dom.extruderRtdNumWires.value = extRtdWires;
+        const extRtdFilter = state.parser.get(ext, 'rtd_use_50Hz_filter', 'True');
+        if (dom.extruderRtdFilter) dom.extruderRtdFilter.value = (extRtdFilter.toLowerCase() === 'false') ? 'False' : 'True';
+
+        updateExtruderSensorSpiVisibility();
 
         document.getElementById('extruder-pid-kp').value = state.parser.get(ext, 'pid_Kp', '21.527');
         document.getElementById('extruder-pid-ki').value = state.parser.get(ext, 'pid_Ki', '1.063');
@@ -1098,12 +1216,59 @@ document.addEventListener('DOMContentLoaded', () => {
         state.parser.set(ext, 'filament_diameter', document.getElementById('extruder-filament-dia').value);
         state.parser.set(ext, 'pressure_advance', document.getElementById('extruder-pressure-advance').value.trim());
 
-        state.parser.set(ext, 'sensor_type', document.getElementById('extruder-sensor-type').value);
+        const sType = dom.extruderSensorType ? dom.extruderSensorType.value : document.getElementById('extruder-sensor-type').value;
+        state.parser.set(ext, 'sensor_type', sType);
         state.parser.set(ext, 'heater_pin', document.getElementById('extruder-heater-pin').value.trim());
         state.parser.set(ext, 'sensor_pin', document.getElementById('extruder-sensor-pin').value.trim());
         state.parser.set(ext, 'min_temp', document.getElementById('extruder-min-temp').value.trim());
         state.parser.set(ext, 'max_temp', document.getElementById('extruder-max-temp').value.trim());
         state.parser.set(ext, 'min_extrude_temp', document.getElementById('extruder-min-extrude').value.trim());
+
+        const isSensorSpi = isSpiSensorType(sType);
+        if (isSensorSpi) {
+            const speed = dom.extruderSensorSpiSpeed ? dom.extruderSensorSpiSpeed.value.trim() : '';
+            state.parser.set(ext, 'spi_speed', speed || '4000000');
+
+            const isSoft = dom.extruderSensorSpiMode && dom.extruderSensorSpiMode.value === 'software';
+            if (isSoft) {
+                state.parser.set(ext, 'spi_bus', null);
+                state.parser.set(ext, 'spi_software_sclk_pin', dom.extruderSensorSpiSclk ? dom.extruderSensorSpiSclk.value.trim() || null : null);
+                state.parser.set(ext, 'spi_software_mosi_pin', dom.extruderSensorSpiMosi ? dom.extruderSensorSpiMosi.value.trim() || null : null);
+                state.parser.set(ext, 'spi_software_miso_pin', dom.extruderSensorSpiMiso ? dom.extruderSensorSpiMiso.value.trim() || null : null);
+            } else {
+                const bus = dom.extruderSensorSpiBus ? dom.extruderSensorSpiBus.value.trim() : '';
+                state.parser.set(ext, 'spi_bus', bus || null);
+                state.parser.set(ext, 'spi_software_sclk_pin', null);
+                state.parser.set(ext, 'spi_software_mosi_pin', null);
+                state.parser.set(ext, 'spi_software_miso_pin', null);
+            }
+
+            if (sType === 'MAX31865') {
+                const nomR = dom.extruderRtdNominalR ? dom.extruderRtdNominalR.value : '100';
+                state.parser.set(ext, 'rtd_nominal_r', nomR || '100');
+                const refR = dom.extruderRtdReferenceR ? dom.extruderRtdReferenceR.value.trim() : '430';
+                state.parser.set(ext, 'rtd_reference_r', refR || (nomR === '1000' ? '4300' : '430'));
+                const wires = dom.extruderRtdNumWires ? dom.extruderRtdNumWires.value : '2';
+                state.parser.set(ext, 'rtd_num_of_wires', wires || '2');
+                const filter = dom.extruderRtdFilter ? dom.extruderRtdFilter.value : 'True';
+                state.parser.set(ext, 'rtd_use_50Hz_filter', filter || 'True');
+            } else {
+                state.parser.set(ext, 'rtd_nominal_r', null);
+                state.parser.set(ext, 'rtd_reference_r', null);
+                state.parser.set(ext, 'rtd_num_of_wires', null);
+                state.parser.set(ext, 'rtd_use_50Hz_filter', null);
+            }
+        } else {
+            state.parser.set(ext, 'spi_speed', null);
+            state.parser.set(ext, 'spi_bus', null);
+            state.parser.set(ext, 'spi_software_sclk_pin', null);
+            state.parser.set(ext, 'spi_software_mosi_pin', null);
+            state.parser.set(ext, 'spi_software_miso_pin', null);
+            state.parser.set(ext, 'rtd_nominal_r', null);
+            state.parser.set(ext, 'rtd_reference_r', null);
+            state.parser.set(ext, 'rtd_num_of_wires', null);
+            state.parser.set(ext, 'rtd_use_50Hz_filter', null);
+        }
 
         state.parser.set(ext, 'control', 'pid');
         state.parser.set(ext, 'pid_Kp', document.getElementById('extruder-pid-kp').value.trim());
@@ -1574,6 +1739,25 @@ document.addEventListener('DOMContentLoaded', () => {
         checkExtField('extruder-pid-ki', 'pid_Ki');
         checkExtField('extruder-pid-kd', 'pid_Kd');
         checkExtField('extruder-pressure-advance', 'pressure_advance');
+
+        // Parametri Sensore SPI & RTD per Estrusore
+        checkExtField('extruder-sensor-spi-speed', 'spi_speed');
+        checkExtField('extruder-sensor-spi-bus', 'spi_bus');
+        checkExtField('extruder-sensor-spi-sclk', 'spi_software_sclk_pin');
+        checkExtField('extruder-sensor-spi-mosi', 'spi_software_mosi_pin');
+        checkExtField('extruder-sensor-spi-miso', 'spi_software_miso_pin');
+        checkExtField('extruder-rtd-nominal-r', 'rtd_nominal_r');
+        checkExtField('extruder-rtd-reference-r', 'rtd_reference_r');
+        checkExtField('extruder-rtd-num-wires', 'rtd_num_of_wires');
+        checkExtField('extruder-rtd-filter', 'rtd_use_50Hz_filter');
+
+        if (dom.extruderSensorSpiMode) {
+            const origHadSoft = !!(origExtParams['spi_software_sclk_pin'] || origExtParams['spi_software_mosi_pin']);
+            const currSoft = dom.extruderSensorSpiMode.value === 'software';
+            const isMod = origHadSoft !== currSoft;
+            dom.extruderSensorSpiMode.classList.toggle('is-modified', isMod);
+            updateFieldBadge(dom.extruderSensorSpiMode, isMod);
+        }
 
         // Driver pins & parametri per Estrusore
         checkExtField('extruder-driver-uart-pin', 'uart_pin', true);
