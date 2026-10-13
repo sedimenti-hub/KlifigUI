@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.4.0';
+    const APP_VERSION = 'v0.5.0';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -69,6 +69,27 @@ document.addEventListener('DOMContentLoaded', () => {
         noticeAuxZ: document.getElementById('notice-aux-z'),
         groupSensorlessHoming: document.getElementById('group-sensorless-homing'),
         driverModelSelect: document.getElementById('driver-model-select'),
+        driverConnTypeSelect: document.getElementById('driver-conn-type-select'),
+        driverConnStandaloneFields: document.getElementById('driver-conn-standalone-fields'),
+        driverConnUartFields: document.getElementById('driver-conn-uart-fields'),
+        driverConnSpiFields: document.getElementById('driver-conn-spi-fields'),
+        driverUartPin: document.getElementById('driver-uart-pin'),
+        driverTxPin: document.getElementById('driver-tx-pin'),
+        driverUartAddress: document.getElementById('driver-uart-address'),
+        driverCsPin: document.getElementById('driver-cs-pin'),
+        driverSpiMode: document.getElementById('driver-spi-mode'),
+        driverSpiBusGroup: document.getElementById('driver-spi-bus-group'),
+        driverSpiBus: document.getElementById('driver-spi-bus'),
+        driverSpiSoftGroup: document.getElementById('driver-spi-soft-group'),
+        driverSpiSclk: document.getElementById('driver-spi-sclk'),
+        driverSpiMosi: document.getElementById('driver-spi-mosi'),
+        driverSpiMiso: document.getElementById('driver-spi-miso'),
+        checkEnableHoldCurrent: document.getElementById('check-enable-hold-current'),
+        groupHoldCurrentField: document.getElementById('group-hold-current-field'),
+        driverHoldCurrent: document.getElementById('driver-hold-current'),
+        checkEnableSenseResistor: document.getElementById('check-enable-sense-resistor'),
+        groupSenseResistorField: document.getElementById('group-sense-resistor-field'),
+        driverSenseResistor: document.getElementById('driver-sense-resistor'),
         driverSmartFields: document.getElementById('driver-smart-fields'),
         driverSensorlessEnable: document.getElementById('driver-sensorless-enable'),
         sensorlessDetails: document.getElementById('sensorless-details'),
@@ -464,13 +485,81 @@ document.addEventListener('DOMContentLoaded', () => {
         dom.btnAddMcu.addEventListener('click', addExtraMcu);
     }
 
-    dom.driverModelSelect.addEventListener('change', () => {
-        dom.driverSmartFields.style.display = dom.driverModelSelect.value === 'none' ? 'none' : 'block';
-    });
+    function updateDriverConnVisibility() {
+        const connType = dom.driverConnTypeSelect ? dom.driverConnTypeSelect.value : 'uart';
+        if (connType === 'standalone') {
+            if (dom.driverConnStandaloneFields) dom.driverConnStandaloneFields.style.display = 'block';
+            if (dom.driverConnUartFields) dom.driverConnUartFields.style.display = 'none';
+            if (dom.driverConnSpiFields) dom.driverConnSpiFields.style.display = 'none';
+            if (dom.driverSmartFields) dom.driverSmartFields.style.display = 'none';
+        } else if (connType === 'uart') {
+            if (dom.driverConnStandaloneFields) dom.driverConnStandaloneFields.style.display = 'none';
+            if (dom.driverConnUartFields) dom.driverConnUartFields.style.display = 'block';
+            if (dom.driverConnSpiFields) dom.driverConnSpiFields.style.display = 'none';
+            if (dom.driverSmartFields) dom.driverSmartFields.style.display = 'block';
+        } else if (connType === 'spi') {
+            if (dom.driverConnStandaloneFields) dom.driverConnStandaloneFields.style.display = 'none';
+            if (dom.driverConnUartFields) dom.driverConnUartFields.style.display = 'none';
+            if (dom.driverConnSpiFields) dom.driverConnSpiFields.style.display = 'block';
+            if (dom.driverSmartFields) dom.driverSmartFields.style.display = 'block';
+        }
+    }
 
-    dom.driverSensorlessEnable.addEventListener('change', () => {
-        dom.sensorlessDetails.style.display = dom.driverSensorlessEnable.checked ? 'block' : 'none';
-    });
+    function updateDriverSpiModeVisibility() {
+        const isSoft = dom.driverSpiMode && dom.driverSpiMode.value === 'software';
+        if (dom.driverSpiBusGroup) dom.driverSpiBusGroup.style.display = isSoft ? 'none' : 'block';
+        if (dom.driverSpiSoftGroup) dom.driverSpiSoftGroup.style.display = isSoft ? 'flex' : 'none';
+    }
+
+    if (dom.driverConnTypeSelect) {
+        dom.driverConnTypeSelect.addEventListener('change', () => {
+            updateDriverConnVisibility();
+        });
+    }
+
+    if (dom.driverModelSelect) {
+        dom.driverModelSelect.addEventListener('change', () => {
+            const m = dom.driverModelSelect.value;
+            if (m === 'generic') {
+                if (dom.driverConnTypeSelect) dom.driverConnTypeSelect.value = 'standalone';
+            } else if ((m === 'tmc5160' || m === 'tmc2130' || m === 'tmc2660') && dom.driverConnTypeSelect && dom.driverConnTypeSelect.value === 'uart') {
+                dom.driverConnTypeSelect.value = 'spi';
+            } else if ((m === 'tmc2209' || m === 'tmc2208' || m === 'tmc2226') && dom.driverConnTypeSelect && dom.driverConnTypeSelect.value === 'spi') {
+                dom.driverConnTypeSelect.value = 'uart';
+            }
+            updateDriverConnVisibility();
+        });
+    }
+
+    if (dom.driverSpiMode) {
+        dom.driverSpiMode.addEventListener('change', () => {
+            updateDriverSpiModeVisibility();
+        });
+    }
+
+    if (dom.checkEnableHoldCurrent) {
+        dom.checkEnableHoldCurrent.addEventListener('change', () => {
+            if (dom.groupHoldCurrentField) {
+                dom.groupHoldCurrentField.style.display = dom.checkEnableHoldCurrent.checked ? 'block' : 'none';
+            }
+        });
+    }
+
+    if (dom.checkEnableSenseResistor) {
+        dom.checkEnableSenseResistor.addEventListener('change', () => {
+            if (dom.groupSenseResistorField) {
+                dom.groupSenseResistorField.style.display = dom.checkEnableSenseResistor.checked ? 'block' : 'none';
+            }
+        });
+    }
+
+    if (dom.driverSensorlessEnable) {
+        dom.driverSensorlessEnable.addEventListener('change', () => {
+            if (dom.sensorlessDetails) {
+                dom.sensorlessDetails.style.display = dom.driverSensorlessEnable.checked ? 'block' : 'none';
+            }
+        });
+    }
 
     const probeTypeSelect = document.getElementById('probe-type-select');
     const probeConfigFields = document.getElementById('probe-config-fields');
@@ -554,12 +643,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gestione Stepper e Driver Attivo
     // -------------------------------------------------------------------------
     function getDriverSectionName(stepperName) {
-        for (const driverType of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+        for (const driverType of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240', 'tmc2130', 'tmc2660']) {
             if (state.parser.hasSection(`${driverType} ${stepperName}`)) {
                 return { type: driverType, section: `${driverType} ${stepperName}` };
             }
         }
-        return { type: 'tmc2209', section: `tmc2209 ${stepperName}` };
+        return { type: null, section: null };
     }
 
     function loadCurrentStepperFromParser() {
@@ -610,33 +699,91 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Caricamento driver
         const driverInfo = getDriverSectionName(s);
-        const hasDriver = state.parser.hasSection(driverInfo.section);
+        const hasDriver = !!(driverInfo.section && state.parser.hasSection(driverInfo.section));
 
-        dom.driverCardTitle.textContent = `Driver TMC per [${s}]`;
-        dom.driverCardTag.textContent = `[${hasDriver ? driverInfo.section : 'Driver Non Configurato'}]`;
+        dom.driverCardTitle.textContent = `Driver Stepper Motion [${s}]`;
 
         if (!hasDriver) {
-            dom.driverModelSelect.value = 'none';
-            dom.driverSmartFields.style.display = 'none';
+            dom.driverCardTag.textContent = '[Standalone / Nessun TMC]';
+            if (dom.driverModelSelect) dom.driverModelSelect.value = 'generic';
+            if (dom.driverConnTypeSelect) dom.driverConnTypeSelect.value = 'standalone';
+            updateDriverConnVisibility();
         } else {
-            dom.driverModelSelect.value = driverInfo.type;
-            dom.driverSmartFields.style.display = 'block';
-            document.getElementById('driver-uart-pin').value = state.parser.get(driverInfo.section, 'uart_pin', state.parser.get(driverInfo.section, 'cs_pin', ''));
+            dom.driverCardTag.textContent = `[${driverInfo.section}]`;
+            if (dom.driverModelSelect) dom.driverModelSelect.value = driverInfo.type || 'tmc2209';
+
+            // Rileva tipo connessione (UART vs SPI)
+            const csPin = state.parser.get(driverInfo.section, 'cs_pin', '');
+            const spiBus = state.parser.get(driverInfo.section, 'spi_bus', '');
+            const spiSoftSclk = state.parser.get(driverInfo.section, 'spi_software_sclk_pin', '');
+            const isSpi = !!(csPin || spiBus || spiSoftSclk);
+
+            const connType = isSpi ? 'spi' : 'uart';
+            if (dom.driverConnTypeSelect) dom.driverConnTypeSelect.value = connType;
+            updateDriverConnVisibility();
+
+            // Campi UART
+            if (dom.driverUartPin) dom.driverUartPin.value = state.parser.get(driverInfo.section, 'uart_pin', '');
+            if (dom.driverTxPin) dom.driverTxPin.value = state.parser.get(driverInfo.section, 'tx_pin', '');
+            if (dom.driverUartAddress) dom.driverUartAddress.value = state.parser.get(driverInfo.section, 'uart_address', '');
+
+            // Campi SPI
+            if (dom.driverCsPin) dom.driverCsPin.value = csPin;
+            if (spiSoftSclk) {
+                if (dom.driverSpiMode) dom.driverSpiMode.value = 'software';
+                if (dom.driverSpiSclk) dom.driverSpiSclk.value = spiSoftSclk;
+                if (dom.driverSpiMosi) dom.driverSpiMosi.value = state.parser.get(driverInfo.section, 'spi_software_mosi_pin', '');
+                if (dom.driverSpiMiso) dom.driverSpiMiso.value = state.parser.get(driverInfo.section, 'spi_software_miso_pin', '');
+                if (dom.driverSpiBus) dom.driverSpiBus.value = '';
+            } else {
+                if (dom.driverSpiMode) dom.driverSpiMode.value = 'hardware';
+                if (dom.driverSpiBus) dom.driverSpiBus.value = spiBus;
+                if (dom.driverSpiSclk) dom.driverSpiSclk.value = '';
+                if (dom.driverSpiMosi) dom.driverSpiMosi.value = '';
+                if (dom.driverSpiMiso) dom.driverSpiMiso.value = '';
+            }
+            updateDriverSpiModeVisibility();
+
+            // Parametri Operativi TMC
             document.getElementById('driver-run-current').value = state.parser.get(driverInfo.section, 'run_current', '0.800');
             document.getElementById('driver-stealthchop').value = state.parser.get(driverInfo.section, 'stealthchop_threshold', '999999');
             document.getElementById('driver-interpolate').checked = state.parser.get(driverInfo.section, 'interpolate', 'True').toLowerCase() === 'true';
 
-            // Sensorless
+            // hold_current
+            const holdCur = state.parser.get(driverInfo.section, 'hold_current', null);
+            if (holdCur !== null && holdCur !== '') {
+                if (dom.checkEnableHoldCurrent) dom.checkEnableHoldCurrent.checked = true;
+                if (dom.groupHoldCurrentField) dom.groupHoldCurrentField.style.display = 'block';
+                if (dom.driverHoldCurrent) dom.driverHoldCurrent.value = holdCur;
+            } else {
+                if (dom.checkEnableHoldCurrent) dom.checkEnableHoldCurrent.checked = false;
+                if (dom.groupHoldCurrentField) dom.groupHoldCurrentField.style.display = 'none';
+                if (dom.driverHoldCurrent) dom.driverHoldCurrent.value = '0.500';
+            }
+
+            // sense_resistor
+            const senseRes = state.parser.get(driverInfo.section, 'sense_resistor', null);
+            if (senseRes !== null && senseRes !== '') {
+                if (dom.checkEnableSenseResistor) dom.checkEnableSenseResistor.checked = true;
+                if (dom.groupSenseResistorField) dom.groupSenseResistorField.style.display = 'block';
+                if (dom.driverSenseResistor) dom.driverSenseResistor.value = senseRes;
+            } else {
+                if (dom.checkEnableSenseResistor) dom.checkEnableSenseResistor.checked = false;
+                if (dom.groupSenseResistorField) dom.groupSenseResistorField.style.display = 'none';
+                if (dom.driverSenseResistor) dom.driverSenseResistor.value = driverInfo.type === 'tmc5160' ? '0.075' : '0.110';
+            }
+
+            // Sensorless Homing (StallGuard)
             const diagPin = state.parser.get(driverInfo.section, 'diag_pin', '');
-            const sgthrs = state.parser.get(driverInfo.section, 'driver_SGTHRS', '');
+            const sgthrs = state.parser.get(driverInfo.section, 'driver_SGTHRS', state.parser.get(driverInfo.section, 'driver_SGT', ''));
             if (diagPin || sgthrs) {
-                dom.driverSensorlessEnable.checked = true;
-                dom.sensorlessDetails.style.display = 'block';
+                if (dom.driverSensorlessEnable) dom.driverSensorlessEnable.checked = true;
+                if (dom.sensorlessDetails) dom.sensorlessDetails.style.display = 'block';
                 document.getElementById('driver-diag-pin').value = diagPin;
                 document.getElementById('driver-sgthrs').value = sgthrs;
             } else {
-                dom.driverSensorlessEnable.checked = false;
-                dom.sensorlessDetails.style.display = 'none';
+                if (dom.driverSensorlessEnable) dom.driverSensorlessEnable.checked = false;
+                if (dom.sensorlessDetails) dom.sensorlessDetails.style.display = 'none';
                 document.getElementById('driver-diag-pin').value = '';
                 document.getElementById('driver-sgthrs').value = '';
             }
@@ -668,27 +815,70 @@ document.addEventListener('DOMContentLoaded', () => {
             state.parser.set(s, 'position_endstop', null);
         }
 
-        // Driver
-        const selectedModel = dom.driverModelSelect.value;
-        for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+        // Rimuovi sezioni driver pregresse per questo asse
+        for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240', 'tmc2130', 'tmc2660']) {
             state.parser.removeSection(`${d} ${s}`);
         }
 
-        if (selectedModel !== 'none') {
-            const driverSec = `${selectedModel} ${s}`;
-            const uartPin = document.getElementById('driver-uart-pin').value.trim();
-            if (selectedModel === 'tmc5160') {
-                state.parser.set(driverSec, 'cs_pin', uartPin);
-            } else {
-                state.parser.set(driverSec, 'uart_pin', uartPin);
+        const connType = dom.driverConnTypeSelect ? dom.driverConnTypeSelect.value : 'uart';
+        let selectedModel = dom.driverModelSelect ? dom.driverModelSelect.value : 'tmc2209';
+
+        if (connType !== 'standalone') {
+            if (selectedModel === 'generic') {
+                selectedModel = connType === 'spi' ? 'tmc5160' : 'tmc2209';
             }
-            state.parser.set(driverSec, 'run_current', document.getElementById('driver-run-current').value.trim());
+            const driverSec = `${selectedModel} ${s}`;
+
+            if (connType === 'uart') {
+                const uartPin = dom.driverUartPin ? dom.driverUartPin.value.trim() : '';
+                state.parser.set(driverSec, 'uart_pin', uartPin || null);
+                const txPin = dom.driverTxPin ? dom.driverTxPin.value.trim() : '';
+                state.parser.set(driverSec, 'tx_pin', txPin || null);
+                const uartAddr = dom.driverUartAddress ? dom.driverUartAddress.value.trim() : '';
+                state.parser.set(driverSec, 'uart_address', uartAddr || null);
+            } else if (connType === 'spi') {
+                const csPin = dom.driverCsPin ? dom.driverCsPin.value.trim() : '';
+                state.parser.set(driverSec, 'cs_pin', csPin || null);
+                if (dom.driverSpiMode && dom.driverSpiMode.value === 'hardware') {
+                    const spiBus = dom.driverSpiBus ? dom.driverSpiBus.value.trim() : '';
+                    state.parser.set(driverSec, 'spi_bus', spiBus || null);
+                } else {
+                    state.parser.set(driverSec, 'spi_software_sclk_pin', dom.driverSpiSclk ? dom.driverSpiSclk.value.trim() || null : null);
+                    state.parser.set(driverSec, 'spi_software_mosi_pin', dom.driverSpiMosi ? dom.driverSpiMosi.value.trim() || null : null);
+                    state.parser.set(driverSec, 'spi_software_miso_pin', dom.driverSpiMiso ? dom.driverSpiMiso.value.trim() || null : null);
+                }
+            }
+
+            state.parser.set(driverSec, 'run_current', document.getElementById('driver-run-current').value.trim() || '0.800');
             state.parser.set(driverSec, 'interpolate', document.getElementById('driver-interpolate').checked ? 'True' : 'False');
             state.parser.set(driverSec, 'stealthchop_threshold', document.getElementById('driver-stealthchop').value);
 
-            if (!isAuxZ && dom.driverSensorlessEnable.checked) {
-                state.parser.set(driverSec, 'diag_pin', document.getElementById('driver-diag-pin').value.trim());
-                state.parser.set(driverSec, 'driver_SGTHRS', document.getElementById('driver-sgthrs').value.trim());
+            // hold_current
+            if (dom.checkEnableHoldCurrent && dom.checkEnableHoldCurrent.checked && dom.driverHoldCurrent && dom.driverHoldCurrent.value.trim()) {
+                state.parser.set(driverSec, 'hold_current', dom.driverHoldCurrent.value.trim());
+            } else {
+                state.parser.set(driverSec, 'hold_current', null);
+            }
+
+            // sense_resistor
+            if (dom.checkEnableSenseResistor && dom.checkEnableSenseResistor.checked && dom.driverSenseResistor && dom.driverSenseResistor.value.trim()) {
+                state.parser.set(driverSec, 'sense_resistor', dom.driverSenseResistor.value.trim());
+            } else {
+                state.parser.set(driverSec, 'sense_resistor', null);
+            }
+
+            // Sensorless
+            if (!isAuxZ && dom.driverSensorlessEnable && dom.driverSensorlessEnable.checked) {
+                const diagPin = document.getElementById('driver-diag-pin').value.trim();
+                const sgthrs = document.getElementById('driver-sgthrs').value.trim();
+                state.parser.set(driverSec, 'diag_pin', diagPin || null);
+                if (selectedModel === 'tmc5160' || selectedModel === 'tmc2130') {
+                    state.parser.set(driverSec, 'driver_SGT', sgthrs || null);
+                    state.parser.set(driverSec, 'driver_SGTHRS', null);
+                } else {
+                    state.parser.set(driverSec, 'driver_SGTHRS', sgthrs || null);
+                    state.parser.set(driverSec, 'driver_SGT', null);
+                }
             }
         }
     }
@@ -944,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         document.querySelectorAll('input[id], select[id], textarea[id]').forEach(el => {
-            if (el.id.startsWith('stepper-') || el.id.startsWith('driver-') || el.id.startsWith('extruder-')) {
+            if (el.id.startsWith('stepper-') || el.id.startsWith('driver-') || el.id.startsWith('extruder-') || el.id.startsWith('check-enable-hold-current') || el.id.startsWith('check-enable-sense-resistor') || el.id.startsWith('check-invert-')) {
                 return;
             }
             snap.fields[el.id] = el.type === 'checkbox' ? el.checked : el.value;
@@ -954,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state.parser.sections[st]) {
                 snap.steppers[st] = { ...state.parser.sections[st].params };
             }
-            for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+            for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240', 'tmc2130', 'tmc2660']) {
                 const sec = `${drv} ${st}`;
                 if (state.parser.sections[sec]) {
                     snap.steppers[sec] = { ...state.parser.sections[sec].params };
@@ -966,7 +1156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state.parser.sections[ext]) {
                 snap.extruders[ext] = { ...state.parser.sections[ext].params };
             }
-            for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+            for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240', 'tmc2130', 'tmc2660']) {
                 const sec = `${drv} ${ext}`;
                 if (state.parser.sections[sec]) {
                     snap.extruders[sec] = { ...state.parser.sections[sec].params };
@@ -1011,8 +1201,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentDriverInfo = getDriverSectionName(currentStepperName);
         const origStepperParams = snap.steppers[currentStepperName] || {};
         const currStepperParams = state.parser.sections[currentStepperName]?.params || {};
-        const origDrvParams = snap.steppers[currentDriverInfo.section] || {};
-        const currDrvParams = state.parser.sections[currentDriverInfo.section]?.params || {};
+        const origDrvParams = (currentDriverInfo && currentDriverInfo.section ? snap.steppers[currentDriverInfo.section] : null) || {};
+        const currDrvParams = (currentDriverInfo && currentDriverInfo.section ? state.parser.sections[currentDriverInfo.section]?.params : null) || {};
 
         const checkStepperField = (id, paramKey, isDriver = false, isBool = false) => {
             const el = document.getElementById(id);
@@ -1041,12 +1231,39 @@ document.addEventListener('DOMContentLoaded', () => {
         checkStepperField('stepper-steps-rotation', 'full_steps_per_rotation');
         checkStepperField('stepper-rotation-distance', 'rotation_distance');
         checkStepperField('stepper-endstop-pin', 'endstop_pin');
+
+        // Driver pins & parametri
         checkStepperField('driver-uart-pin', 'uart_pin', true);
+        checkStepperField('driver-tx-pin', 'tx_pin', true);
+        checkStepperField('driver-uart-address', 'uart_address', true);
+        checkStepperField('driver-cs-pin', 'cs_pin', true);
+        checkStepperField('driver-spi-bus', 'spi_bus', true);
+        checkStepperField('driver-spi-sclk', 'spi_software_sclk_pin', true);
+        checkStepperField('driver-spi-mosi', 'spi_software_mosi_pin', true);
+        checkStepperField('driver-spi-miso', 'spi_software_miso_pin', true);
         checkStepperField('driver-run-current', 'run_current', true);
+        checkStepperField('driver-hold-current', 'hold_current', true);
+        checkStepperField('driver-sense-resistor', 'sense_resistor', true);
         checkStepperField('driver-stealthchop', 'stealthchop_threshold', true);
         checkStepperField('driver-interpolate', 'interpolate', true, true);
         checkStepperField('driver-diag-pin', 'diag_pin', true);
-        checkStepperField('driver-sgthrs', 'driver_SGTHRS', true);
+        checkStepperField('driver-sgthrs', (currentDriverInfo?.type === 'tmc5160' || currentDriverInfo?.type === 'tmc2130') ? 'driver_SGT' : 'driver_SGTHRS', true);
+
+        if (dom.checkEnableHoldCurrent) {
+            const origHadHold = !!origDrvParams['hold_current'];
+            const currHasHold = dom.checkEnableHoldCurrent.checked;
+            const isMod = origHadHold !== currHasHold;
+            dom.checkEnableHoldCurrent.classList.toggle('is-modified', isMod);
+            updateFieldBadge(dom.checkEnableHoldCurrent, isMod);
+        }
+
+        if (dom.checkEnableSenseResistor) {
+            const origHadSense = !!origDrvParams['sense_resistor'];
+            const currHasSense = dom.checkEnableSenseResistor.checked;
+            const isMod = origHadSense !== currHasSense;
+            dom.checkEnableSenseResistor.classList.toggle('is-modified', isMod);
+            updateFieldBadge(dom.checkEnableSenseResistor, isMod);
+        }
 
         // Controllo generale di ciascun subtab Stepper
         for (const st of ['stepper_x', 'dual_carriage', 'stepper_y', 'stepper_z', 'stepper_z1', 'stepper_z2', 'stepper_z3']) {
@@ -1061,7 +1278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             if (!stMod) {
-                for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+                for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240', 'tmc2130', 'tmc2660']) {
                     const sec = `${drv} ${st}`;
                     const origD = snap.steppers[sec] || {};
                     const currD = state.parser.sections[sec]?.params || {};
@@ -1088,8 +1305,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentExtDrvInfo = getDriverSectionName(currentExtruderName);
         const origExtParams = snap.extruders[currentExtruderName] || {};
         const currExtParams = state.parser.sections[currentExtruderName]?.params || {};
-        const origExtDrvParams = snap.extruders[currentExtDrvInfo.section] || {};
-        const currExtDrvParams = state.parser.sections[currentExtDrvInfo.section]?.params || {};
+        const origExtDrvParams = (currentExtDrvInfo && currentExtDrvInfo.section ? snap.extruders[currentExtDrvInfo.section] : null) || {};
+        const currExtDrvParams = (currentExtDrvInfo && currentExtDrvInfo.section ? state.parser.sections[currentExtDrvInfo.section]?.params : null) || {};
 
         const checkExtField = (id, paramKey, isDriver = false) => {
             const el = document.getElementById(id);
