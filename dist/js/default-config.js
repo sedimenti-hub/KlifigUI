@@ -86,49 +86,6 @@ const KLIPPER_CONSTANTS = {
         }
     },
 
-    // Preset Stampanti Popolari
-    PRINTER_PRESETS: {
-        'ender3': {
-            title: 'Creality Ender 3 / Pro / V2',
-            kinematics: 'cartesian',
-            max_velocity: 250,
-            max_accel: 2500,
-            x_min: 0, x_max: 235, x_endstop: 0,
-            y_min: 0, y_max: 235, y_endstop: 0,
-            z_min: 0, z_max: 250, z_endstop: 0,
-            bed_x: 235, bed_y: 235
-        },
-        'voron_24_300': {
-            title: 'Voron 2.4 (300mm CoreXY)',
-            kinematics: 'corexy',
-            max_velocity: 350,
-            max_accel: 5000,
-            x_min: 0, x_max: 300, x_endstop: 300,
-            y_min: 0, y_max: 300, y_endstop: 300,
-            z_min: -2, z_max: 280, z_endstop: 0,
-            bed_x: 300, bed_y: 300
-        },
-        'voron_v0': {
-            title: 'Voron V0.1 / V0.2 (120mm CoreXY)',
-            kinematics: 'corexy',
-            max_velocity: 400,
-            max_accel: 8000,
-            x_min: 0, x_max: 120, x_endstop: 120,
-            y_min: 0, y_max: 120, y_endstop: 120,
-            z_min: 0, z_max: 120, z_endstop: 0,
-            bed_x: 120, bed_y: 120
-        },
-        'prusa_mk3s': {
-            title: 'Prusa i3 MK3S+ (Cartesiana)',
-            kinematics: 'cartesian',
-            max_velocity: 200,
-            max_accel: 2000,
-            x_min: 0, x_max: 250, x_endstop: 0,
-            y_min: -4, y_max: 210, y_endstop: -4,
-            z_min: 0, z_max: 210, z_endstop: 0,
-            bed_x: 250, bed_y: 210
-        }
-    },
 
     // Macro Template Essenziali Pronte per Klipper & Mainsail
     MACRO_TEMPLATES: {

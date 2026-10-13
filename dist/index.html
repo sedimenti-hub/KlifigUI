@@ -69,69 +69,67 @@
     <!-- ==================== CONTAINER PRINCIPALE ==================== -->
     <main class="app-container">
 
-        <!-- Barra di Navigazione Tab (9 Categorie Richieste) -->
+        <!-- Barra di Navigazione Tab (8 Categorie con Cinematica Unificata) -->
         <nav class="tabs-navigation">
-            <button class="tab-btn active" data-tab="tab-printer">
-                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                1. Stampante
-            </button>
-            <button class="tab-btn" data-tab="tab-kinematics">
+            <button class="tab-btn active" data-tab="tab-kinematics">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24M14.83 14.83l4.24 4.24M14.83 9.17l4.24-4.24M4.93 19.07l4.24-4.24"/></svg>
-                2. Cinematica
+                1. Cinematica
             </button>
             <button class="tab-btn" data-tab="tab-host-mcu">
                 <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-                3. Host/MCU
+                2. Host/MCU
             </button>
             <button class="tab-btn" data-tab="tab-stepper">
                 <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/><circle cx="12" cy="12" r="2"/></svg>
-                4. Stepper & Driver
+                3. Stepper & Driver
             </button>
             <button class="tab-btn" data-tab="tab-extruder">
                 <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                5. Extruder
+                4. Extruder
             </button>
             <button class="tab-btn" data-tab="tab-bed">
                 <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M6 3v4M10 3v4M14 3v4M18 3v4"/></svg>
-                6. Bed
+                5. Bed
             </button>
             <button class="tab-btn" data-tab="tab-misc">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                7. Misceleus
+                6. Misceleus
             </button>
             <button class="tab-btn" data-tab="tab-macro">
                 <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                8. Macro
+                7. Macro
             </button>
             <button class="tab-btn" data-tab="tab-calibration">
                 <svg viewBox="0 0 24 24"><path d="M2 12h20M12 2v20M4.93 4.93l14.14 14.14M19.07 4.93 4.93 19.07"/></svg>
-                9. Calibration
+                8. Calibration
             </button>
         </nav>
 
         <!-- ============================================================
-             TAB 1: STAMPANTE ([printer])
+             TAB 1: CINEMATICA (UNIFICATA CON PARAMETRI STAMPANTE, IDEX E MULTI-Z)
              ============================================================ -->
-        <section class="tab-pane active" id="tab-printer">
+        <section class="tab-pane active" id="tab-kinematics">
             <div class="grid-container">
-                <!-- Sezione Base [printer] -->
+
+                <!-- Card 1: Parametri Generali Stampante [printer] -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">Parametri Generali Stampante</span>
+                        <span class="card-title">Parametri Generali Klipper</span>
                         <span class="card-tag">[printer]</span>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="printer-kinematics">Tipo di Cinematica:</label>
+                        <label class="form-label" for="printer-kinematics">Tipo di Cinematica Principale:</label>
                         <select class="form-control" id="printer-kinematics">
                             <option value="cartesian">Cartesiana (Ender 3, Prusa i3, Sovol)</option>
                             <option value="corexy">CoreXY (Voron 2.4/Trident, RatRig, Bambu)</option>
                             <option value="corexz">CoreXZ (Voron Switchwire)</option>
                             <option value="delta">Delta (Kossel, Flsun)</option>
+                            <option value="hybrid_corexy">Hybrid CoreXY (IDEX CoreXY)</option>
                             <option value="rotary_delta">Rotary Delta</option>
                             <option value="polar">Polare</option>
                             <option value="none">Nessuna</option>
                         </select>
-                        <div class="form-helper">Specifica come i motori muovono la testina di stampa.</div>
+                        <div class="form-helper">Specifica il modello cinematico della testina e degli assi.</div>
                     </div>
 
                     <div class="form-group">
@@ -140,7 +138,6 @@
                             <input type="number" class="form-control" id="printer-max-velocity" placeholder="300" min="10" max="1000">
                             <span class="input-unit">mm/s</span>
                         </div>
-                        <div class="form-helper">Velocità massima per gli spostamenti XY.</div>
                     </div>
 
                     <div class="form-group">
@@ -149,14 +146,12 @@
                             <input type="number" class="form-control" id="printer-max-accel" placeholder="3000" min="100" max="50000">
                             <span class="input-unit">mm/s²</span>
                         </div>
-                        <div class="form-helper">Accelerazione massima della testina.</div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="printer-cruise-ratio">Rapporto Crociera (minimum_cruise_ratio):</label>
                             <input type="number" step="0.05" class="form-control" id="printer-cruise-ratio" placeholder="0.5" min="0" max="1">
-                            <div class="form-helper">Standard moderno Klipper (0.5 = 50% crociera).</div>
                         </div>
 
                         <div class="form-group">
@@ -165,79 +160,78 @@
                                 <input type="number" step="0.5" class="form-control" id="printer-square-corner" placeholder="5.0" min="1" max="25">
                                 <span class="input-unit">mm/s</span>
                             </div>
-                            <div class="form-helper">Velocità negli angoli retti (default 5.0).</div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Limiti Asse Z & Decelerazione -->
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">Dinamica Asse Z & Decelerazione</span>
-                        <span class="card-tag">Z Dynamics</span>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="printer-max-z-velocity">Velocità Massima Z (max_z_velocity):</label>
-                        <div class="input-with-unit">
-                            <input type="number" class="form-control" id="printer-max-z-velocity" placeholder="15" min="1" max="100">
-                            <span class="input-unit">mm/s</span>
+                    <div class="form-row" style="margin-top: 0.75rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="printer-max-z-velocity">Velocità Max Z:</label>
+                            <div class="input-with-unit">
+                                <input type="number" class="form-control" id="printer-max-z-velocity" placeholder="15" min="1" max="100">
+                                <span class="input-unit">mm/s</span>
+                            </div>
                         </div>
-                        <div class="form-helper">Solitamente 15-25 mm/s per viti trapezie T8 o 40 mm/s per Z a cinghie.</div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="printer-max-z-accel">Accelerazione Max Z:</label>
+                            <div class="input-with-unit">
+                                <input type="number" class="form-control" id="printer-max-z-accel" placeholder="100" min="10" max="2000">
+                                <span class="input-unit">mm/s²</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="printer-max-z-accel">Accelerazione Massima Z (max_z_accel):</label>
+                    <div class="form-group" style="margin-top: 0.75rem;">
+                        <label class="form-label" for="printer-max-accel-to-decel">Max Accel to Decel (Opzionale legacy):</label>
                         <div class="input-with-unit">
-                            <input type="number" class="form-control" id="printer-max-z-accel" placeholder="100" min="10" max="2000">
+                            <input type="number" class="form-control" id="printer-max-accel-to-decel" placeholder="Lascia vuoto se usi minimum_cruise_ratio">
                             <span class="input-unit">mm/s²</span>
                         </div>
-                        <div class="form-helper">Accelerazione per sollevamenti Z hop e layer change.</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="printer-max-accel-to-decel">Max Accel to Decel (Retrocompatibile):</label>
-                        <div class="input-with-unit">
-                            <input type="number" class="form-control" id="printer-max-accel-to-decel" placeholder="Opzionale (es. 1500)">
-                            <span class="input-unit">mm/s²</span>
-                        </div>
-                        <div class="form-helper">Parametro legacy: se compilato sovrascrive minimum_cruise_ratio.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================================
-             TAB 2: CINEMATICA
-             ============================================================ -->
-        <section class="tab-pane" id="tab-kinematics">
-            <div class="grid-container">
-                <!-- Preset Meccanici Veloci -->
-                <div class="card" style="grid-column: 1 / -1;">
-                    <div class="card-header">
-                        <span class="card-title">Preset Meccanici & Geometria Rapida</span>
-                        <span class="card-tag">Quick Preset</span>
-                    </div>
-                    <div style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 250px;">
-                            <label class="form-label" for="preset-printer-select">Seleziona Modello di Riferimento:</label>
-                            <select class="form-control" id="preset-printer-select">
-                                <option value="">-- Seleziona un Preset --</option>
-                                <option value="ender3">Creality Ender 3 / Pro / V2 (Cartesiana 235x235x250)</option>
-                                <option value="voron_24_300">Voron 2.4 (CoreXY 300x300x280)</option>
-                                <option value="voron_v0">Voron V0.1 / V0.2 (CoreXY 120x120x120)</option>
-                                <option value="prusa_mk3s">Prusa i3 MK3S+ (Cartesiana 250x210x210)</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-secondary" id="btn-apply-preset">Applica Parametri Preset</button>
                     </div>
                 </div>
 
-                <!-- Dimensioni e Limiti Asse X -->
+                <!-- Card 2: Architettura Avanzata: IDEX e Multi-Asse Z -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">Asse X - Limiti di Movimento</span>
-                        <span class="card-tag">Axis X</span>
+                        <span class="card-title">Architettura Meccanica (IDEX & Multi-Z)</span>
+                        <span class="card-tag">Hardware Layout</span>
+                    </div>
+
+                    <!-- Abilitazione IDEX -->
+                    <div class="form-group" style="padding: 0.9rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="check-enable-idex">
+                            <strong style="color: var(--primary-light); font-size: 0.95rem;">Abilita Sistema IDEX (Dual Carriage / Doppio Carrello X)</strong>
+                        </label>
+                        <div class="form-helper" style="margin-top: 0.4rem;">
+                            Abilita il secondo carrello <code>[dual_carriage]</code> indipendente sull'asse X e il secondo estrusore <code>[extruder1]</code>.
+                        </div>
+                    </div>
+
+                    <!-- Configurazione Multi-Asse Z -->
+                    <div class="form-group" style="margin-top: 1.25rem;">
+                        <label class="form-label" for="select-z-motor-count">Numero di Motori Asse Z (Multi-Asse Z):</label>
+                        <select class="form-control" id="select-z-motor-count">
+                            <option value="1">1 Motore Z (Standard singolo asse [stepper_z])</option>
+                            <option value="2">2 Motori Z (Dual Z: [stepper_z], [stepper_z1])</option>
+                            <option value="3">3 Motori Z (Triple Z: [stepper_z], [stepper_z1], [stepper_z2] - es. Trident)</option>
+                            <option value="4">4 Motori Z (Quad Z: [stepper_z], [stepper_z1], [stepper_z2], [stepper_z3] - es. Voron 2.4)</option>
+                        </select>
+                        <div class="form-helper" style="margin-top: 0.4rem;">
+                            Modifica automaticamente i motori disponibili nella scheda <strong>Stepper</strong> e aggiorna le opzioni di livellamento nella scheda <strong>Calibration</strong> (abilitando <code>[z_tilt]</code> o <code>[quad_gantry_level]</code>).
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(6, 182, 212, 0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--accent); font-size: 0.8rem; color: var(--text-secondary);">
+                        ℹ️ <strong>Nota:</strong> I parametri di homing impostati a <code>0</code> vengono omessi dal file di configurazione per lasciare attivi i default interni di Klipper.
+                    </div>
+                </div>
+
+                <!-- Card 3: Asse X - Limiti e Settaggi Homing -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Asse X - Limiti & Homing</span>
+                        <span class="card-tag">[stepper_x]</span>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -255,27 +249,111 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="x-pos-endstop">Endstop (position_endstop):</label>
+                            <label class="form-label" for="x-pos-endstop">Endstop:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="x-pos-endstop" placeholder="0">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" style="margin-top: 1rem;">
-                        <label class="form-label" for="x-homing-speed">Velocità Homing X (homing_speed):</label>
-                        <div class="input-with-unit">
-                            <input type="number" class="form-control" id="x-homing-speed" placeholder="50.0">
-                            <span class="input-unit">mm/s</span>
+                    
+                    <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
+                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Parametri Homing Asse X</span>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="x-homing-speed">homing_speed:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="x-homing-speed" placeholder="0" value="50.0">
+                                    <span class="input-unit">mm/s</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="x-homing-retract-dist">homing_retract_dist:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.5" class="form-control" id="x-homing-retract-dist" placeholder="0" value="5.0">
+                                    <span class="input-unit">mm</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="x-homing-retract-speed">homing_retract_speed:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="x-homing-retract-speed" placeholder="0" value="0">
+                                    <span class="input-unit">mm/s</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Dimensioni e Limiti Asse Y -->
+                <!-- Card 4: Asse Dual Carriage (X2 IDEX) - Visibile solo se IDEX abilitato -->
+                <div class="card" id="card-dual-carriage" style="display: none;">
+                    <div class="card-header">
+                        <span class="card-title">Dual Carriage (Secondo Carrello X IDEX)</span>
+                        <span class="card-tag">[dual_carriage]</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="dc-pos-min">Min (position_min):</label>
+                            <div class="input-with-unit">
+                                <input type="number" class="form-control" id="dc-pos-min" placeholder="0">
+                                <span class="input-unit">mm</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="dc-pos-max">Max (position_max):</label>
+                            <div class="input-with-unit">
+                                <input type="number" class="form-control" id="dc-pos-max" placeholder="300">
+                                <span class="input-unit">mm</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="dc-pos-endstop">Endstop (Parcheggio X2):</label>
+                            <div class="input-with-unit">
+                                <input type="number" class="form-control" id="dc-pos-endstop" placeholder="300">
+                                <span class="input-unit">mm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
+                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Parametri Homing Dual Carriage</span>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="dc-homing-speed">homing_speed:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="dc-homing-speed" placeholder="0" value="50.0">
+                                    <span class="input-unit">mm/s</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="dc-homing-retract-dist">homing_retract_dist:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.5" class="form-control" id="dc-homing-retract-dist" placeholder="0" value="5.0">
+                                    <span class="input-unit">mm</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="dc-homing-retract-speed">homing_retract_speed:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="dc-homing-retract-speed" placeholder="0" value="0">
+                                    <span class="input-unit">mm/s</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Asse Y - Limiti e Settaggi Homing -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">Asse Y - Limiti di Movimento</span>
-                        <span class="card-tag">Axis Y</span>
+                        <span class="card-title">Asse Y - Limiti & Homing</span>
+                        <span class="card-tag">[stepper_y]</span>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -293,27 +371,50 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="y-pos-endstop">Endstop (position_endstop):</label>
+                            <label class="form-label" for="y-pos-endstop">Endstop:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="y-pos-endstop" placeholder="0">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" style="margin-top: 1rem;">
-                        <label class="form-label" for="y-homing-speed">Velocità Homing Y (homing_speed):</label>
-                        <div class="input-with-unit">
-                            <input type="number" class="form-control" id="y-homing-speed" placeholder="50.0">
-                            <span class="input-unit">mm/s</span>
+
+                    <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
+                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Parametri Homing Asse Y</span>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="y-homing-speed">homing_speed:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="y-homing-speed" placeholder="0" value="50.0">
+                                    <span class="input-unit">mm/s</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="y-homing-retract-dist">homing_retract_dist:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.5" class="form-control" id="y-homing-retract-dist" placeholder="0" value="5.0">
+                                    <span class="input-unit">mm</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="y-homing-retract-speed">homing_retract_speed:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="y-homing-retract-speed" placeholder="0" value="0">
+                                    <span class="input-unit">mm/s</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Dimensioni e Limiti Asse Z -->
+                <!-- Card 6: Asse Z - Limiti e Settaggi Homing -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">Asse Z - Limiti di Movimento</span>
-                        <span class="card-tag">Axis Z</span>
+                        <span class="card-title">Asse Z - Limiti & Homing</span>
+                        <span class="card-tag">[stepper_z]</span>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -322,7 +423,6 @@
                                 <input type="number" step="0.5" class="form-control" id="z-pos-min" placeholder="-2.0">
                                 <span class="input-unit">mm</span>
                             </div>
-                            <div class="form-helper">Consigliato -2 o -5 per regolazione Z-Offset.</div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="z-pos-max">Max (position_max):</label>
@@ -339,17 +439,40 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" style="margin-top: 1rem;">
-                        <label class="form-label" for="z-homing-speed">Velocità Homing Z (homing_speed):</label>
-                        <div class="input-with-unit">
-                            <input type="number" class="form-control" id="z-homing-speed" placeholder="10.0">
-                            <span class="input-unit">mm/s</span>
+
+                    <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
+                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Parametri Homing Asse Z</span>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="z-homing-speed">homing_speed:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="z-homing-speed" placeholder="0" value="10.0">
+                                    <span class="input-unit">mm/s</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="z-homing-retract-dist">homing_retract_dist:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.5" class="form-control" id="z-homing-retract-dist" placeholder="0" value="3.0">
+                                    <span class="input-unit">mm</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="z-homing-retract-speed">homing_retract_speed:</label>
+                                <div class="input-with-unit">
+                                    <input type="number" class="form-control" id="z-homing-retract-speed" placeholder="0" value="0">
+                                    <span class="input-unit">mm/s</span>
+                                </div>
+                                <div class="form-helper">0 per disabilitare</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Parametri Delta (Visibili se cinematica = delta) -->
-                <div class="card" id="card-delta-params">
+                <!-- Card 7: Parametri Delta (Visibili se cinematica = delta) -->
+                <div class="card" id="card-delta-params" style="display: none;">
                     <div class="card-header">
                         <span class="card-title">Geometria Delta (Opzionale)</span>
                         <span class="card-tag">Delta Geometry</span>
@@ -378,11 +501,12 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
         <!-- ============================================================
-             TAB 3: HOST / MCU
+             TAB 2: HOST / MCU
              ============================================================ -->
         <section class="tab-pane" id="tab-host-mcu">
             <div class="grid-container">
@@ -483,15 +607,18 @@
         </section>
 
         <!-- ============================================================
-             TAB 4: STEPPER (COMPRESI I DRIVER)
+             TAB 3: STEPPER (COMPRESI I DRIVER - ADATTIVO A IDEX & MULTI-Z)
              ============================================================ -->
         <section class="tab-pane" id="tab-stepper">
-            <!-- Sub-tabs per selezionare l'asse: X, Y, Z, Z1, ecc. -->
-            <div class="subtabs">
+            <!-- Sub-tabs generati/aggiornati dinamicamente per: X, Dual Carriage (se IDEX), Y, Z, Z1, Z2, Z3 -->
+            <div class="subtabs" id="stepper-subtabs-container">
                 <button class="subtab-btn active" data-stepper="stepper_x">Asse X [stepper_x]</button>
+                <button class="subtab-btn" data-stepper="dual_carriage" id="btn-subtab-dual-carriage" style="display: none;">Dual Carriage X2 [dual_carriage]</button>
                 <button class="subtab-btn" data-stepper="stepper_y">Asse Y [stepper_y]</button>
                 <button class="subtab-btn" data-stepper="stepper_z">Asse Z [stepper_z]</button>
-                <button class="subtab-btn" data-stepper="stepper_z1">Asse Z1 [stepper_z1] (Dual Z)</button>
+                <button class="subtab-btn" data-stepper="stepper_z1" id="btn-subtab-z1" style="display: none;">Asse Z1 [stepper_z1]</button>
+                <button class="subtab-btn" data-stepper="stepper_z2" id="btn-subtab-z2" style="display: none;">Asse Z2 [stepper_z2]</button>
+                <button class="subtab-btn" data-stepper="stepper_z3" id="btn-subtab-z3" style="display: none;">Asse Z3 [stepper_z3]</button>
             </div>
 
             <div class="grid-container">
@@ -555,10 +682,15 @@
                         <div class="form-helper">40 per cinghie GT2 a 20 denti, 8.0 per barra trapezia T8x8, 4.0 per T8x4.</div>
                     </div>
 
-                    <div class="form-group">
+                    <!-- Endstop Pin (solo per X, Y, Z primario e Dual Carriage) -->
+                    <div class="form-group" id="group-stepper-endstop">
                         <label class="form-label" for="stepper-endstop-pin">Finecorsa / Endstop Pin:</label>
                         <input type="text" class="form-control" id="stepper-endstop-pin" placeholder="^PA5 o probe:z_virtual_endstop">
                         <div class="form-helper">Usa '^' per pull-up interno. Per sensorless homing: tmc2209_stepper_x:virtual_endstop</div>
+                    </div>
+
+                    <div id="notice-aux-z" style="display: none; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-secondary);">
+                        ℹ️ <em>I limiti di corsa ed endstop per gli assi Z ausiliari (Z1, Z2, Z3) sono gestiti centralmente dall'asse principale [stepper_z].</em>
                     </div>
                 </div>
 
@@ -614,7 +746,7 @@
                         </div>
 
                         <!-- Sensorless Homing (StallGuard) -->
-                        <div class="form-group" style="margin-top: 1rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm);">
+                        <div class="form-group" id="group-sensorless-homing" style="margin-top: 1rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm);">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="driver-sensorless-enable">
                                 <strong>Homing Senza Finecorsa Fisico (Sensorless Homing)</strong>
@@ -639,28 +771,21 @@
         </section>
 
         <!-- ============================================================
-             TAB 5: EXTRUDER
+             TAB 4: EXTRUDER (CON SUPPORTO IDEX [extruder1])
              ============================================================ -->
         <section class="tab-pane" id="tab-extruder">
+            <!-- Selettore Estrusore per IDEX -->
+            <div class="subtabs" id="extruder-subtabs-container">
+                <button class="subtab-btn active" data-extruder="extruder">Estrusore 0 [extruder]</button>
+                <button class="subtab-btn" data-extruder="extruder1" id="btn-subtab-extruder1" style="display: none;">Estrusore 1 IDEX [extruder1]</button>
+            </div>
+
             <div class="grid-container">
-                <!-- Meccanica ed Ugello [extruder] -->
+                <!-- Meccanica ed Ugello -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title">Meccanica Estrusore & Ugello</span>
-                        <span class="card-tag">[extruder]</span>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="extruder-preset-select">Preset Meccanica Rapido:</label>
-                        <select class="form-control" id="extruder-preset-select">
-                            <option value="">-- Seleziona Tipo di Estrusore --</option>
-                            <option value="creality_stock">Creality Stock (Singolo ingranaggio)</option>
-                            <option value="bmg">Bondtech BMG / Dual Drive Clone (50:17)</option>
-                            <option value="orbiter_2">LDO Orbiter v2.0</option>
-                            <option value="voron_cw2">Voron Stealthburner / CW2 (50:10)</option>
-                            <option value="sherpa_mini">Sherpa Mini (50:10)</option>
-                            <option value="titan">E3D Titan Extruder (3:1)</option>
-                        </select>
+                        <span class="card-title" id="extruder-card-title">Meccanica Estrusore & Ugello</span>
+                        <span class="card-tag" id="extruder-card-tag">[extruder]</span>
                     </div>
 
                     <div class="form-row">
@@ -688,7 +813,7 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="extruder-gear-ratio">Rapporto Ingranaggi (gear_ratio):</label>
-                            <input type="text" class="form-control" id="extruder-gear-ratio" placeholder="50:17 o vuoto">
+                            <input type="text" class="form-control" id="extruder-gear-ratio" placeholder="50:17 o 50:10 o vuoto">
                         </div>
                     </div>
 
@@ -795,7 +920,7 @@
         </section>
 
         <!-- ============================================================
-             TAB 6: BED (PIATTO RISCALDATO)
+             TAB 5: BED (PIATTO RISCALDATO)
              ============================================================ -->
         <section class="tab-pane" id="tab-bed">
             <div class="grid-container">
@@ -882,7 +1007,7 @@
         </section>
 
         <!-- ============================================================
-             TAB 7: MISCELEUS (VENTOLE, LED, FUNZIONI BASE)
+             TAB 6: MISCELEUS (VENTOLE, LED, FUNZIONI BASE)
              ============================================================ -->
         <section class="tab-pane" id="tab-misc">
             <div class="grid-container">
@@ -969,7 +1094,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="idle-timeout">Idle Timeout (Spegnimento automatico motori/riscaldatori):</label>
+                        <label class="form-label" for="idle-timeout">Idle Timeout (Spegnimento motori/riscaldatori):</label>
                         <div class="input-with-unit">
                             <input type="number" class="form-control" id="idle-timeout" placeholder="1800">
                             <span class="input-unit">sec</span>
@@ -981,7 +1106,7 @@
         </section>
 
         <!-- ============================================================
-             TAB 8: MACRO
+             TAB 7: MACRO
              ============================================================ -->
         <section class="tab-pane" id="tab-macro">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
@@ -1008,10 +1133,11 @@
         </section>
 
         <!-- ============================================================
-             TAB 9: CALIBRATION (SONDE, BED MESH, INPUT SHAPER)
+             TAB 8: CALIBRATION (SONDE, BED MESH, INPUT SHAPER, Z-TILT, QGL)
              ============================================================ -->
         <section class="tab-pane" id="tab-calibration">
             <div class="grid-container">
+
                 <!-- Sonda / BLTouch / Probe -->
                 <div class="card">
                     <div class="card-header">
@@ -1077,7 +1203,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="probe-samples-result">Risultato Campioni:</label>
                                 <select class="form-control" id="probe-samples-result">
-                                    <option value="median">median (Mediana - scarta valori anomali)</option>
+                                    <option value="median">median (Mediana)</option>
                                     <option value="average">average (Media)</option>
                                 </select>
                             </div>
@@ -1103,7 +1229,6 @@
                         <div class="form-group">
                             <label class="form-label" for="safe-z-pos">Coordinate Centro (home_xy_position):</label>
                             <input type="text" class="form-control" id="safe-z-pos" placeholder="117.5, 117.5">
-                            <div class="form-helper">Coordinate X, Y dove la sonda eseguirà l'homing dell'asse Z.</div>
                         </div>
 
                         <div class="form-row">
@@ -1120,6 +1245,66 @@
                                     <input type="number" class="form-control" id="safe-z-speed" placeholder="50.0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Livellamento Multi-Asse Z (Z-Tilt Leveling: [z_tilt]) per 2 o 3 motori Z -->
+                <div class="card" id="card-z-tilt" style="display: none;">
+                    <div class="card-header">
+                        <span class="card-title">Allineamento Indipendente Motori Z ([z_tilt])</span>
+                        <span class="card-tag">[z_tilt]</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="z-tilt-positions">Posizioni Punti Pivot Motori Z (z_positions):</label>
+                        <input type="text" class="form-control" id="z-tilt-positions" placeholder="-50, 18 \n 350, 18">
+                        <div class="form-helper">Coordinate fisiche dei perni dei motori Z (una per riga o separate da virgola).</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="z-tilt-points">Punti Sonda Piatto da Verificare (points):</label>
+                        <input type="text" class="form-control" id="z-tilt-points" placeholder="30, 110 \n 200, 110">
+                        <div class="form-helper">Coordinate del piatto dove la sonda misurerà l'inclinazione.</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="z-tilt-retries">Tentativi Max (retries):</label>
+                            <input type="number" class="form-control" id="z-tilt-retries" value="3">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="z-tilt-tolerance">Tolleranza (retry_tolerance):</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.005" class="form-control" id="z-tilt-tolerance" value="0.02">
+                                <span class="input-unit">mm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Livellamento Quad Gantry Level ([quad_gantry_level]) per 4 motori Z -->
+                <div class="card" id="card-quad-gantry" style="display: none;">
+                    <div class="card-header">
+                        <span class="card-title">Allineamento 4 Motori Z ([quad_gantry_level])</span>
+                        <span class="card-tag">[quad_gantry_level]</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="qgl-corners">Angoli Esterni Gantry (gantry_corners):</label>
+                        <input type="text" class="form-control" id="qgl-corners" placeholder="-60, -10 \n 360, 370">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="qgl-points">4 Punti Sonda da Verificare (points):</label>
+                        <input type="text" class="form-control" id="qgl-points" placeholder="50, 25 \n 50, 225 \n 250, 225 \n 250, 25">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="qgl-retries">Tentativi Max (retries):</label>
+                            <input type="number" class="form-control" id="qgl-retries" value="5">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="qgl-tolerance">Tolleranza (retry_tolerance):</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.0025" class="form-control" id="qgl-tolerance" value="0.0075">
+                                <span class="input-unit">mm</span>
                             </div>
                         </div>
                     </div>
@@ -1218,6 +1403,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 

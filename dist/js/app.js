@@ -1,7 +1,7 @@
 /**
  * Klipper Configurator - Main Application Controller
- * Gestisce l'interfaccia utente, il sincronismo bidirezionale con KlipperConfigParser
- * e le chiamate API verso Moonraker per Mainsail WebUI.
+ * Gestisce l'interfaccia utente unificata (Cinematica + Stampante), supporto IDEX,
+ * Multi-Asse Z (Z1, Z2, Z3), parametri di homing estesi e sincronizzazione con Moonraker.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         moonraker: new MoonrakerClient(localStorage.getItem('moonraker_url') || ''),
         currentConfigFile: 'printer.cfg',
         currentStepper: 'stepper_x',
+        currentExtruder: 'extruder',
         macros: []
     };
 
@@ -34,14 +35,42 @@ document.addEventListener('DOMContentLoaded', () => {
         // Tabs
         tabButtons: document.querySelectorAll('.tab-btn'),
         tabPanes: document.querySelectorAll('.tab-pane'),
-        
+
+        // Cinematica & Architettura
+        printerKinematics: document.getElementById('printer-kinematics'),
+        cardDeltaParams: document.getElementById('card-delta-params'),
+        checkEnableIdex: document.getElementById('check-enable-idex'),
+        selectZMotorCount: document.getElementById('select-z-motor-count'),
+        cardDualCarriage: document.getElementById('card-dual-carriage'),
+
         // Stepper Subtabs
-        subtabButtons: document.querySelectorAll('.subtab-btn'),
+        subtabButtons: document.querySelectorAll('#stepper-subtabs-container .subtab-btn'),
+        btnSubtabDualCarriage: document.getElementById('btn-subtab-dual-carriage'),
+        btnSubtabZ1: document.getElementById('btn-subtab-z1'),
+        btnSubtabZ2: document.getElementById('btn-subtab-z2'),
+        btnSubtabZ3: document.getElementById('btn-subtab-z3'),
         stepperCardTitle: document.getElementById('stepper-card-title'),
         stepperCardTag: document.getElementById('stepper-card-tag'),
         driverCardTitle: document.getElementById('driver-card-title'),
         driverCardTag: document.getElementById('driver-card-tag'),
+        groupStepperEndstop: document.getElementById('group-stepper-endstop'),
+        noticeAuxZ: document.getElementById('notice-aux-z'),
+        groupSensorlessHoming: document.getElementById('group-sensorless-homing'),
+        driverModelSelect: document.getElementById('driver-model-select'),
+        driverSmartFields: document.getElementById('driver-smart-fields'),
+        driverSensorlessEnable: document.getElementById('driver-sensorless-enable'),
+        sensorlessDetails: document.getElementById('sensorless-details'),
+
+        // Extruder Subtabs (IDEX)
+        extruderSubtabs: document.querySelectorAll('#extruder-subtabs-container .subtab-btn'),
+        btnSubtabExtruder1: document.getElementById('btn-subtab-extruder1'),
+        extruderCardTitle: document.getElementById('extruder-card-title'),
+        extruderCardTag: document.getElementById('extruder-card-tag'),
         
+        // Calibration Multi-Z Cards
+        cardZTilt: document.getElementById('card-z-tilt'),
+        cardQuadGantry: document.getElementById('card-quad-gantry'),
+
         // Macro Container
         macroListContainer: document.getElementById('macro-list-container'),
         btnAddMacro: document.getElementById('btn-add-macro'),
@@ -72,17 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
         calcLeadscrewPitch: document.getElementById('calc-leadscrew-pitch'),
         calcResultVal: document.getElementById('calc-result-val'),
 
-        // Presets
-        presetPrinterSelect: document.getElementById('preset-printer-select'),
-        btnApplyPreset: document.getElementById('btn-apply-preset'),
-        extruderPresetSelect: document.getElementById('extruder-preset-select'),
-
         // Toast
         toastContainer: document.getElementById('toast-container')
     };
 
     // -------------------------------------------------------------------------
-    // Gestione Notifiche Toast
+    // Notifiche Floating Toast
     // -------------------------------------------------------------------------
     function showToast(message, type = 'info', duration = 3500) {
         const toast = document.createElement('div');
@@ -96,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------------------
-    // Navigazione Tab
+    // Navigazione Tab Principale
     // -------------------------------------------------------------------------
     dom.tabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -109,65 +133,128 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Subtabs per gli Stepper (X, Y, Z, Z1)
+    // -------------------------------------------------------------------------
+    // Gestione IDEX e Multi-Asse Z (Visibilità e Subtab Dinamici)
+    // -------------------------------------------------------------------------
+    function updateIdexVisibility() {
+        const isIdex = dom.checkEnableIdex.checked;
+        dom.cardDualCarriage.style.display = isIdex ? 'block' : 'none';
+        dom.btnSubtabDualCarriage.style.display = isIdex ? 'inline-flex' : 'none';
+        dom.btnSubtabExtruder1.style.display = isIdex ? 'inline-flex' : 'none';
+
+        if (!isIdex) {
+            if (state.currentStepper === 'dual_carriage') {
+                switchStepper('stepper_x');
+            }
+            if (state.currentExtruder === 'extruder1') {
+                switchExtruder('extruder');
+            }
+        }
+    }
+
+    function updateMultiZVisibility() {
+        const count = parseInt(dom.selectZMotorCount.value, 10) || 1;
+        dom.btnSubtabZ1.style.display = count >= 2 ? 'inline-flex' : 'none';
+        dom.btnSubtabZ2.style.display = count >= 3 ? 'inline-flex' : 'none';
+        dom.btnSubtabZ3.style.display = count >= 4 ? 'inline-flex' : 'none';
+
+        // Ripristina asse attivo se nascosto
+        if (state.currentStepper === 'stepper_z1' && count < 2) switchStepper('stepper_z');
+        if (state.currentStepper === 'stepper_z2' && count < 3) switchStepper('stepper_z');
+        if (state.currentStepper === 'stepper_z3' && count < 4) switchStepper('stepper_z');
+
+        // Aggiorna schede Calibration
+        if (count >= 2 && count <= 3) {
+            dom.cardZTilt.style.display = 'block';
+            dom.cardQuadGantry.style.display = 'none';
+        } else if (count === 4) {
+            dom.cardZTilt.style.display = 'none';
+            dom.cardQuadGantry.style.display = 'block';
+        } else {
+            dom.cardZTilt.style.display = 'none';
+            dom.cardQuadGantry.style.display = 'none';
+        }
+    }
+
+    dom.checkEnableIdex.addEventListener('change', () => {
+        updateIdexVisibility();
+        showToast(dom.checkEnableIdex.checked ? 'Architettura IDEX abilitata: attivati Dual Carriage ed Extruder 1' : 'Architettura IDEX disabilitata', 'info');
+    });
+
+    dom.selectZMotorCount.addEventListener('change', () => {
+        updateMultiZVisibility();
+        const cnt = dom.selectZMotorCount.value;
+        showToast(`Impostati ${cnt} motori per l'asse Z`, 'info');
+    });
+
+    // Cinematica Delta card
+    dom.printerKinematics.addEventListener('change', () => {
+        dom.cardDeltaParams.style.display = dom.printerKinematics.value === 'delta' ? 'block' : 'none';
+    });
+
+    // -------------------------------------------------------------------------
+    // Subtabs Stepper (X, Dual Carriage, Y, Z, Z1, Z2, Z3)
+    // -------------------------------------------------------------------------
+    function switchStepper(targetStepper) {
+        saveCurrentStepperToParser();
+        dom.subtabButtons.forEach(b => b.classList.remove('active'));
+        const btn = document.querySelector(`#stepper-subtabs-container .subtab-btn[data-stepper="${targetStepper}"]`);
+        if (btn) btn.classList.add('active');
+        state.currentStepper = targetStepper;
+        loadCurrentStepperFromParser();
+    }
+
     dom.subtabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Salva le modifiche dello stepper corrente nel parser prima di cambiare
-            saveCurrentStepperToParser();
-            
-            dom.subtabButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            state.currentStepper = btn.getAttribute('data-stepper');
-            loadCurrentStepperFromParser();
+            const target = btn.getAttribute('data-stepper');
+            switchStepper(target);
         });
     });
 
     // -------------------------------------------------------------------------
-    // Dinamica Campi (Visibility Toggles)
+    // Subtabs Extruder (extruder, extruder1)
     // -------------------------------------------------------------------------
-    // Cinematica Delta card
-    const printerKinematics = document.getElementById('printer-kinematics');
-    const cardDeltaParams = document.getElementById('card-delta-params');
-    printerKinematics.addEventListener('change', () => {
-        cardDeltaParams.style.display = printerKinematics.value === 'delta' ? 'block' : 'none';
+    function switchExtruder(targetExtruder) {
+        saveCurrentExtruderToParser();
+        dom.extruderSubtabs.forEach(b => b.classList.remove('active'));
+        const btn = document.querySelector(`#extruder-subtabs-container .subtab-btn[data-extruder="${targetExtruder}"]`);
+        if (btn) btn.classList.add('active');
+        state.currentExtruder = targetExtruder;
+        loadCurrentExtruderFromParser();
+    }
+
+    dom.extruderSubtabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-extruder');
+            switchExtruder(target);
+        });
     });
 
-    // Host MCU Connection type
+    // -------------------------------------------------------------------------
+    // Toggle Campi Secondari (MCU, Driver, Sensorless, Probe, Safe-Z, Shaper)
+    // -------------------------------------------------------------------------
     const mcuConnType = document.getElementById('mcu-conn-type');
     const groupMcuSerial = document.getElementById('group-mcu-serial');
     const groupMcuCanbus = document.getElementById('group-mcu-canbus');
     mcuConnType.addEventListener('change', () => {
-        if (mcuConnType.value === 'canbus') {
-            groupMcuSerial.style.display = 'none';
-            groupMcuCanbus.style.display = 'block';
-        } else {
-            groupMcuSerial.style.display = 'block';
-            groupMcuCanbus.style.display = 'none';
-        }
+        groupMcuSerial.style.display = mcuConnType.value === 'canbus' ? 'none' : 'block';
+        groupMcuCanbus.style.display = mcuConnType.value === 'canbus' ? 'block' : 'none';
     });
 
-    // Extra MCU Toggle
     const checkEnableExtraMcu = document.getElementById('check-enable-extra-mcu');
     const extraMcuFields = document.getElementById('extra-mcu-fields');
     checkEnableExtraMcu.addEventListener('change', () => {
         extraMcuFields.style.display = checkEnableExtraMcu.checked ? 'block' : 'none';
     });
 
-    // Stepper Driver Smart Fields Toggle
-    const driverModelSelect = document.getElementById('driver-model-select');
-    const driverSmartFields = document.getElementById('driver-smart-fields');
-    driverModelSelect.addEventListener('change', () => {
-        driverSmartFields.style.display = driverModelSelect.value === 'none' ? 'none' : 'block';
+    dom.driverModelSelect.addEventListener('change', () => {
+        dom.driverSmartFields.style.display = dom.driverModelSelect.value === 'none' ? 'none' : 'block';
     });
 
-    // Sensorless Homing Toggle
-    const driverSensorlessEnable = document.getElementById('driver-sensorless-enable');
-    const sensorlessDetails = document.getElementById('sensorless-details');
-    driverSensorlessEnable.addEventListener('change', () => {
-        sensorlessDetails.style.display = driverSensorlessEnable.checked ? 'block' : 'none';
+    dom.driverSensorlessEnable.addEventListener('change', () => {
+        dom.sensorlessDetails.style.display = dom.driverSensorlessEnable.checked ? 'block' : 'none';
     });
 
-    // Probe Type Toggle
     const probeTypeSelect = document.getElementById('probe-type-select');
     const probeConfigFields = document.getElementById('probe-config-fields');
     const groupProbeControlPin = document.getElementById('group-probe-control-pin');
@@ -180,21 +267,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Safe Z Home Toggle
     const checkEnableSafeZ = document.getElementById('check-enable-safe-z');
     const safeZFields = document.getElementById('safe-z-fields');
     checkEnableSafeZ.addEventListener('change', () => {
         safeZFields.style.display = checkEnableSafeZ.checked ? 'block' : 'none';
     });
 
-    // Input Shaper Toggle
     const checkEnableShaper = document.getElementById('check-enable-shaper');
     const shaperFields = document.getElementById('shaper-fields');
     checkEnableShaper.addEventListener('change', () => {
         shaperFields.style.display = checkEnableShaper.checked ? 'block' : 'none';
     });
 
-    // Invert pin checkboxes (Dir Pin, Enable Pin)
+    // Toggle inversione pin con '!'
     const setupInvertPinToggle = (inputEl, checkEl) => {
         checkEl.addEventListener('change', () => {
             let val = inputEl.value.trim();
@@ -218,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const type = dom.calcDriveType.value;
         if (type === 'belt') {
             const teeth = parseFloat(dom.calcPulleyTeeth.value) || 20;
-            const res = teeth * 2; // GT2 = 2mm pitch
+            const res = teeth * 2;
             dom.calcResultVal.textContent = `${res.toFixed(3)} mm`;
             return res.toFixed(3);
         } else {
@@ -235,13 +320,8 @@ document.addEventListener('DOMContentLoaded', () => {
     dom.btnCloseCalc.addEventListener('click', () => dom.modalCalc.classList.remove('open'));
     dom.btnCancelCalc.addEventListener('click', () => dom.modalCalc.classList.remove('open'));
     dom.calcDriveType.addEventListener('change', () => {
-        if (dom.calcDriveType.value === 'belt') {
-            dom.calcBeltFields.style.display = 'block';
-            dom.calcLeadFields.style.display = 'none';
-        } else {
-            dom.calcBeltFields.style.display = 'none';
-            dom.calcLeadFields.style.display = 'block';
-        }
+        dom.calcBeltFields.style.display = dom.calcDriveType.value === 'belt' ? 'block' : 'none';
+        dom.calcLeadFields.style.display = dom.calcDriveType.value === 'belt' ? 'none' : 'block';
         updateCalcResult();
     });
     dom.calcPulleyTeeth.addEventListener('input', updateCalcResult);
@@ -254,58 +334,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // -------------------------------------------------------------------------
-    // Preset Stampanti e Preset Estrusori
-    // -------------------------------------------------------------------------
-    dom.btnApplyPreset.addEventListener('click', () => {
-        const key = dom.presetPrinterSelect.value;
-        if (!key || !KLIPPER_CONSTANTS.PRINTER_PRESETS[key]) {
-            showToast('Seleziona un modello valido dall\'elenco', 'warning');
-            return;
-        }
-        const p = KLIPPER_CONSTANTS.PRINTER_PRESETS[key];
-        
-        // Applica a Stampante
-        printerKinematics.value = p.kinematics;
-        document.getElementById('printer-max-velocity').value = p.max_velocity;
-        document.getElementById('printer-max-accel').value = p.max_accel;
-        printerKinematics.dispatchEvent(new Event('change'));
-
-        // Applica a Limiti Asse
-        document.getElementById('x-pos-min').value = p.x_min;
-        document.getElementById('x-pos-max').value = p.x_max;
-        document.getElementById('x-pos-endstop').value = p.x_endstop;
-
-        document.getElementById('y-pos-min').value = p.y_min;
-        document.getElementById('y-pos-max').value = p.y_max;
-        document.getElementById('y-pos-endstop').value = p.y_endstop;
-
-        document.getElementById('z-pos-min').value = p.z_min;
-        document.getElementById('z-pos-max').value = p.z_max;
-        document.getElementById('z-pos-endstop').value = p.z_endstop;
-
-        // Bed Mesh e Safe Z Home
-        document.getElementById('safe-z-pos').value = `${p.bed_x / 2}, ${p.bed_y / 2}`;
-        document.getElementById('mesh-min').value = `15, 15`;
-        document.getElementById('mesh-max').value = `${p.bed_x - 15}, ${p.bed_y - 15}`;
-
-        showToast(`Parametri per ${p.title} applicati con successo!`, 'success');
-    });
-
-    dom.extruderPresetSelect.addEventListener('change', () => {
-        const key = dom.extruderPresetSelect.value;
-        if (!key || !KLIPPER_CONSTANTS.EXTRUDER_PRESETS[key]) return;
-        const e = KLIPPER_CONSTANTS.EXTRUDER_PRESETS[key];
-
-        document.getElementById('extruder-rot-dist').value = e.rotation_distance;
-        document.getElementById('extruder-gear-ratio').value = e.gear_ratio;
-        showToast(`Parametri estrusore "${e.name}" impostati`, 'info');
-    });
-
-    // -------------------------------------------------------------------------
-    // Gestione Stepper Corrente
+    // Gestione Stepper e Driver Attivo
     // -------------------------------------------------------------------------
     function getDriverSectionName(stepperName) {
-        // Cerca se esiste già un tmc nella configurazione
         for (const driverType of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
             if (state.parser.hasSection(`${driverType} ${stepperName}`)) {
                 return { type: driverType, section: `${driverType} ${stepperName}` };
@@ -316,11 +347,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadCurrentStepperFromParser() {
         const s = state.currentStepper;
-        const axisLetter = s.replace('stepper_', '').toUpperCase();
-        dom.stepperCardTitle.textContent = `Configurazione Motore Asse ${axisLetter}`;
-        dom.stepperCardTag.textContent = `[${s}]`;
+        const isAuxZ = s === 'stepper_z1' || s === 'stepper_z2' || s === 'stepper_z3';
+        const isDualCarriage = s === 'dual_carriage';
 
-        // Carica campi motore
+        // Etichette
+        if (isDualCarriage) {
+            dom.stepperCardTitle.textContent = 'Configurazione Dual Carriage X2';
+            dom.stepperCardTag.textContent = '[dual_carriage]';
+        } else if (isAuxZ) {
+            const zNum = s.replace('stepper_', '').toUpperCase();
+            dom.stepperCardTitle.textContent = `Configurazione Motore Asse ${zNum}`;
+            dom.stepperCardTag.textContent = `[${s}]`;
+        } else {
+            const axisLetter = s.replace('stepper_', '').toUpperCase();
+            dom.stepperCardTitle.textContent = `Configurazione Motore Asse ${axisLetter}`;
+            dom.stepperCardTag.textContent = `[${s}]`;
+        }
+
+        // Visibilità endstop per motori ausiliari Z
+        if (isAuxZ) {
+            dom.groupStepperEndstop.style.display = 'none';
+            dom.noticeAuxZ.style.display = 'block';
+            dom.groupSensorlessHoming.style.display = 'none';
+        } else {
+            dom.groupStepperEndstop.style.display = 'block';
+            dom.noticeAuxZ.style.display = 'none';
+            dom.groupSensorlessHoming.style.display = 'block';
+        }
+
+        // Caricamento pin e parametri motore
         document.getElementById('stepper-step-pin').value = state.parser.get(s, 'step_pin', '');
         
         const dirPin = state.parser.get(s, 'dir_pin', '');
@@ -333,22 +388,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('stepper-microsteps').value = state.parser.get(s, 'microsteps', '16');
         document.getElementById('stepper-steps-rotation').value = state.parser.get(s, 'full_steps_per_rotation', '200');
-        document.getElementById('stepper-rotation-distance').value = state.parser.get(s, 'rotation_distance', '40.0');
+        document.getElementById('stepper-rotation-distance').value = state.parser.get(s, 'rotation_distance', isAuxZ || s === 'stepper_z' ? '8.0' : '40.0');
         document.getElementById('stepper-endstop-pin').value = state.parser.get(s, 'endstop_pin', '');
 
-        // Carica campi driver
+        // Caricamento driver
         const driverInfo = getDriverSectionName(s);
         const hasDriver = state.parser.hasSection(driverInfo.section);
 
-        dom.driverCardTitle.textContent = `Driver Stepper Asse ${axisLetter}`;
+        dom.driverCardTitle.textContent = `Driver TMC per [${s}]`;
         dom.driverCardTag.textContent = `[${hasDriver ? driverInfo.section : 'Driver Non Configurato'}]`;
 
         if (!hasDriver) {
-            driverModelSelect.value = 'none';
-            driverSmartFields.style.display = 'none';
+            dom.driverModelSelect.value = 'none';
+            dom.driverSmartFields.style.display = 'none';
         } else {
-            driverModelSelect.value = driverInfo.type;
-            driverSmartFields.style.display = 'block';
+            dom.driverModelSelect.value = driverInfo.type;
+            dom.driverSmartFields.style.display = 'block';
             document.getElementById('driver-uart-pin').value = state.parser.get(driverInfo.section, 'uart_pin', state.parser.get(driverInfo.section, 'cs_pin', ''));
             document.getElementById('driver-run-current').value = state.parser.get(driverInfo.section, 'run_current', '0.800');
             document.getElementById('driver-stealthchop').value = state.parser.get(driverInfo.section, 'stealthchop_threshold', '999999');
@@ -358,13 +413,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const diagPin = state.parser.get(driverInfo.section, 'diag_pin', '');
             const sgthrs = state.parser.get(driverInfo.section, 'driver_SGTHRS', '');
             if (diagPin || sgthrs) {
-                driverSensorlessEnable.checked = true;
-                sensorlessDetails.style.display = 'block';
+                dom.driverSensorlessEnable.checked = true;
+                dom.sensorlessDetails.style.display = 'block';
                 document.getElementById('driver-diag-pin').value = diagPin;
                 document.getElementById('driver-sgthrs').value = sgthrs;
             } else {
-                driverSensorlessEnable.checked = false;
-                sensorlessDetails.style.display = 'none';
+                dom.driverSensorlessEnable.checked = false;
+                dom.sensorlessDetails.style.display = 'none';
                 document.getElementById('driver-diag-pin').value = '';
                 document.getElementById('driver-sgthrs').value = '';
             }
@@ -373,6 +428,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveCurrentStepperToParser() {
         const s = state.currentStepper;
+        const isAuxZ = s === 'stepper_z1' || s === 'stepper_z2' || s === 'stepper_z3';
+        const isDualCarriage = s === 'dual_carriage';
+
+        if (isDualCarriage) {
+            state.parser.set(s, 'axis', 'x');
+        }
 
         state.parser.set(s, 'step_pin', document.getElementById('stepper-step-pin').value.trim());
         state.parser.set(s, 'dir_pin', document.getElementById('stepper-dir-pin').value.trim());
@@ -380,11 +441,18 @@ document.addEventListener('DOMContentLoaded', () => {
         state.parser.set(s, 'microsteps', document.getElementById('stepper-microsteps').value);
         state.parser.set(s, 'full_steps_per_rotation', document.getElementById('stepper-steps-rotation').value);
         state.parser.set(s, 'rotation_distance', document.getElementById('stepper-rotation-distance').value.trim());
-        state.parser.set(s, 'endstop_pin', document.getElementById('stepper-endstop-pin').value.trim());
+
+        if (!isAuxZ) {
+            state.parser.set(s, 'endstop_pin', document.getElementById('stepper-endstop-pin').value.trim());
+        } else {
+            state.parser.set(s, 'endstop_pin', null);
+            state.parser.set(s, 'position_min', null);
+            state.parser.set(s, 'position_max', null);
+            state.parser.set(s, 'position_endstop', null);
+        }
 
         // Driver
-        const selectedModel = driverModelSelect.value;
-        // Rimuovi sezioni driver vecchie per questo stepper
+        const selectedModel = dom.driverModelSelect.value;
         for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
             state.parser.removeSection(`${d} ${s}`);
         }
@@ -401,11 +469,82 @@ document.addEventListener('DOMContentLoaded', () => {
             state.parser.set(driverSec, 'interpolate', document.getElementById('driver-interpolate').checked ? 'True' : 'False');
             state.parser.set(driverSec, 'stealthchop_threshold', document.getElementById('driver-stealthchop').value);
 
-            if (driverSensorlessEnable.checked) {
+            if (!isAuxZ && dom.driverSensorlessEnable.checked) {
                 state.parser.set(driverSec, 'diag_pin', document.getElementById('driver-diag-pin').value.trim());
                 state.parser.set(driverSec, 'driver_SGTHRS', document.getElementById('driver-sgthrs').value.trim());
             }
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Gestione Extruder e Extruder 1 (IDEX)
+    // -------------------------------------------------------------------------
+    function loadCurrentExtruderFromParser() {
+        const ext = state.currentExtruder;
+        dom.extruderCardTitle.textContent = ext === 'extruder1' ? 'Meccanica Secondo Estrusore IDEX' : 'Meccanica Estrusore Principale';
+        dom.extruderCardTag.textContent = `[${ext}]`;
+
+        document.getElementById('extruder-step-pin').value = state.parser.get(ext, 'step_pin', '');
+        document.getElementById('extruder-dir-pin').value = state.parser.get(ext, 'dir_pin', '');
+        document.getElementById('extruder-enable-pin').value = state.parser.get(ext, 'enable_pin', '');
+        document.getElementById('extruder-rot-dist').value = state.parser.get(ext, 'rotation_distance', '22.678');
+        document.getElementById('extruder-gear-ratio').value = state.parser.get(ext, 'gear_ratio', '');
+        document.getElementById('extruder-nozzle-dia').value = state.parser.get(ext, 'nozzle_diameter', '0.400');
+        document.getElementById('extruder-filament-dia').value = state.parser.get(ext, 'filament_diameter', '1.750');
+        document.getElementById('extruder-pressure-advance').value = state.parser.get(ext, 'pressure_advance', '0.040');
+
+        document.getElementById('extruder-sensor-type').value = state.parser.get(ext, 'sensor_type', 'EPCOS 100K B57560G104F');
+        document.getElementById('extruder-heater-pin').value = state.parser.get(ext, 'heater_pin', '');
+        document.getElementById('extruder-sensor-pin').value = state.parser.get(ext, 'sensor_pin', '');
+        document.getElementById('extruder-min-temp').value = state.parser.get(ext, 'min_temp', '0');
+        document.getElementById('extruder-max-temp').value = state.parser.get(ext, 'max_temp', '280');
+        document.getElementById('extruder-min-extrude').value = state.parser.get(ext, 'min_extrude_temp', '170');
+
+        document.getElementById('extruder-pid-kp').value = state.parser.get(ext, 'pid_Kp', '21.527');
+        document.getElementById('extruder-pid-ki').value = state.parser.get(ext, 'pid_Ki', '1.063');
+        document.getElementById('extruder-pid-kd').value = state.parser.get(ext, 'pid_Kd', '108.982');
+    }
+
+    function saveCurrentExtruderToParser() {
+        const ext = state.currentExtruder;
+        state.parser.set(ext, 'step_pin', document.getElementById('extruder-step-pin').value.trim());
+        state.parser.set(ext, 'dir_pin', document.getElementById('extruder-dir-pin').value.trim());
+        state.parser.set(ext, 'enable_pin', document.getElementById('extruder-enable-pin').value.trim());
+        state.parser.set(ext, 'rotation_distance', document.getElementById('extruder-rot-dist').value.trim());
+        state.parser.set(ext, 'gear_ratio', document.getElementById('extruder-gear-ratio').value.trim());
+        state.parser.set(ext, 'nozzle_diameter', document.getElementById('extruder-nozzle-dia').value.trim());
+        state.parser.set(ext, 'filament_diameter', document.getElementById('extruder-filament-dia').value);
+        state.parser.set(ext, 'pressure_advance', document.getElementById('extruder-pressure-advance').value.trim());
+
+        state.parser.set(ext, 'sensor_type', document.getElementById('extruder-sensor-type').value);
+        state.parser.set(ext, 'heater_pin', document.getElementById('extruder-heater-pin').value.trim());
+        state.parser.set(ext, 'sensor_pin', document.getElementById('extruder-sensor-pin').value.trim());
+        state.parser.set(ext, 'min_temp', document.getElementById('extruder-min-temp').value.trim());
+        state.parser.set(ext, 'max_temp', document.getElementById('extruder-max-temp').value.trim());
+        state.parser.set(ext, 'min_extrude_temp', document.getElementById('extruder-min-extrude').value.trim());
+
+        state.parser.set(ext, 'control', 'pid');
+        state.parser.set(ext, 'pid_Kp', document.getElementById('extruder-pid-kp').value.trim());
+        state.parser.set(ext, 'pid_Ki', document.getElementById('extruder-pid-ki').value.trim());
+        state.parser.set(ext, 'pid_Kd', document.getElementById('extruder-pid-kd').value.trim());
+    }
+
+    // -------------------------------------------------------------------------
+    // Helper Homing Parameters (0 per disabilitare / omettere)
+    // -------------------------------------------------------------------------
+    function applyHomingParam(section, key, valStr) {
+        const val = parseFloat(valStr) || 0;
+        if (val > 0) {
+            state.parser.set(section, key, String(val));
+        } else {
+            state.parser.set(section, key, null);
+        }
+    }
+
+    function readHomingParam(section, key) {
+        const val = state.parser.get(section, key, '');
+        if (!val || parseFloat(val) <= 0) return '0';
+        return val;
     }
 
     // -------------------------------------------------------------------------
@@ -449,7 +588,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.macroListContainer.appendChild(card);
         });
 
-        // Event listener per modifiche macro
         dom.macroListContainer.querySelectorAll('.macro-desc-input').forEach(input => {
             input.addEventListener('input', (e) => {
                 const idx = parseInt(e.target.dataset.index, 10);
@@ -482,7 +620,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const [name, tpl] of Object.entries(templates)) {
             const exists = state.macros.find(m => m.name.toUpperCase() === name.toUpperCase());
             if (!exists) {
-                // Estrai il blocco gcode interno
                 const lines = tpl.gcode.split('\n');
                 const gcodeLines = [];
                 let inGcode = false;
@@ -506,11 +643,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         renderMacroList();
-        showToast(`${count} macro template essenziali inserite`, 'success');
+        showToast(`${count} macro template inserite`, 'success');
     }
 
     dom.btnAddMacro.addEventListener('click', () => {
-        const name = prompt('Inserisci il nome della nuova Macro (es: PURGE_NOZZLE, M600):');
+        const name = prompt('Nome della nuova Macro (es: PURGE_NOZZLE, M600):');
         if (!name) return;
         const cleanName = name.trim().toUpperCase().replace(/[^A-Z0-9_]/g, '_');
         if (state.macros.find(m => m.name === cleanName)) {
@@ -521,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: cleanName,
             description: '',
             rename_existing: '',
-            gcode: '; Inserisci qui i comandi G-Code\nG90\nG28'
+            gcode: '; Comandi G-Code\nG90\nG28'
         });
         renderMacroList();
         showToast(`Macro ${cleanName} creata`, 'success');
@@ -535,8 +672,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateUiFromParser() {
         const p = state.parser;
 
-        // 1. STAMPANTE [printer]
-        printerKinematics.value = p.get('printer', 'kinematics', 'cartesian');
+        // 1. CINEMATICA & PARAMETRI STAMPANTE UNIFICATI [printer]
+        dom.printerKinematics.value = p.get('printer', 'kinematics', 'cartesian');
         document.getElementById('printer-max-velocity').value = p.get('printer', 'max_velocity', '300');
         document.getElementById('printer-max-accel').value = p.get('printer', 'max_accel', '3000');
         document.getElementById('printer-cruise-ratio').value = p.get('printer', 'minimum_cruise_ratio', '0.5');
@@ -544,30 +681,59 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('printer-max-z-velocity').value = p.get('printer', 'max_z_velocity', '15');
         document.getElementById('printer-max-z-accel').value = p.get('printer', 'max_z_accel', '100');
         document.getElementById('printer-max-accel-to-decel').value = p.get('printer', 'max_accel_to_decel', '');
-        printerKinematics.dispatchEvent(new Event('change'));
+        dom.printerKinematics.dispatchEvent(new Event('change'));
 
-        // 2. CINEMATICA (Assi e Limiti)
+        // Rilevamento IDEX
+        const hasDualCarriage = p.hasSection('dual_carriage') || p.hasSection('extruder1');
+        dom.checkEnableIdex.checked = hasDualCarriage;
+        updateIdexVisibility();
+
+        // Rilevamento Multi-Asse Z
+        let zCount = 1;
+        if (p.hasSection('stepper_z3')) zCount = 4;
+        else if (p.hasSection('stepper_z2')) zCount = 3;
+        else if (p.hasSection('stepper_z1')) zCount = 2;
+        dom.selectZMotorCount.value = String(zCount);
+        updateMultiZVisibility();
+
+        // Limiti & Homing Asse X
         document.getElementById('x-pos-min').value = p.get('stepper_x', 'position_min', '0');
         document.getElementById('x-pos-max').value = p.get('stepper_x', 'position_max', '235');
         document.getElementById('x-pos-endstop').value = p.get('stepper_x', 'position_endstop', '0');
-        document.getElementById('x-homing-speed').value = p.get('stepper_x', 'homing_speed', '50.0');
+        document.getElementById('x-homing-speed').value = readHomingParam('stepper_x', 'homing_speed');
+        document.getElementById('x-homing-retract-dist').value = readHomingParam('stepper_x', 'homing_retract_dist');
+        document.getElementById('x-homing-retract-speed').value = readHomingParam('stepper_x', 'homing_retract_speed') || readHomingParam('stepper_x', 'second_homing_speed');
 
+        // Limiti & Homing Dual Carriage X2
+        document.getElementById('dc-pos-min').value = p.get('dual_carriage', 'position_min', '0');
+        document.getElementById('dc-pos-max').value = p.get('dual_carriage', 'position_max', '300');
+        document.getElementById('dc-pos-endstop').value = p.get('dual_carriage', 'position_endstop', '300');
+        document.getElementById('dc-homing-speed').value = readHomingParam('dual_carriage', 'homing_speed');
+        document.getElementById('dc-homing-retract-dist').value = readHomingParam('dual_carriage', 'homing_retract_dist');
+        document.getElementById('dc-homing-retract-speed').value = readHomingParam('dual_carriage', 'homing_retract_speed') || readHomingParam('dual_carriage', 'second_homing_speed');
+
+        // Limiti & Homing Asse Y
         document.getElementById('y-pos-min').value = p.get('stepper_y', 'position_min', '0');
         document.getElementById('y-pos-max').value = p.get('stepper_y', 'position_max', '235');
         document.getElementById('y-pos-endstop').value = p.get('stepper_y', 'position_endstop', '0');
-        document.getElementById('y-homing-speed').value = p.get('stepper_y', 'homing_speed', '50.0');
+        document.getElementById('y-homing-speed').value = readHomingParam('stepper_y', 'homing_speed');
+        document.getElementById('y-homing-retract-dist').value = readHomingParam('stepper_y', 'homing_retract_dist');
+        document.getElementById('y-homing-retract-speed').value = readHomingParam('stepper_y', 'homing_retract_speed') || readHomingParam('stepper_y', 'second_homing_speed');
 
+        // Limiti & Homing Asse Z
         document.getElementById('z-pos-min').value = p.get('stepper_z', 'position_min', '-2.0');
         document.getElementById('z-pos-max').value = p.get('stepper_z', 'position_max', '250');
         document.getElementById('z-pos-endstop').value = p.get('stepper_z', 'position_endstop', '0.0');
-        document.getElementById('z-homing-speed').value = p.get('stepper_z', 'homing_speed', '10.0');
+        document.getElementById('z-homing-speed').value = readHomingParam('stepper_z', 'homing_speed');
+        document.getElementById('z-homing-retract-dist').value = readHomingParam('stepper_z', 'homing_retract_dist');
+        document.getElementById('z-homing-retract-speed').value = readHomingParam('stepper_z', 'homing_retract_speed') || readHomingParam('stepper_z', 'second_homing_speed');
 
-        // Delta
+        // Parametri Delta
         document.getElementById('delta-arm-length').value = p.get('delta', 'arm_length', '265.0');
         document.getElementById('delta-radius').value = p.get('delta', 'delta_radius', '130.0');
         document.getElementById('delta-print-radius').value = p.get('delta', 'print_radius', '100.0');
 
-        // 3. HOST / MCU
+        // 2. HOST / MCU
         const canUuid = p.get('mcu', 'canbus_uuid', '');
         if (canUuid) {
             mcuConnType.value = 'canbus';
@@ -583,31 +749,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('check-enable-host-temp').checked = p.hasSection('temperature_sensor raspberry_pi') || p.hasSection('temperature_sensor host');
         document.getElementById('check-enable-mcu-temp').checked = p.hasSection('temperature_sensor mcu_temp');
 
-        // 4. STEPPER & DRIVER
+        // 3. STEPPER & DRIVER
         loadCurrentStepperFromParser();
 
-        // 5. EXTRUDER
-        document.getElementById('extruder-step-pin').value = p.get('extruder', 'step_pin', '');
-        document.getElementById('extruder-dir-pin').value = p.get('extruder', 'dir_pin', '');
-        document.getElementById('extruder-enable-pin').value = p.get('extruder', 'enable_pin', '');
-        document.getElementById('extruder-rot-dist').value = p.get('extruder', 'rotation_distance', '22.678');
-        document.getElementById('extruder-gear-ratio').value = p.get('extruder', 'gear_ratio', '');
-        document.getElementById('extruder-nozzle-dia').value = p.get('extruder', 'nozzle_diameter', '0.400');
-        document.getElementById('extruder-filament-dia').value = p.get('extruder', 'filament_diameter', '1.750');
-        document.getElementById('extruder-pressure-advance').value = p.get('extruder', 'pressure_advance', '0.040');
+        // 4. EXTRUDER
+        loadCurrentExtruderFromParser();
 
-        document.getElementById('extruder-sensor-type').value = p.get('extruder', 'sensor_type', 'EPCOS 100K B57560G104F');
-        document.getElementById('extruder-heater-pin').value = p.get('extruder', 'heater_pin', '');
-        document.getElementById('extruder-sensor-pin').value = p.get('extruder', 'sensor_pin', '');
-        document.getElementById('extruder-min-temp').value = p.get('extruder', 'min_temp', '0');
-        document.getElementById('extruder-max-temp').value = p.get('extruder', 'max_temp', '280');
-        document.getElementById('extruder-min-extrude').value = p.get('extruder', 'min_extrude_temp', '170');
-
-        document.getElementById('extruder-pid-kp').value = p.get('extruder', 'pid_Kp', '21.527');
-        document.getElementById('extruder-pid-ki').value = p.get('extruder', 'pid_Ki', '1.063');
-        document.getElementById('extruder-pid-kd').value = p.get('extruder', 'pid_Kd', '108.982');
-
-        // 6. BED
+        // 5. BED
         document.getElementById('bed-sensor-type').value = p.get('heater_bed', 'sensor_type', 'EPCOS 100K B57560G104F');
         document.getElementById('bed-heater-pin').value = p.get('heater_bed', 'heater_pin', '');
         document.getElementById('bed-sensor-pin').value = p.get('heater_bed', 'sensor_pin', '');
@@ -618,7 +766,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('bed-pid-ki').value = p.get('heater_bed', 'pid_Ki', '0.770');
         document.getElementById('bed-pid-kd').value = p.get('heater_bed', 'pid_Kd', '948.182');
 
-        // 7. MISCELEUS
+        // 6. MISCELEUS
         document.getElementById('fan-part-pin').value = p.get('fan', 'pin', '');
         document.getElementById('fan-part-kick').value = p.get('fan', 'kick_start_time', '0.5');
         document.getElementById('fan-part-off-below').value = p.get('fan', 'off_below', '0.10');
@@ -636,7 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('check-respond').checked = p.hasSection('respond');
         document.getElementById('idle-timeout').value = p.get('idle_timeout', 'timeout', '1800');
 
-        // 8. MACRO
+        // 7. MACRO
         state.macros = [];
         const macroSections = p.findSectionsByPrefix('gcode_macro');
         for (const sec of macroSections) {
@@ -653,7 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         renderMacroList();
 
-        // 9. CALIBRATION
+        // 8. CALIBRATION
         if (p.hasSection('bltouch')) {
             probeTypeSelect.value = 'bltouch';
             document.getElementById('probe-sensor-pin').value = p.get('bltouch', 'sensor_pin', '');
@@ -687,6 +835,22 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('mesh-probe-count').value = p.get('bed_mesh', 'probe_count', '5, 5');
         document.getElementById('mesh-algorithm').value = p.get('bed_mesh', 'algorithm', 'bicubic');
 
+        // Z-Tilt
+        if (p.hasSection('z_tilt')) {
+            document.getElementById('z-tilt-positions').value = p.get('z_tilt', 'z_positions', '');
+            document.getElementById('z-tilt-points').value = p.get('z_tilt', 'points', '');
+            document.getElementById('z-tilt-retries').value = p.get('z_tilt', 'retries', '3');
+            document.getElementById('z-tilt-tolerance').value = p.get('z_tilt', 'retry_tolerance', '0.02');
+        }
+
+        // Quad Gantry Level
+        if (p.hasSection('quad_gantry_level')) {
+            document.getElementById('qgl-corners').value = p.get('quad_gantry_level', 'gantry_corners', '');
+            document.getElementById('qgl-points').value = p.get('quad_gantry_level', 'points', '');
+            document.getElementById('qgl-retries').value = p.get('quad_gantry_level', 'retries', '5');
+            document.getElementById('qgl-tolerance').value = p.get('quad_gantry_level', 'retry_tolerance', '0.0075');
+        }
+
         // Input Shaper
         document.getElementById('check-enable-shaper').checked = p.hasSection('input_shaper');
         document.getElementById('shaper-freq-x').value = p.get('input_shaper', 'shaper_freq_x', '45.2');
@@ -702,11 +866,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateParserFromUi() {
         const p = state.parser;
 
-        // Salva lo stepper attualmente visualizzato
+        // Salva stepper ed estruder visualizzati attualmente
         saveCurrentStepperToParser();
+        saveCurrentExtruderToParser();
 
-        // 1. STAMPANTE [printer]
-        p.set('printer', 'kinematics', printerKinematics.value);
+        // 1. CINEMATICA & PARAMETRI STAMPANTE UNIFICATI [printer]
+        p.set('printer', 'kinematics', dom.printerKinematics.value);
         p.set('printer', 'max_velocity', document.getElementById('printer-max-velocity').value);
         p.set('printer', 'max_accel', document.getElementById('printer-max-accel').value);
         p.set('printer', 'minimum_cruise_ratio', document.getElementById('printer-cruise-ratio').value);
@@ -716,24 +881,68 @@ document.addEventListener('DOMContentLoaded', () => {
         const legacyAccel = document.getElementById('printer-max-accel-to-decel').value;
         if (legacyAccel) p.set('printer', 'max_accel_to_decel', legacyAccel);
 
-        // 2. CINEMATICA (Assi X, Y, Z)
+        // Limiti e Homing Asse X
         p.set('stepper_x', 'position_min', document.getElementById('x-pos-min').value);
         p.set('stepper_x', 'position_max', document.getElementById('x-pos-max').value);
         p.set('stepper_x', 'position_endstop', document.getElementById('x-pos-endstop').value);
-        p.set('stepper_x', 'homing_speed', document.getElementById('x-homing-speed').value);
+        applyHomingParam('stepper_x', 'homing_speed', document.getElementById('x-homing-speed').value);
+        applyHomingParam('stepper_x', 'homing_retract_dist', document.getElementById('x-homing-retract-dist').value);
+        applyHomingParam('stepper_x', 'homing_retract_speed', document.getElementById('x-homing-retract-speed').value);
 
+        // Gestione IDEX (Dual Carriage & Extruder1)
+        const isIdex = dom.checkEnableIdex.checked;
+        if (isIdex) {
+            p.set('dual_carriage', 'axis', 'x');
+            p.set('dual_carriage', 'position_min', document.getElementById('dc-pos-min').value);
+            p.set('dual_carriage', 'position_max', document.getElementById('dc-pos-max').value);
+            p.set('dual_carriage', 'position_endstop', document.getElementById('dc-pos-endstop').value);
+            applyHomingParam('dual_carriage', 'homing_speed', document.getElementById('dc-homing-speed').value);
+            applyHomingParam('dual_carriage', 'homing_retract_dist', document.getElementById('dc-homing-retract-dist').value);
+            applyHomingParam('dual_carriage', 'homing_retract_speed', document.getElementById('dc-homing-retract-speed').value);
+        } else {
+            p.removeSection('dual_carriage');
+            for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+                p.removeSection(`${d} dual_carriage`);
+                p.removeSection(`${d} extruder1`);
+            }
+            p.removeSection('extruder1');
+        }
+
+        // Limiti e Homing Asse Y
         p.set('stepper_y', 'position_min', document.getElementById('y-pos-min').value);
         p.set('stepper_y', 'position_max', document.getElementById('y-pos-max').value);
         p.set('stepper_y', 'position_endstop', document.getElementById('y-pos-endstop').value);
-        p.set('stepper_y', 'homing_speed', document.getElementById('y-homing-speed').value);
+        applyHomingParam('stepper_y', 'homing_speed', document.getElementById('y-homing-speed').value);
+        applyHomingParam('stepper_y', 'homing_retract_dist', document.getElementById('y-homing-retract-dist').value);
+        applyHomingParam('stepper_y', 'homing_retract_speed', document.getElementById('y-homing-retract-speed').value);
 
+        // Limiti e Homing Asse Z
         p.set('stepper_z', 'position_min', document.getElementById('z-pos-min').value);
         p.set('stepper_z', 'position_max', document.getElementById('z-pos-max').value);
         const zEndstop = document.getElementById('z-pos-endstop').value;
         if (zEndstop) p.set('stepper_z', 'position_endstop', zEndstop);
-        p.set('stepper_z', 'homing_speed', document.getElementById('z-homing-speed').value);
+        applyHomingParam('stepper_z', 'homing_speed', document.getElementById('z-homing-speed').value);
+        applyHomingParam('stepper_z', 'homing_retract_dist', document.getElementById('z-homing-retract-dist').value);
+        applyHomingParam('stepper_z', 'homing_retract_speed', document.getElementById('z-homing-retract-speed').value);
 
-        // 3. HOST / MCU
+        // Gestione Multi-Asse Z (pulizia motori in eccesso)
+        const zCount = parseInt(dom.selectZMotorCount.value, 10) || 1;
+        if (zCount < 4) {
+            p.removeSection('stepper_z3');
+            for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) p.removeSection(`${d} stepper_z3`);
+        }
+        if (zCount < 3) {
+            p.removeSection('stepper_z2');
+            for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) p.removeSection(`${d} stepper_z2`);
+        }
+        if (zCount < 2) {
+            p.removeSection('stepper_z1');
+            for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) p.removeSection(`${d} stepper_z1`);
+            p.removeSection('z_tilt');
+            p.removeSection('quad_gantry_level');
+        }
+
+        // 2. HOST / MCU
         if (mcuConnType.value === 'canbus') {
             p.set('mcu', 'canbus_uuid', document.getElementById('mcu-canbus-uuid').value.trim());
             p.set('mcu', 'serial', null);
@@ -744,7 +953,6 @@ document.addEventListener('DOMContentLoaded', () => {
         p.set('mcu', 'baud', document.getElementById('mcu-baud').value);
         p.set('mcu', 'restart_method', document.getElementById('mcu-restart-method').value);
 
-        // Host thermal sensor
         if (document.getElementById('check-enable-host-temp').checked) {
             p.set('temperature_sensor raspberry_pi', 'sensor_type', 'temperature_host');
             p.set('temperature_sensor raspberry_pi', 'min_temp', '10');
@@ -754,7 +962,6 @@ document.addEventListener('DOMContentLoaded', () => {
             p.removeSection('temperature_sensor host');
         }
 
-        // MCU thermal sensor
         if (document.getElementById('check-enable-mcu-temp').checked) {
             p.set('temperature_sensor mcu_temp', 'sensor_type', 'temperature_mcu');
             p.set('temperature_sensor mcu_temp', 'min_temp', '0');
@@ -763,29 +970,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.removeSection('temperature_sensor mcu_temp');
         }
 
-        // 5. EXTRUDER
-        p.set('extruder', 'step_pin', document.getElementById('extruder-step-pin').value.trim());
-        p.set('extruder', 'dir_pin', document.getElementById('extruder-dir-pin').value.trim());
-        p.set('extruder', 'enable_pin', document.getElementById('extruder-enable-pin').value.trim());
-        p.set('extruder', 'rotation_distance', document.getElementById('extruder-rot-dist').value.trim());
-        p.set('extruder', 'gear_ratio', document.getElementById('extruder-gear-ratio').value.trim());
-        p.set('extruder', 'nozzle_diameter', document.getElementById('extruder-nozzle-dia').value.trim());
-        p.set('extruder', 'filament_diameter', document.getElementById('extruder-filament-dia').value);
-        p.set('extruder', 'pressure_advance', document.getElementById('extruder-pressure-advance').value.trim());
-
-        p.set('extruder', 'sensor_type', document.getElementById('extruder-sensor-type').value);
-        p.set('extruder', 'heater_pin', document.getElementById('extruder-heater-pin').value.trim());
-        p.set('extruder', 'sensor_pin', document.getElementById('extruder-sensor-pin').value.trim());
-        p.set('extruder', 'min_temp', document.getElementById('extruder-min-temp').value.trim());
-        p.set('extruder', 'max_temp', document.getElementById('extruder-max-temp').value.trim());
-        p.set('extruder', 'min_extrude_temp', document.getElementById('extruder-min-extrude').value.trim());
-
-        p.set('extruder', 'control', 'pid');
-        p.set('extruder', 'pid_Kp', document.getElementById('extruder-pid-kp').value.trim());
-        p.set('extruder', 'pid_Ki', document.getElementById('extruder-pid-ki').value.trim());
-        p.set('extruder', 'pid_Kd', document.getElementById('extruder-pid-kd').value.trim());
-
-        // 6. BED
+        // 5. BED
         p.set('heater_bed', 'heater_pin', document.getElementById('bed-heater-pin').value.trim());
         p.set('heater_bed', 'sensor_type', document.getElementById('bed-sensor-type').value);
         p.set('heater_bed', 'sensor_pin', document.getElementById('bed-sensor-pin').value.trim());
@@ -796,7 +981,7 @@ document.addEventListener('DOMContentLoaded', () => {
         p.set('heater_bed', 'pid_Ki', document.getElementById('bed-pid-ki').value.trim());
         p.set('heater_bed', 'pid_Kd', document.getElementById('bed-pid-kd').value.trim());
 
-        // 7. MISCELEUS
+        // 6. MISCELEUS
         p.set('fan', 'pin', document.getElementById('fan-part-pin').value.trim());
         p.set('fan', 'kick_start_time', document.getElementById('fan-part-kick').value);
         p.set('fan', 'off_below', document.getElementById('fan-part-off-below').value);
@@ -815,7 +1000,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (document.getElementById('check-pause-resume').checked) {
-            p.set('pause_resume', '', null); // sezione senza parametri obbligatori
+            p.set('pause_resume', '', null);
         } else {
             p.removeSection('pause_resume');
         }
@@ -834,8 +1019,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         p.set('idle_timeout', 'timeout', document.getElementById('idle-timeout').value);
 
-        // 8. MACRO
-        // Rimuovi sezioni macro esistenti e riscrivile
+        // 7. MACRO
         const existingMacroSecs = p.findSectionsByPrefix('gcode_macro');
         for (const s of existingMacroSecs) {
             p.removeSection(s);
@@ -848,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
             p.set(secName, 'gcode', macro.gcode);
         }
 
-        // 9. CALIBRATION
+        // 8. CALIBRATION
         const probeType = probeTypeSelect.value;
         p.removeSection('bltouch');
         p.removeSection('probe');
@@ -885,6 +1069,34 @@ document.addEventListener('DOMContentLoaded', () => {
         p.set('bed_mesh', 'mesh_max', document.getElementById('mesh-max').value.trim());
         p.set('bed_mesh', 'probe_count', document.getElementById('mesh-probe-count').value);
         p.set('bed_mesh', 'algorithm', document.getElementById('mesh-algorithm').value);
+
+        // Z-Tilt (se motori Z = 2 o 3)
+        if (zCount >= 2 && zCount <= 3) {
+            p.removeSection('quad_gantry_level');
+            const zpos = document.getElementById('z-tilt-positions').value.trim();
+            const zpts = document.getElementById('z-tilt-points').value.trim();
+            if (zpos && zpts) {
+                p.set('z_tilt', 'z_positions', zpos);
+                p.set('z_tilt', 'points', zpts);
+                p.set('z_tilt', 'speed', '100');
+                p.set('z_tilt', 'horizontal_move_z', '5.0');
+                p.set('z_tilt', 'retries', document.getElementById('z-tilt-retries').value);
+                p.set('z_tilt', 'retry_tolerance', document.getElementById('z-tilt-tolerance').value);
+            }
+        } else if (zCount === 4) {
+            // Quad Gantry Level (se motori Z = 4)
+            p.removeSection('z_tilt');
+            const qglCorners = document.getElementById('qgl-corners').value.trim();
+            const qglPoints = document.getElementById('qgl-points').value.trim();
+            if (qglCorners && qglPoints) {
+                p.set('quad_gantry_level', 'gantry_corners', qglCorners);
+                p.set('quad_gantry_level', 'points', qglPoints);
+                p.set('quad_gantry_level', 'speed', '150');
+                p.set('quad_gantry_level', 'horizontal_move_z', '10.0');
+                p.set('quad_gantry_level', 'retries', document.getElementById('qgl-retries').value);
+                p.set('quad_gantry_level', 'retry_tolerance', document.getElementById('qgl-tolerance').value);
+            }
+        }
 
         // Input Shaper
         if (checkEnableShaper.checked) {
@@ -933,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         a.download = state.currentConfigFile;
         a.click();
         URL.revokeObjectURL(a.href);
-        showToast(`File ${state.currentConfigFile} scaricato con successo`, 'success');
+        showToast(`File ${state.currentConfigFile} scaricato`, 'success');
     });
 
     // -------------------------------------------------------------------------
@@ -979,7 +1191,6 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.statusDot.classList.add('connected');
             dom.statusText.textContent = 'Moonraker Connesso';
 
-            // Carica l'elenco dei file .cfg
             const filesRes = await state.moonraker.listConfigFiles();
             if (filesRes.success && filesRes.files.length > 0) {
                 dom.selectConfigFile.innerHTML = '';
@@ -992,14 +1203,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // Scarica il file selezionato
             await loadConfigFromMoonraker();
         } else {
             dom.statusDot.classList.remove('connected');
             dom.statusText.textContent = 'Moonraker Offline (Usa Locale)';
-            showToast('Moonraker non raggiungibile. Modalità Offline attiva (usando configurazione template).', 'warning', 4500);
+            showToast('Moonraker offline. Caricata configurazione template.', 'warning', 4500);
 
-            // Carica il template di default
             state.parser.parse(KLIPPER_CONSTANTS.SAMPLE_CONFIG);
             populateUiFromParser();
         }
@@ -1041,6 +1250,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await checkMoonrakerConnection();
     });
 
-    // Avvio Iniziale
+    // Avvio
     checkMoonrakerConnection();
 });
