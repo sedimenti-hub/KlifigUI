@@ -581,26 +581,26 @@
                         <div class="form-helper">Visualizza la temperatura del microcontrollore STM32/RP2040.</div>
                     </div>
 
-                    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
+                </div>
 
-                    <!-- MCU Secondario (es. Toolhead CAN EBB36/SB2209 o Pi GPIO) -->
-                    <div class="card-title" style="margin-bottom: 0.75rem;">MCU Secondario / Toolhead CAN</div>
-                    <div class="form-group">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" id="check-enable-extra-mcu">
-                            <strong>Abilita MCU Secondario (es: [mcu can0] o [mcu rpi])</strong>
-                        </label>
+                <!-- Card 3: Microcontrollori Secondari Dinamici ([mcu <nome>]) -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <div class="card-header">
+                        <div>
+                            <span class="card-title">Microcontrollori Secondari & Toolhead ([mcu &lt;nome&gt;])</span>
+                            <div class="card-subtitle" style="margin: 0; margin-top: 0.25rem;">
+                                Gestisci schede ausiliarie (CAN bus toolhead EBB/SB2209, Raspberry Pi GPIO, expander).
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm" id="btn-add-mcu">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            + Aggiungi Nuovo MCU
+                        </button>
                     </div>
 
-                    <div id="extra-mcu-fields" style="display: none;">
-                        <div class="form-group">
-                            <label class="form-label" for="extra-mcu-name">Nome Sezione MCU:</label>
-                            <input type="text" class="form-control" id="extra-mcu-name" placeholder="can0">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="extra-mcu-uuid">canbus_uuid o serial:</label>
-                            <input type="text" class="form-control" id="extra-mcu-uuid" placeholder="canbus_uuid: 11a22b33c44d">
-                        </div>
+                    <!-- Contenitore Lista MCU Secondari Dinamici -->
+                    <div id="extra-mcu-list-container">
+                        <!-- Popolato dinamicamente da app.js -->
                     </div>
                 </div>
             </div>

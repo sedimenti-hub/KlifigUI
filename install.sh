@@ -45,13 +45,13 @@ else
     echo -e "    Verrà utilizzata: $CONFIG_DIR"
 fi
 
-# 2. Copia i file web in /var/www/klipper-configurator
-echo -e "\n${BLUE}[2/4] Installazione dei file dell'interfaccia web in $TARGET_DIR...${NC}"
-$SUDO mkdir -p "$TARGET_DIR"
-$SUDO cp -r "$SCRIPT_DIR/dist/"* "$TARGET_DIR/"
-$SUDO chown -R www-data:www-data "$TARGET_DIR" 2>/dev/null || true
-$SUDO chmod -R 755 "$TARGET_DIR"
-echo -e "${GREEN}[✓] File web installati con successo.${NC}"
+# 2. Collegamento dei file web in /var/www/klipper-configurator tramite symlink
+echo -e "\n${BLUE}[2/4] Collegamento dei file web da $SCRIPT_DIR/dist a $TARGET_DIR...${NC}"
+$SUDO rm -rf "$TARGET_DIR"
+$SUDO ln -s "$SCRIPT_DIR/dist" "$TARGET_DIR"
+$SUDO chmod -R 755 "$SCRIPT_DIR/dist"
+chmod o+x "$USER_HOME" 2>/dev/null || true
+echo -e "${GREEN}[✓] File web collegati con successo (aggiornamenti git istantanei).${NC}"
 
 # 3. Configurazione Nginx per aggiungere /configurator
 echo -e "\n${BLUE}[3/4] Configurazione del server web Nginx...${NC}"

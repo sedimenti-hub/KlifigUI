@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentConfigFile: 'printer.cfg',
         currentStepper: 'stepper_x',
         currentExtruder: 'extruder',
+        extraMcus: [],
         macros: []
     };
 
@@ -42,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
         checkEnableIdex: document.getElementById('check-enable-idex'),
         selectZMotorCount: document.getElementById('select-z-motor-count'),
         cardDualCarriage: document.getElementById('card-dual-carriage'),
+
+        // Host / MCU Secondari
+        btnAddMcu: document.getElementById('btn-add-mcu'),
+        extraMcuListContainer: document.getElementById('extra-mcu-list-container'),
 
         // Stepper Subtabs
         subtabButtons: document.querySelectorAll('#stepper-subtabs-container .subtab-btn'),
@@ -241,11 +246,210 @@ document.addEventListener('DOMContentLoaded', () => {
         groupMcuCanbus.style.display = mcuConnType.value === 'canbus' ? 'block' : 'none';
     });
 
-    const checkEnableExtraMcu = document.getElementById('check-enable-extra-mcu');
-    const extraMcuFields = document.getElementById('extra-mcu-fields');
-    checkEnableExtraMcu.addEventListener('change', () => {
-        extraMcuFields.style.display = checkEnableExtraMcu.checked ? 'block' : 'none';
-    });
+    // -------------------------------------------------------------------------
+    // Gestione Microcontrollori Secondari Dinamici ([mcu <nome>])
+    // -------------------------------------------------------------------------
+    function syncExtraMcusFromDom() {
+        if (!dom.extraMcuListContainer) return;
+        const cards = dom.extraMcuListContainer.querySelectorAll('.extra-mcu-card');
+        cards.forEach((card) => {
+            const nameInput = card.querySelector('.mcu-name-input');
+            if (!nameInput) return;
+            const idx = parseInt(nameInput.dataset.index, 10);
+            if (state.extraMcus[idx] === undefined) return;
+
+            const connSelect = card.querySelector('.mcu-conn-type-select');
+            const addrInput = card.querySelector('.mcu-address-input');
+            const baudInput = card.querySelector('.mcu-baud-input');
+            const restartInput = card.querySelector('.mcu-restart-input');
+
+            const cleanName = nameInput.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+            state.extraMcus[idx].name = cleanName;
+            if (connSelect) state.extraMcus[idx].connType = connSelect.value;
+            if (addrInput) {
+                if (state.extraMcus[idx].connType === 'canbus') {
+                    state.extraMcus[idx].canbus_uuid = addrInput.value.trim();
+                } else if (state.extraMcus[idx].connType === 'host') {
+                    state.extraMcus[idx].serial = '/tmp/klipper_host_mcu';
+                } else {
+                    state.extraMcus[idx].serial = addrInput.value.trim();
+                }
+            }
+            if (baudInput) state.extraMcus[idx].baud = baudInput.value.trim();
+            if (restartInput) state.extraMcus[idx].restart_method = restartInput.value.trim();
+        });
+    }
+
+    function renderExtraMcus() {
+        if (!dom.extraMcuListContainer) return;
+        dom.extraMcuListContainer.innerHTML = '';
+
+        if (state.extraMcus.length === 0) {
+            dom.extraMcuListContainer.innerHTML = `
+                <div style="text-align: center; padding: 1.75rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem; font-size: 0.875rem;">Nessun microcontrollore secondario configurato.</p>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-mcu">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        + Aggiungi il tuo primo MCU secondario (es. toolhead, rpi, can0)
+                    </button>
+                </div>
+            `;
+            const btnEmpty = document.getElementById('btn-empty-add-mcu');
+            if (btnEmpty) btnEmpty.addEventListener('click', addExtraMcu);
+            return;
+        }
+
+        state.extraMcus.forEach((mcu, index) => {
+            const card = document.createElement('div');
+            card.className = 'extra-mcu-card macro-card';
+            card.style.marginBottom = '1rem';
+            card.style.backgroundColor = 'var(--bg-surface)';
+            card.style.border = '1px solid var(--border-color)';
+            card.style.borderRadius = 'var(--radius-sm)';
+            card.style.padding = '1.1rem';
+
+            const isCanbus = mcu.connType === 'canbus';
+            const isHost = mcu.connType === 'host';
+
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="font-weight: 700; color: var(--primary-light); font-size: 0.95rem;">[mcu ${mcu.name || 'nuovo'}]</span>
+                        <span class="card-tag">MCU Secondario</span>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm btn-delete-mcu" data-index="${index}" title="Elimina questo MCU">
+                        Elimina MCU
+                    </button>
+                </div>
+
+                <div class="form-row" style="margin-bottom: 0.85rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">Nome MCU (Sezione [mcu &lt;nome&gt;]):</label>
+                        <input type="text" class="form-control mcu-name-input" data-index="${index}" value="${mcu.name || ''}" placeholder="es. toolhead, rpi, can0, ebb36">
+                        <div class="form-helper">Questo nome identifica il microcontrollore e i suoi pin (es: <code>${mcu.name || 'toolhead'}:PB6</code>).</div>
+                    </div>
+
+                    <div class="form-group" style="flex: 1;">
+                        <label class="form-label">Metodo di Connessione:</label>
+                        <select class="form-control mcu-conn-type-select" data-index="${index}">
+                            <option value="canbus" ${isCanbus ? 'selected' : ''}>CAN Bus (canbus_uuid)</option>
+                            <option value="serial" ${(!isCanbus && !isHost) ? 'selected' : ''}>USB / Seriale (/dev/serial/by-id/...)</option>
+                            <option value="host" ${isHost ? 'selected' : ''}>Raspberry Pi Linux MCU (/tmp/klipper_host_mcu)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0.85rem;">
+                    <label class="form-label">${isCanbus ? 'UUID CAN Bus (canbus_uuid):' : (isHost ? 'Percorso Socket Linux MCU (serial):' : 'Porta Seriale USB (serial):')}</label>
+                    <input type="text" class="form-control mcu-address-input" data-index="${index}" value="${isCanbus ? (mcu.canbus_uuid || '') : (mcu.serial || '')}" placeholder="${isCanbus ? 'es. 43b0d2d3a1f8' : (isHost ? '/tmp/klipper_host_mcu' : '/dev/serial/by-id/usb-Klipper_...')}" ${isHost ? 'readonly' : ''}>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Baud Rate (Opzionale):</label>
+                        <input type="text" class="form-control mcu-baud-input" data-index="${index}" value="${mcu.baud || ''}" placeholder="250000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Restart Method (Opzionale):</label>
+                        <input type="text" class="form-control mcu-restart-input" data-index="${index}" value="${mcu.restart_method || ''}" placeholder="command">
+                    </div>
+                </div>
+            `;
+
+            dom.extraMcuListContainer.appendChild(card);
+        });
+
+        // Event listeners per mcu-name-input
+        dom.extraMcuListContainer.querySelectorAll('.mcu-name-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                const clean = e.target.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+                state.extraMcus[idx].name = clean;
+                const headerTag = e.target.closest('.extra-mcu-card').querySelector('span[style*="font-weight: 700"]');
+                if (headerTag) headerTag.textContent = `[mcu ${clean || 'nuovo'}]`;
+                const helper = e.target.closest('.form-group').querySelector('.form-helper code');
+                if (helper) helper.textContent = `${clean || 'toolhead'}:PB6`;
+            });
+        });
+
+        // Event listeners per mcu-conn-type-select
+        dom.extraMcuListContainer.querySelectorAll('.mcu-conn-type-select').forEach(select => {
+            select.addEventListener('change', (e) => {
+                syncExtraMcusFromDom();
+                const idx = parseInt(e.target.dataset.index, 10);
+                const newType = e.target.value;
+                state.extraMcus[idx].connType = newType;
+                if (newType === 'host') {
+                    state.extraMcus[idx].serial = '/tmp/klipper_host_mcu';
+                    state.extraMcus[idx].canbus_uuid = '';
+                }
+                renderExtraMcus();
+            });
+        });
+
+        // Event listeners per mcu-address-input
+        dom.extraMcuListContainer.querySelectorAll('.mcu-address-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                const mcu = state.extraMcus[idx];
+                if (mcu.connType === 'canbus') {
+                    mcu.canbus_uuid = e.target.value.trim();
+                } else {
+                    mcu.serial = e.target.value.trim();
+                }
+            });
+        });
+
+        // Event listeners per baud e restart
+        dom.extraMcuListContainer.querySelectorAll('.mcu-baud-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.extraMcus[idx].baud = e.target.value.trim();
+            });
+        });
+        dom.extraMcuListContainer.querySelectorAll('.mcu-restart-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.extraMcus[idx].restart_method = e.target.value.trim();
+            });
+        });
+
+        // Event listeners per eliminazione
+        dom.extraMcuListContainer.querySelectorAll('.btn-delete-mcu').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                syncExtraMcusFromDom();
+                const idx = parseInt(e.target.dataset.index, 10);
+                const removedName = state.extraMcus[idx]?.name || 'MCU';
+                state.extraMcus.splice(idx, 1);
+                renderExtraMcus();
+                showToast(`MCU [mcu ${removedName}] rimosso`, 'info');
+            });
+        });
+    }
+
+    function addExtraMcu() {
+        syncExtraMcusFromDom();
+        let baseName = 'toolhead';
+        if (state.extraMcus.some(m => m.name === baseName)) baseName = 'can0';
+        if (state.extraMcus.some(m => m.name === baseName)) baseName = 'rpi';
+        if (state.extraMcus.some(m => m.name === baseName)) baseName = `mcu_${state.extraMcus.length + 1}`;
+
+        state.extraMcus.push({
+            name: baseName,
+            connType: 'canbus',
+            canbus_uuid: '',
+            serial: '',
+            baud: '',
+            restart_method: ''
+        });
+
+        renderExtraMcus();
+        showToast(`Aggiunto nuovo MCU [mcu ${baseName}]`, 'success');
+    }
+
+    if (dom.btnAddMcu) {
+        dom.btnAddMcu.addEventListener('click', addExtraMcu);
+    }
 
     dom.driverModelSelect.addEventListener('change', () => {
         dom.driverSmartFields.style.display = dom.driverModelSelect.value === 'none' ? 'none' : 'block';
@@ -749,6 +953,31 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('check-enable-host-temp').checked = p.hasSection('temperature_sensor raspberry_pi') || p.hasSection('temperature_sensor host');
         document.getElementById('check-enable-mcu-temp').checked = p.hasSection('temperature_sensor mcu_temp');
 
+        // Microcontrollori Secondari [mcu <nome>]
+        state.extraMcus = [];
+        const extraMcuSections = p.findSectionsByPrefix('mcu ');
+        for (const sec of extraMcuSections) {
+            const mcuName = sec.replace(/^mcu\s+/, '').trim();
+            if (!mcuName) continue;
+            const mcuCanUuid = p.get(sec, 'canbus_uuid', '');
+            const mcuSerial = p.get(sec, 'serial', '');
+            let cType = 'serial';
+            if (mcuCanUuid) {
+                cType = 'canbus';
+            } else if (mcuSerial === '/tmp/klipper_host_mcu') {
+                cType = 'host';
+            }
+            state.extraMcus.push({
+                name: mcuName,
+                connType: cType,
+                canbus_uuid: mcuCanUuid,
+                serial: mcuSerial,
+                baud: p.get(sec, 'baud', ''),
+                restart_method: p.get(sec, 'restart_method', '')
+            });
+        }
+        renderExtraMcus();
+
         // 3. STEPPER & DRIVER
         loadCurrentStepperFromParser();
 
@@ -968,6 +1197,29 @@ document.addEventListener('DOMContentLoaded', () => {
             p.set('temperature_sensor mcu_temp', 'max_temp', '100');
         } else {
             p.removeSection('temperature_sensor mcu_temp');
+        }
+
+        // Salva MCU Secondari Dinamici [mcu <nome>]
+        syncExtraMcusFromDom();
+        const oldMcuSections = p.findSectionsByPrefix('mcu ');
+        for (const s of oldMcuSections) {
+            p.removeSection(s);
+        }
+        for (const mcu of state.extraMcus) {
+            if (!mcu.name || !mcu.name.trim()) continue;
+            const secName = 'mcu ' + mcu.name.trim();
+            if (mcu.connType === 'canbus') {
+                p.set(secName, 'canbus_uuid', mcu.canbus_uuid ? mcu.canbus_uuid.trim() : '');
+                p.set(secName, 'serial', null);
+            } else if (mcu.connType === 'host') {
+                p.set(secName, 'serial', '/tmp/klipper_host_mcu');
+                p.set(secName, 'canbus_uuid', null);
+            } else {
+                p.set(secName, 'serial', mcu.serial ? mcu.serial.trim() : '');
+                p.set(secName, 'canbus_uuid', null);
+            }
+            if (mcu.baud) p.set(secName, 'baud', mcu.baud.trim());
+            if (mcu.restart_method) p.set(secName, 'restart_method', mcu.restart_method.trim());
         }
 
         // 5. BED
