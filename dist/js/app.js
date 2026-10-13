@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.3.0';
+    const APP_VERSION = 'v0.4.0';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         currentStepper: 'stepper_x',
         currentExtruder: 'extruder',
         extraMcus: [],
-        macros: []
+        macros: [],
+        baselineSnapshot: null
     };
 
     // -------------------------------------------------------------------------
@@ -27,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dom = {
         // Status & Navbar
         appVersionBadge: document.getElementById('app-version-badge'),
+        unsavedChangesPill: document.getElementById('unsaved-changes-pill'),
+        unsavedChangesText: document.getElementById('unsaved-changes-text'),
         statusDot: document.getElementById('status-dot'),
         statusText: document.getElementById('status-text'),
         btnConnSettings: document.getElementById('btn-conn-settings'),
@@ -215,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn) btn.classList.add('active');
         state.currentStepper = targetStepper;
         loadCurrentStepperFromParser();
+        checkDirtyState();
     }
 
     dom.subtabButtons.forEach(btn => {
@@ -234,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn) btn.classList.add('active');
         state.currentExtruder = targetExtruder;
         loadCurrentExtruderFromParser();
+        checkDirtyState();
     }
 
     dom.extruderSubtabs.forEach(btn => {
@@ -876,7 +881,326 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast(`Macro ${cleanName} creata`, 'success');
     });
 
-    dom.btnInsertMacroTemplate.addEventListener('click', insertMacroTemplates);
+    dom.btnInsertMacroTemplate.addEventListener('click', () => {
+        insertMacroTemplates();
+        checkDirtyState();
+    });
+
+    // -------------------------------------------------------------------------
+    // Rilevamento e Evidenziazione Modifiche (Dirty State Tracking)
+    // -------------------------------------------------------------------------
+    function updateFieldBadge(el, isModified) {
+        if (!el) return;
+        const formGroup = el.closest('.form-group') || el.closest('.form-row') || el.parentElement;
+        if (!formGroup) return;
+
+        let label = formGroup.querySelector('.form-label');
+        if (!label) {
+            const lbl = formGroup.querySelector('label');
+            if (lbl && !lbl.classList.contains('checkbox-inline')) label = lbl;
+        }
+
+        if (label) {
+            let badge = label.querySelector('.modified-badge');
+            if (isModified) {
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'modified-badge';
+                    badge.textContent = 'Modificato';
+                    label.appendChild(badge);
+                }
+            } else {
+                if (badge) badge.remove();
+            }
+        }
+
+        if (el.type === 'checkbox') {
+            const checkInline = el.closest('.checkbox-inline');
+            if (checkInline) {
+                checkInline.classList.toggle('is-modified', isModified);
+            }
+        }
+    }
+
+    function clearAllModifiedIndicators() {
+        document.querySelectorAll('.is-modified').forEach(el => el.classList.remove('is-modified'));
+        document.querySelectorAll('.modified-badge').forEach(b => b.remove());
+        document.querySelectorAll('.has-modified').forEach(el => el.classList.remove('has-modified'));
+        if (dom.unsavedChangesPill) dom.unsavedChangesPill.style.display = 'none';
+        if (dom.btnSave) dom.btnSave.classList.remove('btn-warning-glow');
+    }
+
+    function takeFullUiSnapshot() {
+        saveCurrentStepperToParser();
+        saveCurrentExtruderToParser();
+        syncExtraMcusFromDom();
+
+        const snap = {
+            fields: {},
+            steppers: {},
+            extruders: {},
+            extraMcus: JSON.stringify(state.extraMcus),
+            macros: JSON.stringify(state.macros)
+        };
+
+        document.querySelectorAll('input[id], select[id], textarea[id]').forEach(el => {
+            if (el.id.startsWith('stepper-') || el.id.startsWith('driver-') || el.id.startsWith('extruder-')) {
+                return;
+            }
+            snap.fields[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+        });
+
+        for (const st of ['stepper_x', 'dual_carriage', 'stepper_y', 'stepper_z', 'stepper_z1', 'stepper_z2', 'stepper_z3']) {
+            if (state.parser.sections[st]) {
+                snap.steppers[st] = { ...state.parser.sections[st].params };
+            }
+            for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+                const sec = `${drv} ${st}`;
+                if (state.parser.sections[sec]) {
+                    snap.steppers[sec] = { ...state.parser.sections[sec].params };
+                }
+            }
+        }
+
+        for (const ext of ['extruder', 'extruder1']) {
+            if (state.parser.sections[ext]) {
+                snap.extruders[ext] = { ...state.parser.sections[ext].params };
+            }
+            for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+                const sec = `${drv} ${ext}`;
+                if (state.parser.sections[sec]) {
+                    snap.extruders[sec] = { ...state.parser.sections[sec].params };
+                }
+            }
+        }
+
+        return snap;
+    }
+
+    function checkDirtyState() {
+        if (!state.baselineSnapshot) return;
+        const snap = state.baselineSnapshot;
+
+        saveCurrentStepperToParser();
+        saveCurrentExtruderToParser();
+        syncExtraMcusFromDom();
+
+        let totalModifiedCount = 0;
+        const tabModified = {};
+
+        // 1. Campi statici con ID
+        for (const [id, originalVal] of Object.entries(snap.fields)) {
+            const el = document.getElementById(id);
+            if (!el) continue;
+            const currentVal = el.type === 'checkbox' ? el.checked : el.value;
+            const isMod = currentVal !== originalVal;
+            if (isMod) {
+                el.classList.add('is-modified');
+                totalModifiedCount++;
+                const pane = el.closest('.tab-pane');
+                if (pane) tabModified[pane.id] = true;
+                updateFieldBadge(el, true);
+            } else {
+                el.classList.remove('is-modified');
+                updateFieldBadge(el, false);
+            }
+        }
+
+        // 2. Campi Stepper e Driver TMC attivi
+        const currentStepperName = state.currentStepper;
+        const currentDriverInfo = getDriverSectionName(currentStepperName);
+        const origStepperParams = snap.steppers[currentStepperName] || {};
+        const currStepperParams = state.parser.sections[currentStepperName]?.params || {};
+        const origDrvParams = snap.steppers[currentDriverInfo.section] || {};
+        const currDrvParams = state.parser.sections[currentDriverInfo.section]?.params || {};
+
+        const checkStepperField = (id, paramKey, isDriver = false, isBool = false) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const orig = isDriver ? (origDrvParams[paramKey] || '') : (origStepperParams[paramKey] || '');
+            const curr = isDriver ? (currDrvParams[paramKey] || '') : (currStepperParams[paramKey] || '');
+            let isMod = false;
+            if (isBool) {
+                isMod = (orig.toLowerCase() === 'true') !== el.checked;
+            } else {
+                isMod = orig.trim() !== curr.trim();
+            }
+            if (isMod) {
+                el.classList.add('is-modified');
+                updateFieldBadge(el, true);
+            } else {
+                el.classList.remove('is-modified');
+                updateFieldBadge(el, false);
+            }
+        };
+
+        checkStepperField('stepper-step-pin', 'step_pin');
+        checkStepperField('stepper-dir-pin', 'dir_pin');
+        checkStepperField('stepper-enable-pin', 'enable_pin');
+        checkStepperField('stepper-microsteps', 'microsteps');
+        checkStepperField('stepper-steps-rotation', 'full_steps_per_rotation');
+        checkStepperField('stepper-rotation-distance', 'rotation_distance');
+        checkStepperField('stepper-endstop-pin', 'endstop_pin');
+        checkStepperField('driver-uart-pin', 'uart_pin', true);
+        checkStepperField('driver-run-current', 'run_current', true);
+        checkStepperField('driver-stealthchop', 'stealthchop_threshold', true);
+        checkStepperField('driver-interpolate', 'interpolate', true, true);
+        checkStepperField('driver-diag-pin', 'diag_pin', true);
+        checkStepperField('driver-sgthrs', 'driver_SGTHRS', true);
+
+        // Controllo generale di ciascun subtab Stepper
+        for (const st of ['stepper_x', 'dual_carriage', 'stepper_y', 'stepper_z', 'stepper_z1', 'stepper_z2', 'stepper_z3']) {
+            let stMod = false;
+            const origSt = snap.steppers[st] || {};
+            const currSt = state.parser.sections[st]?.params || {};
+            const keysSt = new Set([...Object.keys(origSt), ...Object.keys(currSt)]);
+            for (const k of keysSt) {
+                if ((origSt[k] || '').trim() !== (currSt[k] || '').trim()) {
+                    stMod = true;
+                    break;
+                }
+            }
+            if (!stMod) {
+                for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+                    const sec = `${drv} ${st}`;
+                    const origD = snap.steppers[sec] || {};
+                    const currD = state.parser.sections[sec]?.params || {};
+                    const keysD = new Set([...Object.keys(origD), ...Object.keys(currD)]);
+                    for (const k of keysD) {
+                        if ((origD[k] || '').trim() !== (currD[k] || '').trim()) {
+                            stMod = true;
+                            break;
+                        }
+                    }
+                    if (stMod) break;
+                }
+            }
+            const btn = document.querySelector(`#stepper-subtabs-container .subtab-btn[data-stepper="${st}"]`);
+            if (btn) btn.classList.toggle('has-modified', stMod);
+            if (stMod) {
+                totalModifiedCount++;
+                tabModified['tab-stepper'] = true;
+            }
+        }
+
+        // 3. Campi Extruder attivi
+        const currentExtruderName = state.currentExtruder;
+        const currentExtDrvInfo = getDriverSectionName(currentExtruderName);
+        const origExtParams = snap.extruders[currentExtruderName] || {};
+        const currExtParams = state.parser.sections[currentExtruderName]?.params || {};
+        const origExtDrvParams = snap.extruders[currentExtDrvInfo.section] || {};
+        const currExtDrvParams = state.parser.sections[currentExtDrvInfo.section]?.params || {};
+
+        const checkExtField = (id, paramKey, isDriver = false) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const orig = isDriver ? (origExtDrvParams[paramKey] || '') : (origExtParams[paramKey] || '');
+            const curr = isDriver ? (currExtDrvParams[paramKey] || '') : (currExtParams[paramKey] || '');
+            const isMod = orig.trim() !== curr.trim();
+            if (isMod) {
+                el.classList.add('is-modified');
+                updateFieldBadge(el, true);
+            } else {
+                el.classList.remove('is-modified');
+                updateFieldBadge(el, false);
+            }
+        };
+
+        checkExtField('extruder-step-pin', 'step_pin');
+        checkExtField('extruder-dir-pin', 'dir_pin');
+        checkExtField('extruder-enable-pin', 'enable_pin');
+        checkExtField('extruder-rotation-distance', 'rotation_distance');
+        checkExtField('extruder-gear-ratio', 'gear_ratio');
+        checkExtField('extruder-microsteps', 'microsteps');
+        checkExtField('extruder-full-steps', 'full_steps_per_rotation');
+        checkExtField('extruder-nozzle-diameter', 'nozzle_diameter');
+        checkExtField('extruder-filament-diameter', 'filament_diameter');
+        checkExtField('extruder-heater-pin', 'heater_pin');
+        checkExtField('extruder-sensor-type', 'sensor_type');
+        checkExtField('extruder-sensor-pin', 'sensor_pin');
+        checkExtField('extruder-min-temp', 'min_temp');
+        checkExtField('extruder-max-temp', 'max_temp');
+        checkExtField('extruder-min-extrude', 'min_extrude_temp');
+        checkExtField('extruder-max-extrude', 'max_extrude_only_distance');
+        checkExtField('extruder-control-type', 'control');
+        checkExtField('extruder-pid-kp', 'pid_Kp');
+        checkExtField('extruder-pid-ki', 'pid_Ki');
+        checkExtField('extruder-pid-kd', 'pid_Kd');
+        checkExtField('extruder-pressure-advance', 'pressure_advance');
+        checkExtField('extruder-smooth-time', 'smooth_time');
+        checkExtField('extruder-driver-uart', 'uart_pin', true);
+        checkExtField('extruder-driver-current', 'run_current', true);
+        checkExtField('extruder-driver-stealthchop', 'stealthchop_threshold', true);
+
+        // Controllo generale subtab Extruder
+        for (const ext of ['extruder', 'extruder1']) {
+            let extMod = false;
+            const origE = snap.extruders[ext] || {};
+            const currE = state.parser.sections[ext]?.params || {};
+            const keysE = new Set([...Object.keys(origE), ...Object.keys(currE)]);
+            for (const k of keysE) {
+                if ((origE[k] || '').trim() !== (currE[k] || '').trim()) {
+                    extMod = true;
+                    break;
+                }
+            }
+            if (!extMod) {
+                for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+                    const sec = `${drv} ${ext}`;
+                    const origD = snap.extruders[sec] || {};
+                    const currD = state.parser.sections[sec]?.params || {};
+                    const keysD = new Set([...Object.keys(origD), ...Object.keys(currD)]);
+                    for (const k of keysD) {
+                        if ((origD[k] || '').trim() !== (currD[k] || '').trim()) {
+                            extMod = true;
+                            break;
+                        }
+                    }
+                    if (extMod) break;
+                }
+            }
+            const btn = document.querySelector(`#extruder-subtabs-container .subtab-btn[data-extruder="${ext}"]`);
+            if (btn) btn.classList.toggle('has-modified', extMod);
+            if (extMod) {
+                totalModifiedCount++;
+                tabModified['tab-extruder'] = true;
+            }
+        }
+
+        // 4. Extra MCUs
+        if (JSON.stringify(state.extraMcus) !== snap.extraMcus) {
+            totalModifiedCount++;
+            tabModified['tab-host-mcu'] = true;
+        }
+
+        // 5. Macro
+        if (JSON.stringify(state.macros) !== snap.macros) {
+            totalModifiedCount++;
+            tabModified['tab-macro'] = true;
+        }
+
+        // 6. Aggiorna indicatori sui Tab principali
+        dom.tabButtons.forEach(btn => {
+            const target = btn.getAttribute('data-tab');
+            btn.classList.toggle('has-modified', !!tabModified[target]);
+        });
+
+        // 7. Pill di notifica modifiche non salvate nella navbar
+        if (dom.unsavedChangesPill && dom.unsavedChangesText) {
+            if (totalModifiedCount > 0) {
+                dom.unsavedChangesPill.style.display = 'inline-flex';
+                dom.unsavedChangesText.textContent = totalModifiedCount === 1 ? '1 modifica non salvata' : `${totalModifiedCount} modifiche non salvate`;
+            } else {
+                dom.unsavedChangesPill.style.display = 'none';
+            }
+        }
+
+        // 8. Tasto Salva evidenziato
+        if (dom.btnSave) {
+            dom.btnSave.classList.toggle('btn-warning-glow', totalModifiedCount > 0);
+            dom.btnSave.title = totalModifiedCount > 0 ? `Salva modifiche (${totalModifiedCount} non salvate)` : 'Salva modifiche su Moonraker';
+        }
+    }
 
     // -------------------------------------------------------------------------
     // Sincronizzazione Completa: Parser -> UI
@@ -1095,6 +1419,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('shaper-freq-y').value = p.get('input_shaper', 'shaper_freq_y', '42.0');
         document.getElementById('shaper-type-y').value = p.get('input_shaper', 'shaper_type_y', 'mzv');
         checkEnableShaper.dispatchEvent(new Event('change'));
+
+        // Salva snapshot iniziale della configurazione pulita
+        clearAllModifiedIndicators();
+        state.baselineSnapshot = takeFullUiSnapshot();
     }
 
     // -------------------------------------------------------------------------
@@ -1419,6 +1747,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const res = await state.moonraker.uploadConfig(state.currentConfigFile, content, true);
         if (res.success) {
+            clearAllModifiedIndicators();
+            state.baselineSnapshot = takeFullUiSnapshot();
             showToast(`File ${state.currentConfigFile} salvato con successo! (Backup creato)`, 'success', 3500);
 
             if (andRestart) {
@@ -1508,6 +1838,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('moonraker_url', url);
         dom.modalConn.classList.remove('open');
         await checkMoonrakerConnection();
+    });
+
+    // Rilevamento modifiche in tempo reale su qualsiasi controllo
+    document.addEventListener('input', () => {
+        if (state.baselineSnapshot) checkDirtyState();
+    });
+    document.addEventListener('change', () => {
+        if (state.baselineSnapshot) checkDirtyState();
     });
 
     // Avvio

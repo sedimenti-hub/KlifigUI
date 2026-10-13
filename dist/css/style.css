@@ -131,11 +131,25 @@ body {
     box-shadow: 0 0 6px #34d399;
 }
 
-.nav-actions {
-    display: flex;
+.unsaved-changes-pill {
+    display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+    gap: 0.45rem;
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.775rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+    animation: pulseDirty 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseDirty {
+    0%, 100% { box-shadow: 0 0 6px rgba(245, 158, 11, 0.2); }
+    50% { box-shadow: 0 0 14px rgba(245, 158, 11, 0.45); }
 }
 
 .connection-pill {
@@ -450,6 +464,73 @@ body {
     outline: none;
     border-color: var(--border-focus);
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+/* Evidenziazione Campi Modificati Prima del Salvataggio */
+.form-control.is-modified,
+input[type="text"].is-modified,
+input[type="number"].is-modified,
+select.is-modified,
+textarea.is-modified {
+    border-color: #f59e0b !important;
+    background-color: rgba(245, 158, 11, 0.07) !important;
+    box-shadow: 0 0 0 1px #f59e0b, 0 0 10px rgba(245, 158, 11, 0.25) !important;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.checkbox-inline.is-modified {
+    border: 1px solid #f59e0b !important;
+    background-color: rgba(245, 158, 11, 0.12) !important;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.25) !important;
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+}
+
+.modified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.16);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    margin-left: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    animation: fadeInModified 0.2s ease-in-out;
+}
+
+@keyframes fadeInModified {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.tab-btn.has-modified::after,
+.subtab-btn.has-modified::after {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #f59e0b;
+    box-shadow: 0 0 6px #f59e0b;
+    margin-left: 0.45rem;
+    flex-shrink: 0;
+}
+
+.btn-warning-glow {
+    border-color: #f59e0b !important;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.4) !important;
+    animation: pulseSaveBtn 2s infinite ease-in-out;
+}
+
+@keyframes pulseSaveBtn {
+    0%, 100% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); }
+    50% { box-shadow: 0 0 16px rgba(245, 158, 11, 0.6); }
 }
 
 select.form-control {

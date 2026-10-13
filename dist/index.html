@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.3.0">
+    <link rel="stylesheet" href="css/style.css?v=0.4.0">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -19,11 +19,17 @@
             <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span class="nav-title">Klipper Configurator</span>
                 <span class="nav-badge">Mainsail WebUI</span>
-                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.3.0</span>
+                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.4.0</span>
             </div>
         </div>
 
         <div class="nav-actions">
+            <!-- Pill Modifiche Non Salvate -->
+            <div class="unsaved-changes-pill" id="unsaved-changes-pill" style="display: none;" title="Impostazioni modificate non ancora salvate">
+                <span style="font-size: 0.8rem;">●</span>
+                <span id="unsaved-changes-text">0 modifiche non salvate</span>
+            </div>
+
             <!-- Moonraker Connection Pill -->
             <div class="connection-pill" id="btn-conn-settings" title="Clicca per configurare l'indirizzo di Moonraker">
                 <span class="status-dot" id="status-dot"></span>
@@ -1494,9 +1500,9 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.3.0"></script>
-    <script src="js/default-config.js?v=0.3.0"></script>
-    <script src="js/moonraker-client.js?v=0.3.0"></script>
-    <script src="js/app.js?v=0.3.0"></script>
+    <script src="js/klipper-parser.js?v=0.4.0"></script>
+    <script src="js/default-config.js?v=0.4.0"></script>
+    <script src="js/moonraker-client.js?v=0.4.0"></script>
+    <script src="js/app.js?v=0.4.0"></script>
 </body>
 </html>
