@@ -82,8 +82,6 @@ path: ~/klipper-configurator
 origin: https://github.com/mattiadev/klipper-configurator.git
 primary_branch: main
 is_system_service: False
-managed_services:
-    nginx
 ```
 
 ---
