@@ -21,13 +21,18 @@ else
     SUDO=""
 fi
 
-# 1. Ricrea il symlink diretto a ~/KlifigUI/dist
-echo -e "\n${BLUE}[1/2] Collegamento simbolico (symlink) in /var/www/klipper-configurator...${NC}"
+# Disabilita il tracciamento dei bit permessi chmod per evitare lo stato DIRTY in Moonraker
+git config core.fileMode false 2>/dev/null || true
+
+# 1. Ripristino stato Git e collegamento symlink diretto a ~/KlifigUI/dist
+echo -e "\n${BLUE}[1/2] Ripristino pulizia Git e collegamento symlink...${NC}"
+git checkout -- . 2>/dev/null || true
 $SUDO rm -rf "$TARGET_DIR"
 $SUDO ln -s "$SCRIPT_DIR/dist" "$TARGET_DIR"
-$SUDO chmod -R 755 "$SCRIPT_DIR/dist"
 chmod o+x "$HOME" 2>/dev/null || true
-echo -e "${GREEN}[✓] Symlink collegato a $SCRIPT_DIR/dist.${NC}"
+find "$SCRIPT_DIR/dist" -type d -exec chmod 755 {} + 2>/dev/null || true
+find "$SCRIPT_DIR/dist" -type f -exec chmod 644 {} + 2>/dev/null || true
+echo -e "${GREEN}[✓] Symlink collegato a $SCRIPT_DIR/dist e stato Git pulito.${NC}"
 
 # 2. Aggiorna header anti-cache Nginx
 echo -e "\n${BLUE}[2/2] Aggiornamento intestazioni Anti-Cache Nginx...${NC}"

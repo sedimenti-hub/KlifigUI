@@ -47,10 +47,12 @@ fi
 
 # 2. Collegamento dei file web in /var/www/klipper-configurator tramite symlink
 echo -e "\n${BLUE}[2/4] Collegamento dei file web da $SCRIPT_DIR/dist a $TARGET_DIR...${NC}"
+git config core.fileMode false 2>/dev/null || true
 $SUDO rm -rf "$TARGET_DIR"
 $SUDO ln -s "$SCRIPT_DIR/dist" "$TARGET_DIR"
-$SUDO chmod -R 755 "$SCRIPT_DIR/dist"
 chmod o+x "$USER_HOME" 2>/dev/null || true
+find "$SCRIPT_DIR/dist" -type d -exec chmod 755 {} + 2>/dev/null || true
+find "$SCRIPT_DIR/dist" -type f -exec chmod 644 {} + 2>/dev/null || true
 echo -e "${GREEN}[✓] File web collegati con successo (aggiornamenti git istantanei).${NC}"
 
 # 3. Configurazione Nginx per aggiungere /configurator
