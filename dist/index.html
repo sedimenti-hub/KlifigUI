@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.5.0">
+    <link rel="stylesheet" href="css/style.css?v=0.6.0">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -19,7 +19,7 @@
             <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span class="nav-title">Klipper Configurator</span>
                 <span class="nav-badge">Mainsail WebUI</span>
-                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.5.0</span>
+                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.6.0</span>
             </div>
         </div>
 
@@ -1031,6 +1031,164 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Parametri Driver Stepper per Estrusore -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title" id="extruder-driver-card-title">Driver Estrusore</span>
+                        <span class="card-tag" id="extruder-driver-card-tag">[tmc2209 extruder]</span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="extruder-driver-model-select">Modello Driver:</label>
+                            <select class="form-control" id="extruder-driver-model-select">
+                                <option value="tmc2209">TMC2209</option>
+                                <option value="tmc2208">TMC2208</option>
+                                <option value="tmc2226">TMC2226</option>
+                                <option value="tmc5160">TMC5160</option>
+                                <option value="tmc2240">TMC2240</option>
+                                <option value="tmc2130">TMC2130</option>
+                                <option value="tmc2660">TMC2660</option>
+                                <option value="generic">A4988 / Generico (Standalone)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="extruder-driver-conn-type-select">Tipo Connessione Driver:</label>
+                            <select class="form-control" id="extruder-driver-conn-type-select">
+                                <option value="uart">UART (Seriale 1/2 pin - TMC2209 / TMC2208 / ecc.)</option>
+                                <option value="spi">SPI (Bus SPI - TMC5160 / TMC2130 / ecc.)</option>
+                                <option value="standalone">Standalone (Nessun bus dati / A4988 / Ponticelli)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Campi Connessione: STANDALONE -->
+                    <div id="extruder-driver-conn-standalone-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+                            ℹ️ <strong>Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper (es. A4988, DRV8825 o TMC configurato con ponticelli fisici). Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC per l'estrusore in <code>printer.cfg</code>.
+                        </div>
+                    </div>
+
+                    <!-- Campi Connessione: UART -->
+                    <div id="extruder-driver-conn-uart-fields">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-uart-pin">Pin UART (uart_pin):</label>
+                                <input type="text" class="form-control" id="extruder-driver-uart-pin" placeholder="PC11">
+                                <div class="form-helper">Pin di comunicazione seriale UART per l'estrusore.</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-tx-pin">Pin TX (tx_pin - Opzionale):</label>
+                                <input type="text" class="form-control" id="extruder-driver-tx-pin" placeholder="PC10">
+                                <div class="form-helper">Opzionale. Da specificare solo se la board usa pin RX e TX separati.</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-uart-address">Indirizzo UART (uart_address):</label>
+                                <input type="number" class="form-control" id="extruder-driver-uart-address" placeholder="0" min="0" max="3">
+                                <div class="form-helper">Opzionale (0-3). Usato quando più driver condividono lo stesso pin UART.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Campi Connessione: SPI -->
+                    <div id="extruder-driver-conn-spi-fields" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-cs-pin">Pin Chip Select (cs_pin):</label>
+                                <input type="text" class="form-control" id="extruder-driver-cs-pin" placeholder="PD11">
+                                <div class="form-helper">Pin CS dedicato al driver dell'estrusore.</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-spi-mode">Modalità Bus SPI:</label>
+                                <select class="form-control" id="extruder-driver-spi-mode">
+                                    <option value="hardware">Hardware SPI (Bus MCU)</option>
+                                    <option value="software">Software SPI (Bit-banging)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="extruder-driver-spi-bus-group">
+                            <label class="form-label" for="extruder-driver-spi-bus">Bus SPI Hardware (spi_bus):</label>
+                            <input type="text" class="form-control" id="extruder-driver-spi-bus" placeholder="spi1">
+                            <div class="form-helper">Bus SPI configurato sulla MCU (es. spi1, spi2, spi3a).</div>
+                        </div>
+                        <div class="form-row" id="extruder-driver-spi-soft-group" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-spi-sclk">Pin SCLK (spi_software_sclk_pin):</label>
+                                <input type="text" class="form-control" id="extruder-driver-spi-sclk" placeholder="PE12">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-spi-mosi">Pin MOSI (spi_software_mosi_pin):</label>
+                                <input type="text" class="form-control" id="extruder-driver-spi-mosi" placeholder="PE14">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-spi-miso">Pin MISO (spi_software_miso_pin):</label>
+                                <input type="text" class="form-control" id="extruder-driver-spi-miso" placeholder="PE13">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Parametri Avanzati TMC (visibili per UART e SPI) -->
+                    <div id="extruder-driver-smart-fields">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-run-current">Corrente Operativa (run_current):</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.05" class="form-control" id="extruder-driver-run-current" placeholder="0.650" min="0.1" max="2.0">
+                                    <span class="input-unit">A RMS</span>
+                                </div>
+                                <div class="form-helper">Tipicamente 0.500A - 0.700A per motori pancake / mini estrusori (es. Orbiter, Stealthburner, BMG).</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="extruder-driver-stealthchop">Modalità StealthChop:</label>
+                                <select class="form-control" id="extruder-driver-stealthchop">
+                                    <option value="0">SpreadCycle (Consigliato per estrusore - Più coppia e precisione)</option>
+                                    <option value="999999">Silenziosa (StealthChop attivo)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- hold_current con checkbox + inserimento valore -->
+                        <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="extruder-check-enable-hold-current">
+                                <strong>Abilita Corrente di Mantenimento (hold_current)</strong>
+                            </label>
+                            <div id="extruder-group-hold-current-field" style="display: none; margin-top: 0.75rem;">
+                                <label class="form-label" for="extruder-driver-hold-current">Corrente a Riposo (hold_current):</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.05" class="form-control" id="extruder-driver-hold-current" placeholder="0.400" min="0.05" max="2.0">
+                                    <span class="input-unit">A RMS</span>
+                                </div>
+                                <div class="form-helper">Corrente ridotta a motore fermo. NOTA: Sugli estrusori è generalmente sconsigliato impostare valori troppo bassi per evitare perdite di passi alla ripresa dell'estrusione.</div>
+                            </div>
+                        </div>
+
+                        <!-- sense_resistor con checkbox + inserimento valore -->
+                        <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="extruder-check-enable-sense-resistor">
+                                <strong>Specifica Valore Resistenza di Sense (sense_resistor)</strong>
+                            </label>
+                            <div id="extruder-group-sense-resistor-field" style="display: none; margin-top: 0.75rem;">
+                                <label class="form-label" for="extruder-driver-sense-resistor">Resistenza di Sense (sense_resistor):</label>
+                                <div class="input-with-unit">
+                                    <input type="number" step="0.005" class="form-control" id="extruder-driver-sense-resistor" placeholder="0.110" min="0.010" max="0.500">
+                                    <span class="input-unit">Ω</span>
+                                </div>
+                                <div class="form-helper">Default di Klipper: 0.110 Ω per TMC2209/2208/2226, 0.075 Ω per TMC5160. Attiva solo se la tua scheda usa un resistore non standard.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="extruder-driver-interpolate" checked>
+                                <strong>Interpolazione a 256 microstep (interpolate: True)</strong>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1605,9 +1763,9 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.5.0"></script>
-    <script src="js/default-config.js?v=0.5.0"></script>
-    <script src="js/moonraker-client.js?v=0.5.0"></script>
-    <script src="js/app.js?v=0.5.0"></script>
+    <script src="js/klipper-parser.js?v=0.6.0"></script>
+    <script src="js/default-config.js?v=0.6.0"></script>
+    <script src="js/moonraker-client.js?v=0.6.0"></script>
+    <script src="js/app.js?v=0.6.0"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.5.0';
+    const APP_VERSION = 'v0.6.0';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -99,6 +99,34 @@ document.addEventListener('DOMContentLoaded', () => {
         btnSubtabExtruder1: document.getElementById('btn-subtab-extruder1'),
         extruderCardTitle: document.getElementById('extruder-card-title'),
         extruderCardTag: document.getElementById('extruder-card-tag'),
+        extruderDriverCardTitle: document.getElementById('extruder-driver-card-title'),
+        extruderDriverCardTag: document.getElementById('extruder-driver-card-tag'),
+        extruderDriverModelSelect: document.getElementById('extruder-driver-model-select'),
+        extruderDriverConnTypeSelect: document.getElementById('extruder-driver-conn-type-select'),
+        extruderDriverConnStandaloneFields: document.getElementById('extruder-driver-conn-standalone-fields'),
+        extruderDriverConnUartFields: document.getElementById('extruder-driver-conn-uart-fields'),
+        extruderDriverConnSpiFields: document.getElementById('extruder-driver-conn-spi-fields'),
+        extruderDriverUartPin: document.getElementById('extruder-driver-uart-pin'),
+        extruderDriverTxPin: document.getElementById('extruder-driver-tx-pin'),
+        extruderDriverUartAddress: document.getElementById('extruder-driver-uart-address'),
+        extruderDriverCsPin: document.getElementById('extruder-driver-cs-pin'),
+        extruderDriverSpiMode: document.getElementById('extruder-driver-spi-mode'),
+        extruderDriverSpiBusGroup: document.getElementById('extruder-driver-spi-bus-group'),
+        extruderDriverSpiBus: document.getElementById('extruder-driver-spi-bus'),
+        extruderDriverSpiSoftGroup: document.getElementById('extruder-driver-spi-soft-group'),
+        extruderDriverSpiSclk: document.getElementById('extruder-driver-spi-sclk'),
+        extruderDriverSpiMosi: document.getElementById('extruder-driver-spi-mosi'),
+        extruderDriverSpiMiso: document.getElementById('extruder-driver-spi-miso'),
+        extruderDriverSmartFields: document.getElementById('extruder-driver-smart-fields'),
+        extruderDriverRunCurrent: document.getElementById('extruder-driver-run-current'),
+        extruderDriverStealthchop: document.getElementById('extruder-driver-stealthchop'),
+        extruderCheckEnableHoldCurrent: document.getElementById('extruder-check-enable-hold-current'),
+        extruderGroupHoldCurrentField: document.getElementById('extruder-group-hold-current-field'),
+        extruderDriverHoldCurrent: document.getElementById('extruder-driver-hold-current'),
+        extruderCheckEnableSenseResistor: document.getElementById('extruder-check-enable-sense-resistor'),
+        extruderGroupSenseResistorField: document.getElementById('extruder-group-sense-resistor-field'),
+        extruderDriverSenseResistor: document.getElementById('extruder-driver-sense-resistor'),
+        extruderDriverInterpolate: document.getElementById('extruder-driver-interpolate'),
         
         // Calibration Multi-Z Cards
         cardZTilt: document.getElementById('card-z-tilt'),
@@ -561,6 +589,75 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Extruder Driver UI Visibility & Event Listeners
+    function updateExtruderDriverConnVisibility() {
+        const connType = dom.extruderDriverConnTypeSelect ? dom.extruderDriverConnTypeSelect.value : 'uart';
+        if (connType === 'standalone') {
+            if (dom.extruderDriverConnStandaloneFields) dom.extruderDriverConnStandaloneFields.style.display = 'block';
+            if (dom.extruderDriverConnUartFields) dom.extruderDriverConnUartFields.style.display = 'none';
+            if (dom.extruderDriverConnSpiFields) dom.extruderDriverConnSpiFields.style.display = 'none';
+            if (dom.extruderDriverSmartFields) dom.extruderDriverSmartFields.style.display = 'none';
+        } else if (connType === 'uart') {
+            if (dom.extruderDriverConnStandaloneFields) dom.extruderDriverConnStandaloneFields.style.display = 'none';
+            if (dom.extruderDriverConnUartFields) dom.extruderDriverConnUartFields.style.display = 'block';
+            if (dom.extruderDriverConnSpiFields) dom.extruderDriverConnSpiFields.style.display = 'none';
+            if (dom.extruderDriverSmartFields) dom.extruderDriverSmartFields.style.display = 'block';
+        } else if (connType === 'spi') {
+            if (dom.extruderDriverConnStandaloneFields) dom.extruderDriverConnStandaloneFields.style.display = 'none';
+            if (dom.extruderDriverConnUartFields) dom.extruderDriverConnUartFields.style.display = 'none';
+            if (dom.extruderDriverConnSpiFields) dom.extruderDriverConnSpiFields.style.display = 'block';
+            if (dom.extruderDriverSmartFields) dom.extruderDriverSmartFields.style.display = 'block';
+        }
+    }
+
+    function updateExtruderDriverSpiModeVisibility() {
+        const isSoft = dom.extruderDriverSpiMode && dom.extruderDriverSpiMode.value === 'software';
+        if (dom.extruderDriverSpiBusGroup) dom.extruderDriverSpiBusGroup.style.display = isSoft ? 'none' : 'block';
+        if (dom.extruderDriverSpiSoftGroup) dom.extruderDriverSpiSoftGroup.style.display = isSoft ? 'flex' : 'none';
+    }
+
+    if (dom.extruderDriverConnTypeSelect) {
+        dom.extruderDriverConnTypeSelect.addEventListener('change', () => {
+            updateExtruderDriverConnVisibility();
+        });
+    }
+
+    if (dom.extruderDriverModelSelect) {
+        dom.extruderDriverModelSelect.addEventListener('change', () => {
+            const m = dom.extruderDriverModelSelect.value;
+            if (m === 'generic') {
+                if (dom.extruderDriverConnTypeSelect) dom.extruderDriverConnTypeSelect.value = 'standalone';
+            } else if ((m === 'tmc5160' || m === 'tmc2130' || m === 'tmc2660') && dom.extruderDriverConnTypeSelect && dom.extruderDriverConnTypeSelect.value === 'uart') {
+                dom.extruderDriverConnTypeSelect.value = 'spi';
+            } else if ((m === 'tmc2209' || m === 'tmc2208' || m === 'tmc2226') && dom.extruderDriverConnTypeSelect && dom.extruderDriverConnTypeSelect.value === 'spi') {
+                dom.extruderDriverConnTypeSelect.value = 'uart';
+            }
+            updateExtruderDriverConnVisibility();
+        });
+    }
+
+    if (dom.extruderDriverSpiMode) {
+        dom.extruderDriverSpiMode.addEventListener('change', () => {
+            updateExtruderDriverSpiModeVisibility();
+        });
+    }
+
+    if (dom.extruderCheckEnableHoldCurrent) {
+        dom.extruderCheckEnableHoldCurrent.addEventListener('change', () => {
+            if (dom.extruderGroupHoldCurrentField) {
+                dom.extruderGroupHoldCurrentField.style.display = dom.extruderCheckEnableHoldCurrent.checked ? 'block' : 'none';
+            }
+        });
+    }
+
+    if (dom.extruderCheckEnableSenseResistor) {
+        dom.extruderCheckEnableSenseResistor.addEventListener('change', () => {
+            if (dom.extruderGroupSenseResistorField) {
+                dom.extruderGroupSenseResistorField.style.display = dom.extruderCheckEnableSenseResistor.checked ? 'block' : 'none';
+            }
+        });
+    }
+
     const probeTypeSelect = document.getElementById('probe-type-select');
     const probeConfigFields = document.getElementById('probe-config-fields');
     const groupProbeControlPin = document.getElementById('group-probe-control-pin');
@@ -910,6 +1007,84 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('extruder-pid-kp').value = state.parser.get(ext, 'pid_Kp', '21.527');
         document.getElementById('extruder-pid-ki').value = state.parser.get(ext, 'pid_Ki', '1.063');
         document.getElementById('extruder-pid-kd').value = state.parser.get(ext, 'pid_Kd', '108.982');
+
+        // Caricamento Driver Estrusore
+        const driverInfo = getDriverSectionName(ext);
+        const hasDriver = !!(driverInfo.section && state.parser.hasSection(driverInfo.section));
+
+        if (dom.extruderDriverCardTitle) {
+            dom.extruderDriverCardTitle.textContent = ext === 'extruder1' ? 'Driver Secondo Estrusore IDEX [extruder1]' : 'Driver Estrusore Principale [extruder]';
+        }
+
+        if (!hasDriver) {
+            if (dom.extruderDriverCardTag) dom.extruderDriverCardTag.textContent = '[Standalone / Nessun TMC]';
+            if (dom.extruderDriverModelSelect) dom.extruderDriverModelSelect.value = 'generic';
+            if (dom.extruderDriverConnTypeSelect) dom.extruderDriverConnTypeSelect.value = 'standalone';
+            updateExtruderDriverConnVisibility();
+        } else {
+            if (dom.extruderDriverCardTag) dom.extruderDriverCardTag.textContent = `[${driverInfo.section}]`;
+            if (dom.extruderDriverModelSelect) dom.extruderDriverModelSelect.value = driverInfo.type || 'tmc2209';
+
+            const csPin = state.parser.get(driverInfo.section, 'cs_pin', '');
+            const spiBus = state.parser.get(driverInfo.section, 'spi_bus', '');
+            const spiSoftSclk = state.parser.get(driverInfo.section, 'spi_software_sclk_pin', '');
+            const isSpi = !!(csPin || spiBus || spiSoftSclk);
+
+            const connType = isSpi ? 'spi' : 'uart';
+            if (dom.extruderDriverConnTypeSelect) dom.extruderDriverConnTypeSelect.value = connType;
+            updateExtruderDriverConnVisibility();
+
+            // Campi UART
+            if (dom.extruderDriverUartPin) dom.extruderDriverUartPin.value = state.parser.get(driverInfo.section, 'uart_pin', '');
+            if (dom.extruderDriverTxPin) dom.extruderDriverTxPin.value = state.parser.get(driverInfo.section, 'tx_pin', '');
+            if (dom.extruderDriverUartAddress) dom.extruderDriverUartAddress.value = state.parser.get(driverInfo.section, 'uart_address', '');
+
+            // Campi SPI
+            if (dom.extruderDriverCsPin) dom.extruderDriverCsPin.value = csPin;
+            if (spiSoftSclk) {
+                if (dom.extruderDriverSpiMode) dom.extruderDriverSpiMode.value = 'software';
+                if (dom.extruderDriverSpiSclk) dom.extruderDriverSpiSclk.value = spiSoftSclk;
+                if (dom.extruderDriverSpiMosi) dom.extruderDriverSpiMosi.value = state.parser.get(driverInfo.section, 'spi_software_mosi_pin', '');
+                if (dom.extruderDriverSpiMiso) dom.extruderDriverSpiMiso.value = state.parser.get(driverInfo.section, 'spi_software_miso_pin', '');
+                if (dom.extruderDriverSpiBus) dom.extruderDriverSpiBus.value = '';
+            } else {
+                if (dom.extruderDriverSpiMode) dom.extruderDriverSpiMode.value = 'hardware';
+                if (dom.extruderDriverSpiBus) dom.extruderDriverSpiBus.value = spiBus;
+                if (dom.extruderDriverSpiSclk) dom.extruderDriverSpiSclk.value = '';
+                if (dom.extruderDriverSpiMosi) dom.extruderDriverSpiMosi.value = '';
+                if (dom.extruderDriverSpiMiso) dom.extruderDriverSpiMiso.value = '';
+            }
+            updateExtruderDriverSpiModeVisibility();
+
+            // Operativi
+            if (dom.extruderDriverRunCurrent) dom.extruderDriverRunCurrent.value = state.parser.get(driverInfo.section, 'run_current', '0.650');
+            if (dom.extruderDriverStealthchop) dom.extruderDriverStealthchop.value = state.parser.get(driverInfo.section, 'stealthchop_threshold', '0');
+            if (dom.extruderDriverInterpolate) dom.extruderDriverInterpolate.checked = state.parser.get(driverInfo.section, 'interpolate', 'True').toLowerCase() === 'true';
+
+            // hold_current
+            const holdCur = state.parser.get(driverInfo.section, 'hold_current', null);
+            if (holdCur !== null && holdCur !== '') {
+                if (dom.extruderCheckEnableHoldCurrent) dom.extruderCheckEnableHoldCurrent.checked = true;
+                if (dom.extruderGroupHoldCurrentField) dom.extruderGroupHoldCurrentField.style.display = 'block';
+                if (dom.extruderDriverHoldCurrent) dom.extruderDriverHoldCurrent.value = holdCur;
+            } else {
+                if (dom.extruderCheckEnableHoldCurrent) dom.extruderCheckEnableHoldCurrent.checked = false;
+                if (dom.extruderGroupHoldCurrentField) dom.extruderGroupHoldCurrentField.style.display = 'none';
+                if (dom.extruderDriverHoldCurrent) dom.extruderDriverHoldCurrent.value = '0.400';
+            }
+
+            // sense_resistor
+            const senseRes = state.parser.get(driverInfo.section, 'sense_resistor', null);
+            if (senseRes !== null && senseRes !== '') {
+                if (dom.extruderCheckEnableSenseResistor) dom.extruderCheckEnableSenseResistor.checked = true;
+                if (dom.extruderGroupSenseResistorField) dom.extruderGroupSenseResistorField.style.display = 'block';
+                if (dom.extruderDriverSenseResistor) dom.extruderDriverSenseResistor.value = senseRes;
+            } else {
+                if (dom.extruderCheckEnableSenseResistor) dom.extruderCheckEnableSenseResistor.checked = false;
+                if (dom.extruderGroupSenseResistorField) dom.extruderGroupSenseResistorField.style.display = 'none';
+                if (dom.extruderDriverSenseResistor) dom.extruderDriverSenseResistor.value = driverInfo.type === 'tmc5160' ? '0.075' : '0.110';
+            }
+        }
     }
 
     function saveCurrentExtruderToParser() {
@@ -934,6 +1109,60 @@ document.addEventListener('DOMContentLoaded', () => {
         state.parser.set(ext, 'pid_Kp', document.getElementById('extruder-pid-kp').value.trim());
         state.parser.set(ext, 'pid_Ki', document.getElementById('extruder-pid-ki').value.trim());
         state.parser.set(ext, 'pid_Kd', document.getElementById('extruder-pid-kd').value.trim());
+
+        // Pulisci sezioni driver pregresse per questo estrusore
+        for (const d of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240', 'tmc2130', 'tmc2660']) {
+            state.parser.removeSection(`${d} ${ext}`);
+        }
+
+        const connType = dom.extruderDriverConnTypeSelect ? dom.extruderDriverConnTypeSelect.value : 'uart';
+        let selectedModel = dom.extruderDriverModelSelect ? dom.extruderDriverModelSelect.value : 'tmc2209';
+
+        if (connType !== 'standalone') {
+            if (selectedModel === 'generic') {
+                selectedModel = connType === 'spi' ? 'tmc5160' : 'tmc2209';
+            }
+            const driverSec = `${selectedModel} ${ext}`;
+
+            if (connType === 'uart') {
+                const uartPin = dom.extruderDriverUartPin ? dom.extruderDriverUartPin.value.trim() : '';
+                state.parser.set(driverSec, 'uart_pin', uartPin || null);
+                const txPin = dom.extruderDriverTxPin ? dom.extruderDriverTxPin.value.trim() : '';
+                state.parser.set(driverSec, 'tx_pin', txPin || null);
+                const uartAddr = dom.extruderDriverUartAddress ? dom.extruderDriverUartAddress.value.trim() : '';
+                state.parser.set(driverSec, 'uart_address', uartAddr || null);
+            } else if (connType === 'spi') {
+                const csPin = dom.extruderDriverCsPin ? dom.extruderDriverCsPin.value.trim() : '';
+                state.parser.set(driverSec, 'cs_pin', csPin || null);
+                if (dom.extruderDriverSpiMode && dom.extruderDriverSpiMode.value === 'hardware') {
+                    const spiBus = dom.extruderDriverSpiBus ? dom.extruderDriverSpiBus.value.trim() : '';
+                    state.parser.set(driverSec, 'spi_bus', spiBus || null);
+                } else {
+                    state.parser.set(driverSec, 'spi_software_sclk_pin', dom.extruderDriverSpiSclk ? dom.extruderDriverSpiSclk.value.trim() || null : null);
+                    state.parser.set(driverSec, 'spi_software_mosi_pin', dom.extruderDriverSpiMosi ? dom.extruderDriverSpiMosi.value.trim() || null : null);
+                    state.parser.set(driverSec, 'spi_software_miso_pin', dom.extruderDriverSpiMiso ? dom.extruderDriverSpiMiso.value.trim() || null : null);
+                }
+            }
+
+            const runCur = dom.extruderDriverRunCurrent ? dom.extruderDriverRunCurrent.value.trim() : '0.650';
+            state.parser.set(driverSec, 'run_current', runCur || '0.650');
+            state.parser.set(driverSec, 'interpolate', (dom.extruderDriverInterpolate && dom.extruderDriverInterpolate.checked) ? 'True' : 'False');
+            state.parser.set(driverSec, 'stealthchop_threshold', dom.extruderDriverStealthchop ? dom.extruderDriverStealthchop.value : '0');
+
+            // hold_current
+            if (dom.extruderCheckEnableHoldCurrent && dom.extruderCheckEnableHoldCurrent.checked && dom.extruderDriverHoldCurrent && dom.extruderDriverHoldCurrent.value.trim()) {
+                state.parser.set(driverSec, 'hold_current', dom.extruderDriverHoldCurrent.value.trim());
+            } else {
+                state.parser.set(driverSec, 'hold_current', null);
+            }
+
+            // sense_resistor
+            if (dom.extruderCheckEnableSenseResistor && dom.extruderCheckEnableSenseResistor.checked && dom.extruderDriverSenseResistor && dom.extruderDriverSenseResistor.value.trim()) {
+                state.parser.set(driverSec, 'sense_resistor', dom.extruderDriverSenseResistor.value.trim());
+            } else {
+                state.parser.set(driverSec, 'sense_resistor', null);
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -1308,12 +1537,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const origExtDrvParams = (currentExtDrvInfo && currentExtDrvInfo.section ? snap.extruders[currentExtDrvInfo.section] : null) || {};
         const currExtDrvParams = (currentExtDrvInfo && currentExtDrvInfo.section ? state.parser.sections[currentExtDrvInfo.section]?.params : null) || {};
 
-        const checkExtField = (id, paramKey, isDriver = false) => {
+        const checkExtField = (id, paramKey, isDriver = false, isBool = false) => {
             const el = document.getElementById(id);
             if (!el) return;
             const orig = isDriver ? (origExtDrvParams[paramKey] || '') : (origExtParams[paramKey] || '');
             const curr = isDriver ? (currExtDrvParams[paramKey] || '') : (currExtParams[paramKey] || '');
-            const isMod = orig.trim() !== curr.trim();
+            let isMod = false;
+            if (isBool) {
+                isMod = (orig.toLowerCase() === 'true') !== el.checked;
+            } else {
+                isMod = orig.trim() !== curr.trim();
+            }
             if (isMod) {
                 el.classList.add('is-modified');
                 updateFieldBadge(el, true);
@@ -1326,28 +1560,51 @@ document.addEventListener('DOMContentLoaded', () => {
         checkExtField('extruder-step-pin', 'step_pin');
         checkExtField('extruder-dir-pin', 'dir_pin');
         checkExtField('extruder-enable-pin', 'enable_pin');
-        checkExtField('extruder-rotation-distance', 'rotation_distance');
+        checkExtField('extruder-rot-dist', 'rotation_distance');
         checkExtField('extruder-gear-ratio', 'gear_ratio');
-        checkExtField('extruder-microsteps', 'microsteps');
-        checkExtField('extruder-full-steps', 'full_steps_per_rotation');
-        checkExtField('extruder-nozzle-diameter', 'nozzle_diameter');
-        checkExtField('extruder-filament-diameter', 'filament_diameter');
+        checkExtField('extruder-nozzle-dia', 'nozzle_diameter');
+        checkExtField('extruder-filament-dia', 'filament_diameter');
         checkExtField('extruder-heater-pin', 'heater_pin');
         checkExtField('extruder-sensor-type', 'sensor_type');
         checkExtField('extruder-sensor-pin', 'sensor_pin');
         checkExtField('extruder-min-temp', 'min_temp');
         checkExtField('extruder-max-temp', 'max_temp');
         checkExtField('extruder-min-extrude', 'min_extrude_temp');
-        checkExtField('extruder-max-extrude', 'max_extrude_only_distance');
-        checkExtField('extruder-control-type', 'control');
         checkExtField('extruder-pid-kp', 'pid_Kp');
         checkExtField('extruder-pid-ki', 'pid_Ki');
         checkExtField('extruder-pid-kd', 'pid_Kd');
         checkExtField('extruder-pressure-advance', 'pressure_advance');
-        checkExtField('extruder-smooth-time', 'smooth_time');
-        checkExtField('extruder-driver-uart', 'uart_pin', true);
-        checkExtField('extruder-driver-current', 'run_current', true);
+
+        // Driver pins & parametri per Estrusore
+        checkExtField('extruder-driver-uart-pin', 'uart_pin', true);
+        checkExtField('extruder-driver-tx-pin', 'tx_pin', true);
+        checkExtField('extruder-driver-uart-address', 'uart_address', true);
+        checkExtField('extruder-driver-cs-pin', 'cs_pin', true);
+        checkExtField('extruder-driver-spi-bus', 'spi_bus', true);
+        checkExtField('extruder-driver-spi-sclk', 'spi_software_sclk_pin', true);
+        checkExtField('extruder-driver-spi-mosi', 'spi_software_mosi_pin', true);
+        checkExtField('extruder-driver-spi-miso', 'spi_software_miso_pin', true);
+        checkExtField('extruder-driver-run-current', 'run_current', true);
+        checkExtField('extruder-driver-hold-current', 'hold_current', true);
+        checkExtField('extruder-driver-sense-resistor', 'sense_resistor', true);
         checkExtField('extruder-driver-stealthchop', 'stealthchop_threshold', true);
+        checkExtField('extruder-driver-interpolate', 'interpolate', true, true);
+
+        if (dom.extruderCheckEnableHoldCurrent) {
+            const origHadHold = !!origExtDrvParams['hold_current'];
+            const currHasHold = dom.extruderCheckEnableHoldCurrent.checked;
+            const isMod = origHadHold !== currHasHold;
+            dom.extruderCheckEnableHoldCurrent.classList.toggle('is-modified', isMod);
+            updateFieldBadge(dom.extruderCheckEnableHoldCurrent, isMod);
+        }
+
+        if (dom.extruderCheckEnableSenseResistor) {
+            const origHadSense = !!origExtDrvParams['sense_resistor'];
+            const currHasSense = dom.extruderCheckEnableSenseResistor.checked;
+            const isMod = origHadSense !== currHasSense;
+            dom.extruderCheckEnableSenseResistor.classList.toggle('is-modified', isMod);
+            updateFieldBadge(dom.extruderCheckEnableSenseResistor, isMod);
+        }
 
         // Controllo generale subtab Extruder
         for (const ext of ['extruder', 'extruder1']) {
@@ -1362,7 +1619,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             if (!extMod) {
-                for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240']) {
+                for (const drv of ['tmc2209', 'tmc2208', 'tmc2226', 'tmc5160', 'tmc2240', 'tmc2130', 'tmc2660']) {
                     const sec = `${drv} ${ext}`;
                     const origD = snap.extruders[sec] || {};
                     const currD = state.parser.sections[sec]?.params || {};
