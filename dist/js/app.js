@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.4';
+    const APP_VERSION = 'v0.7.5';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -3335,9 +3335,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const linkMapping = {
             'nav-mainsail-dashboard': `${baseUrl}/#/`,
-            'nav-mainsail-console': `${baseUrl}/#/console`,
+            'nav-mainsail-webcam': `${baseUrl}/#/cam`,
+            'nav-mainsail-control': `${baseUrl}/#/control`,
             'nav-mainsail-heightmap': `${baseUrl}/#/heightmap`,
             'nav-mainsail-files': `${baseUrl}/#/files`,
+            'nav-mainsail-viewer': `${baseUrl}/#/viewer`,
             'nav-mainsail-history': `${baseUrl}/#/history`,
             'nav-mainsail-machine': `${baseUrl}/#/machine`,
             'nav-mainsail-settings': `${baseUrl}/#/settings`,
