@@ -585,53 +585,52 @@ body {
 }
 
 .tabs-navigation {
-    display: inline-flex;
-    width: fit-content;
-    max-width: 100%;
-    gap: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
     background-color: var(--bg-surface);
-    padding: 0.4rem;
+    padding: 0.35rem 0.45rem;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
-    overflow-x: auto;
-    scrollbar-width: thin;
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow-sm);
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
 }
 
 .tabs-navigation::-webkit-scrollbar {
-    height: 4px;
-}
-.tabs-navigation::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 4px;
+    display: none;
+    height: 0;
+    width: 0;
 }
 
 .tab-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.65rem 1rem;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.7rem;
     border-radius: var(--radius-sm);
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    font-size: 0.885rem;
+    font-size: 0.835rem;
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
     transition: var(--transition);
-    flex-shrink: 0;
+    flex: 1 1 auto;
+    min-width: fit-content;
 }
 
 .tab-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     stroke: currentColor;
     fill: none;
     stroke-width: 2;
     transition: var(--transition);
+    flex-shrink: 0;
 }
 
 .tab-btn:hover {
@@ -1038,20 +1037,24 @@ textarea.form-control {
 
 /* Sub-navigazione interna per Stepper (X, Y, Z, Extruder) */
 .subtabs {
-    display: inline-flex;
-    width: fit-content;
-    max-width: 100%;
-    gap: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.5rem;
     margin-bottom: 1.25rem;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
+}
+
+.subtabs::-webkit-scrollbar {
+    display: none;
+    height: 0;
+    width: 0;
 }
 
 .subtab-btn {
-    padding: 0.4rem 0.8rem;
+    padding: 0.4rem 0.75rem;
     border-radius: var(--radius-sm);
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid transparent;
@@ -1061,7 +1064,7 @@ textarea.form-control {
     cursor: pointer;
     transition: var(--transition);
     white-space: nowrap;
-    flex-shrink: 0;
+    flex: 0 1 auto;
 }
 
 .subtab-btn:hover {
@@ -1221,6 +1224,14 @@ textarea.form-control {
 }
 
 /* Responsive */
+@media (max-width: 1200px) {
+    .tab-btn {
+        padding: 0.4rem 0.55rem;
+        font-size: 0.8rem;
+        gap: 0.35rem;
+    }
+}
+
 @media (max-width: 900px) {
     .navbar {
         flex-direction: column;
