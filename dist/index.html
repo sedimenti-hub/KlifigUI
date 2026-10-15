@@ -7,8 +7,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.3">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+    <link rel="stylesheet" href="css/style.css?v=0.7.4">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300c0f3'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
 
@@ -21,7 +21,7 @@
                 <a href="/#/" class="sidebar-logo-link" id="sidebar-logo-link" title="Torna a Mainsail Dashboard">
                     <div class="sidebar-logo-icon">
                         <img id="sidebar-custom-logo-img" style="display: none; width: 28px; height: 28px; object-fit: contain;" alt="Logo">
-                        <svg id="sidebar-default-logo-svg" viewBox="0 0 24 24" width="24" height="24">
+                        <svg id="sidebar-default-logo-svg" viewBox="0 0 24 24" width="28" height="28">
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                         </svg>
                     </div>
@@ -34,7 +34,7 @@
                 <!-- 1. Dashboard -->
                 <a href="/#/" class="sidebar-nav-item" id="nav-mainsail-dashboard" data-tooltip="Dashboard" title="Dashboard">
                     <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z"/></svg>
                     </span>
                     <span class="sidebar-nav-label">Dashboard</span>
                 </a>
@@ -50,7 +50,7 @@
                 <!-- 3. Heightmap -->
                 <a href="/#/heightmap" class="sidebar-nav-item" id="nav-mainsail-heightmap" data-tooltip="Heightmap Piatto" title="Heightmap">
                     <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M3,3V21H21V19H5V3H3M7,17H9V10H7V17M11,17H13V7H11V17M15,17H17V13H15V17M19,17H21V4H19V17Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M10,4V8H14V4H10M16,4V8H20V4H16M16,10V14H20V10H16M16,16V20H20V16H16M14,20V16H10V20H14M8,20V16H4V20H8M8,14V10H4V14H8M8,8V4H4V8H8M10,14H14V10H10V14M4,2H20A2,2 0 0,1 22,4V20A2,2 0 0,1 20,22H4C2.92,22 2,21.1 2,20V4A2,2 0 0,1 4,2Z"/></svg>
                     </span>
                     <span class="sidebar-nav-label">Heightmap</span>
                 </a>
@@ -58,7 +58,7 @@
                 <!-- 4. G-Code Files -->
                 <a href="/#/files" class="sidebar-nav-item" id="nav-mainsail-files" data-tooltip="File G-Code" title="File">
                     <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5V9M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m0 18h12v-8h-4a2 2 0 0 1-2-2V4H6v16z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/></svg>
                     </span>
                     <span class="sidebar-nav-label">File G-Code</span>
                 </a>
@@ -72,9 +72,9 @@
                 </a>
 
                 <!-- 6. Klipper Config (Attiva!) -->
-                <a href="/configurator/" class="sidebar-nav-item active" id="nav-mainsail-configurator" data-tooltip="Klipper Config" title="Klipper Config">
+                <a href="/configurator/" class="sidebar-nav-item active" id="nav-mainsail-configurator" data-tooltip="Klipper Configurator" title="Klipper Config">
                     <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04,-0.3 0.06,-0.61 0.06,-0.94c0,-0.32 -0.02,-0.64 -0.07,-0.94l2.03,-1.58c0.18,-0.14 0.23,-0.41 0.12,-0.61l-1.92,-3.32c-0.12,-0.22 -0.37,-0.29 -0.59,-0.22l-2.39,0.96c-0.5,-0.38 -1.03,-0.7 -1.62,-0.94l-0.36,-2.54c-0.04,-0.24 -0.24,-0.41 -0.48,-0.41h-3.84c-0.24,0 -0.43,0.17 -0.47,0.41l-0.36,2.54c-0.59,0.24 -1.13,0.57 -1.62,0.94l-2.39,-0.96c-0.22,-0.08 -0.47,0 -0.59,0.22l-1.91,3.32c-0.12,0.21 -0.08,0.47 0.12,0.61l2.03,1.58c-0.05,0.3 -0.09,0.63 -0.09,0.94s0.02,0.64 0.07,0.94l-2.03,1.58c-0.18,0.14 -0.23,0.41 -0.12,0.61l1.92,3.32c0.12,0.22 0.37,0.29 0.59,0.22l2.39,-0.96c0.5,0.38 1.03,0.7 1.62,0.94l0.36,2.54c0.05,0.24 0.24,0.41 0.48,0.41h3.84c0.24,0 0.44,-0.17 0.47,-0.41l0.36,-2.54c0.59,-0.24 1.13,-0.56 1.62,-0.94l2.39,0.96c0.22,0.08 0.47,0 0.59,-0.22l1.92,-3.32c0.12,-0.22 0.07,-0.47 -0.12,-0.61l-2.01,-1.58zM12,15.6c-1.98,0 -3.6,-1.62 -3.6,-3.6s1.62,-3.6 3.6,-3.6s3.6,1.62 3.6,3.6s-1.62,3.6 -3.6,3.6z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M3,17V19H9V17H3M3,5V7H13V5H3M13,21V19H21V17H13V15H11V21H13M7,9V11H3V13H7V15H9V9H7M21,13V11H11V13H21M15,9H17V7H21V5H17V3H15V9Z"/></svg>
                     </span>
                     <span class="sidebar-nav-label">Klipper Config</span>
                 </a>
@@ -115,8 +115,7 @@
                     <div class="nav-logo">K</div>
                     <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
                         <span class="nav-title">Klipper Configurator</span>
-                        <span class="nav-badge">Mainsail WebUI</span>
-                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.3</span>
+                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.4</span>
                     </div>
                 </div>
 
@@ -124,13 +123,13 @@
             <!-- Pill Modifiche Non Salvate -->
             <div class="unsaved-changes-pill" id="unsaved-changes-pill" style="display: none;" title="Impostazioni modificate non ancora salvate">
                 <span style="font-size: 0.8rem;">●</span>
-                <span id="unsaved-changes-text">0 modifiche non salvate</span>
+                <span id="unsaved-changes-text">0 modifiche</span>
             </div>
 
             <!-- Moonraker Connection Pill -->
-            <div class="connection-pill" id="btn-conn-settings" title="Clicca per configurare l'indirizzo di Moonraker">
+            <div class="connection-pill" id="btn-conn-settings" title="Clicca per configurare la connessione Moonraker e il tema">
                 <span class="status-dot" id="status-dot"></span>
-                <span id="status-text">Moonraker: Verifica in corso...</span>
+                <span id="status-text">Moonraker: Connessione...</span>
             </div>
 
             <!-- Selettore File Config -->
@@ -140,14 +139,14 @@
             </select>
 
             <!-- Pulsanti Azione Principali -->
-            <button class="btn btn-secondary btn-sm" id="btn-reload" title="Ricarica file da Moonraker">
+            <button class="btn btn-secondary btn-sm" id="btn-reload" title="Ricarica configurazione da Moonraker">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
                 Ricarica
             </button>
 
             <button class="btn btn-secondary btn-sm" id="btn-preview" title="Visualizza anteprima codice generato">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                Anteprima CFG
+                Anteprima
             </button>
 
             <button class="btn btn-secondary btn-sm" id="btn-download" title="Scarica file .cfg sul tuo computer">
@@ -155,21 +154,21 @@
                 Scarica
             </button>
 
-            <button class="btn btn-primary btn-sm" id="btn-save" title="Salva modifiche su Moonraker (crea backup automatico)">
+            <button class="btn btn-secondary btn-sm" id="btn-save" title="Salva modifiche su Moonraker (crea backup automatico)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                 Salva
             </button>
 
-            <button class="btn btn-success btn-sm" id="btn-save-restart" title="Salva e riavvia Klipper (FIRMWARE_RESTART)">
+            <button class="btn btn-primary btn-sm" id="btn-save-restart" title="Salva e riavvia Klipper (FIRMWARE_RESTART)">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                 Salva & Riavvia
             </button>
 
-            <!-- Ritorno rapido a Mainsail -->
-            <a href="/" class="btn btn-secondary btn-sm" title="Torna alla Dashboard principale di Mainsail">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-                Mainsail
-            </a>
+            <!-- Selettore Rapido Tema e Colori Mainsail -->
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-quick-theme" title="Personalizza Tema e Colori Mainsail">
+                <span id="quick-theme-dot" style="display: inline-block; width: 11px; height: 11px; border-radius: 50%; background-color: var(--primary); box-shadow: 0 0 6px var(--primary);"></span>
+                <span>Tema</span>
+            </button>
         </div>
     </header>
 
@@ -191,7 +190,7 @@
                 3. Stepper Motion
             </button>
             <button class="tab-btn" data-tab="tab-extruder">
-                <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M7 2h10v4l-3 4v3h-4v-3L7 6V2zm1 2v1.5l2.5 3.33V11h3V8.83L16 5.5V4H8zm3 9h2v4l-1 2-1-2v-4z" fill="currentColor"/></svg>
                 4. Extruder
             </button>
             <button class="tab-btn" data-tab="tab-bed">
@@ -220,7 +219,8 @@
              TAB 1: CINEMATICA (UNIFICATA CON PARAMETRI STAMPANTE, IDEX E MULTI-Z)
              ============================================================ -->
         <section class="tab-pane active" id="tab-kinematics">
-            <div class="grid-container">
+            <!-- Sezione 1: Parametri Macchina & Architettura (2 Colonne Bilanciate) -->
+            <div class="grid-container grid-2-col">
 
                 <!-- Card 1: Parametri Generali Stampante [printer] -->
                 <div class="card">
@@ -333,10 +333,48 @@
                         </div>
                     </div>
 
-                    <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(6, 182, 212, 0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--accent); font-size: 0.8rem; color: var(--text-secondary);">
+                    <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0, 192, 243, 0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--primary); font-size: 0.8rem; color: var(--text-secondary);">
                         ℹ️ <strong>Nota:</strong> I parametri di homing impostati a <code>0</code> vengono omessi dal file di configurazione per lasciare attivi i default interni di Klipper.
                     </div>
                 </div>
+
+                <!-- Card 7: Parametri Delta (Visibili se cinematica = delta) -->
+                <div class="card" id="card-delta-params" style="display: none;">
+                    <div class="card-header">
+                        <span class="card-title">Geometria Delta (Opzionale)</span>
+                        <span class="card-tag">Delta Geometry</span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="delta-arm-length">Lunghezza Braccio (arm_length):</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.1" class="form-control" id="delta-arm-length" placeholder="265.0">
+                                <span class="input-unit">mm</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="delta-radius">Raggio Delta (delta_radius):</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.1" class="form-control" id="delta-radius" placeholder="130.0">
+                                <span class="input-unit">mm</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="delta-print-radius">Raggio di Stampa (print_radius):</label>
+                            <div class="input-with-unit">
+                                <input type="number" step="0.1" class="form-control" id="delta-print-radius" placeholder="100.0">
+                                <span class="input-unit">mm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- /.grid-2-col -->
+
+            <div class="section-divider-title">Limiti Assi & Configurazione Homing</div>
+
+            <!-- Sezione 2: Limiti Assi & Homing (3 Colonne Bilanciate X, Y, Z) -->
+            <div class="grid-container grid-3-col">
 
                 <!-- Card 3: Asse X - Limiti e Settaggi Homing -->
                 <div class="card">
@@ -577,37 +615,6 @@
                                     <span class="input-unit">mm/s</span>
                                 </div>
                                 <div class="form-helper">0 per disabilitare</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 7: Parametri Delta (Visibili se cinematica = delta) -->
-                <div class="card" id="card-delta-params" style="display: none;">
-                    <div class="card-header">
-                        <span class="card-title">Geometria Delta (Opzionale)</span>
-                        <span class="card-tag">Delta Geometry</span>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="delta-arm-length">Lunghezza Braccio (arm_length):</label>
-                            <div class="input-with-unit">
-                                <input type="number" step="0.1" class="form-control" id="delta-arm-length" placeholder="265.0">
-                                <span class="input-unit">mm</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="delta-radius">Raggio Delta (delta_radius):</label>
-                            <div class="input-with-unit">
-                                <input type="number" step="0.1" class="form-control" id="delta-radius" placeholder="130.0">
-                                <span class="input-unit">mm</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="delta-print-radius">Raggio di Stampa (print_radius):</label>
-                            <div class="input-with-unit">
-                                <input type="number" step="0.1" class="form-control" id="delta-print-radius" placeholder="100.0">
-                                <span class="input-unit">mm</span>
                             </div>
                         </div>
                     </div>
@@ -2138,10 +2145,11 @@
                         <span id="theme-sync-status" class="nav-badge" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">Sincronizzato</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Colore Primario Attivo:</span>
-                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Colore Primario Accento:</span>
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <input type="color" id="picker-theme-color" value="#00c0f3" title="Scegli qualsiasi colore con il selettore cromatico" style="width: 28px; height: 28px; padding: 0; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; background: transparent;">
                             <span id="active-theme-color-dot" style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background-color: var(--primary);"></span>
-                            <span id="active-theme-color-hex" style="font-size: 0.8rem; font-family: monospace; font-weight: 600;">#0284c7</span>
+                            <span id="active-theme-color-hex" style="font-size: 0.85rem; font-family: monospace; font-weight: 700;">#00c0f3</span>
                         </div>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -2151,14 +2159,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Preset Colori Comuni Mainsail / Vendor:</label>
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="theme-preset-buttons">
-                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#0284c7" title="Mainsail Blue" style="border-left: 4px solid #0284c7;">Mainsail</button>
+                    <label class="form-label">Preset Temi Ufficiali Mainsail / Vendor:</label>
+                    <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;" id="theme-preset-buttons">
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#00c0f3" title="Mainsail Cyan (Default)" style="border-left: 4px solid #00c0f3;">Mainsail</button>
                         <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#d32f2f" title="Voron Design Red" style="border-left: 4px solid #d32f2f;">Voron</button>
-                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#00ff41" title="RatRig Green" style="border-left: 4px solid #00ff41;">RatRig</button>
                         <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#00e5ff" title="VzBot Cyan" style="border-left: 4px solid #00e5ff;">VzBot</button>
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#00ff41" title="RatRig Green" style="border-left: 4px solid #00ff41;">RatRig</button>
                         <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#f97316" title="Klipper Orange" style="border-left: 4px solid #f97316;">Klipper</button>
                         <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#9333ea" title="StealthBurner Purple" style="border-left: 4px solid #9333ea;">Purple</button>
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#0284c7" title="Ocean Blue" style="border-left: 4px solid #0284c7;">Blue</button>
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#10b981" title="Emerald Green" style="border-left: 4px solid #10b981;">Emerald</button>
                     </div>
                 </div>
 
@@ -2219,9 +2229,9 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.7.3"></script>
-    <script src="js/default-config.js?v=0.7.3"></script>
-    <script src="js/moonraker-client.js?v=0.7.3"></script>
-    <script src="js/app.js?v=0.7.3"></script>
+    <script src="js/klipper-parser.js?v=0.7.4"></script>
+    <script src="js/default-config.js?v=0.7.4"></script>
+    <script src="js/moonraker-client.js?v=0.7.4"></script>
+    <script src="js/app.js?v=0.7.4"></script>
 </body>
 </html>

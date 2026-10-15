@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.3';
+    const APP_VERSION = 'v0.7.4';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -247,7 +247,10 @@ document.addEventListener('DOMContentLoaded', () => {
         activeThemeModeText: document.getElementById('active-theme-mode-text'),
         checkForceLightMode: document.getElementById('check-force-light-mode'),
         presetColorBtns: document.querySelectorAll('.preset-color-btn'),
-        sidebarNavLinks: document.querySelectorAll('.sidebar-nav-item')
+        sidebarNavLinks: document.querySelectorAll('.sidebar-nav-item'),
+        btnQuickTheme: document.getElementById('btn-quick-theme'),
+        quickThemeDot: document.getElementById('quick-theme-dot'),
+        pickerThemeColor: document.getElementById('picker-theme-color')
     };
 
     if (dom.appVersionBadge) {
@@ -3347,11 +3350,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const THEME_PRESETS = {
+        mainsail: '#00c0f3',
+        voron: '#d32f2f',
+        vzbot: '#00e5ff',
+        ratrig: '#00ff41',
+        klipper: '#f97316',
+        purple: '#9333ea',
+        blue: '#0284c7',
+        emerald: '#10b981'
+    };
+
     /**
      * Applica il colore primario, il contrasto e la modalità tema (Dark / Light)
      */
     function applyMainsailTheme(options = {}) {
-        const primary = options.primaryColor || localStorage.getItem('mainsail_cached_primary_color') || '#0284c7';
+        const primary = options.primaryColor || localStorage.getItem('mainsail_cached_primary_color') || '#00c0f3';
         const forceLight = localStorage.getItem('mainsail_force_light_mode') === 'true';
         const mode = forceLight ? 'light' : (options.themeMode || localStorage.getItem('mainsail_cached_theme_mode') || 'dark');
 
@@ -3367,6 +3381,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (dom.activeThemeColorDot) dom.activeThemeColorDot.style.backgroundColor = primary;
             if (dom.activeThemeColorHex) dom.activeThemeColorHex.textContent = primary;
+            if (dom.quickThemeDot) {
+                dom.quickThemeDot.style.backgroundColor = primary;
+                dom.quickThemeDot.style.boxShadow = `0 0 6px ${primary}`;
+            }
+            if (dom.pickerThemeColor) {
+                dom.pickerThemeColor.value = primary;
+            }
         }
 
         // Imposta modalità tema
@@ -3407,6 +3428,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
+            // Controlla logo personalizzato
+            const customLogo = await state.moonraker.getCustomLogoUrl();
+            if (customLogo && dom.sidebarCustomLogoImg && dom.sidebarDefaultLogoSvg) {
+                dom.sidebarCustomLogoImg.src = customLogo;
+                dom.sidebarCustomLogoImg.style.display = 'block';
+                dom.sidebarDefaultLogoSvg.style.display = 'none';
+            }
+
             const res = await state.moonraker.getMainsailSettings();
             let primaryColor = null;
             let themeMode = 'dark';
@@ -3422,6 +3451,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     primaryColor = s.theme.primaryColor;
                 } else if (typeof s.primaryColor === 'string') {
                     primaryColor = s.primaryColor;
+                }
+
+                // Estrazione preset tema se il colore non è specificato in esadecimale
+                const themePreset = (s.uiSettings && s.uiSettings.theme) || (s.general && s.general.theme);
+                if (typeof themePreset === 'string' && THEME_PRESETS[themePreset.toLowerCase()]) {
+                    if (!primaryColor) {
+                        primaryColor = THEME_PRESETS[themePreset.toLowerCase()];
+                    }
                 }
 
                 // Estrazione Modalità Tema (dark / light)
@@ -3461,7 +3498,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const hasCustomCss = await state.moonraker.checkCustomCss();
 
             applyMainsailTheme({
-                primaryColor: primaryColor || localStorage.getItem('mainsail_cached_primary_color') || '#0284c7',
+                primaryColor: primaryColor || localStorage.getItem('mainsail_cached_primary_color') || '#00c0f3',
                 themeMode: themeMode,
                 hasCustomCss: hasCustomCss
             });
@@ -3496,6 +3533,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 dom.sidebarToggleLabel.textContent = isNowExpanded ? 'Comprimi' : 'Espandi';
             }
         });
+
+        // Pulsante rapido Tema nella navbar
+        if (dom.btnQuickTheme) {
+            dom.btnQuickTheme.addEventListener('click', () => {
+                dom.inputMoonrakerUrl.value = state.moonraker.baseUrl;
+                dom.modalConn.classList.add('open');
+            });
+        }
+
+        // Color Picker nativo per tema
+        if (dom.pickerThemeColor) {
+            dom.pickerThemeColor.addEventListener('input', (e) => {
+                const color = e.target.value;
+                if (color) {
+                    localStorage.setItem('mainsail_cached_primary_color', color);
+                    applyMainsailTheme({ primaryColor: color });
+                }
+            });
+            dom.pickerThemeColor.addEventListener('change', (e) => {
+                const color = e.target.value;
+                if (color) {
+                    localStorage.setItem('mainsail_cached_primary_color', color);
+                    applyMainsailTheme({ primaryColor: color });
+                    showToast(`Colore tema impostato su ${color}`, 'info', 1500);
+                }
+            });
+        }
 
         // Preset colori nel modal di connessione
         if (dom.presetColorBtns) {

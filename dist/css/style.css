@@ -4,56 +4,56 @@
    ========================================================================== */
 
 :root {
-    --bg-main: #0b0f19;
-    --bg-sidebar: #0e131f;
-    --bg-surface: #111827;
-    --bg-card: #1f2937;
-    --bg-card-hover: #283548;
-    --bg-input: #111827;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --border-focus: #38bdf8;
+    --bg-main: #121212;
+    --bg-sidebar: #1e1e1e;
+    --bg-surface: #1e1e1e;
+    --bg-card: #1e1e1e;
+    --bg-card-hover: #262626;
+    --bg-input: #18181b;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-focus: var(--primary);
     
-    --primary: #0284c7;
-    --primary-rgb: 2, 132, 199;
-    --primary-hover: #0369a1;
-    --primary-light: #38bdf8;
+    --primary: #00c0f3;
+    --primary-rgb: 0, 192, 243;
+    --primary-hover: #00a4d1;
+    --primary-light: #33cdff;
     
-    --accent: #06b6d4;
+    --accent: #00e5ff;
     --success: #10b981;
     --warning: #f59e0b;
     --danger: #ef4444;
     
-    --text-primary: #f9fafb;
-    --text-secondary: #9ca3af;
-    --text-muted: #6b7280;
+    --text-primary: #f4f4f5;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
     
-    --sidebar-width-collapsed: 64px;
+    --sidebar-width-collapsed: 56px;
     --sidebar-width-expanded: 220px;
     --sidebar-width: var(--sidebar-width-collapsed);
     
     --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.5);
     
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Modalità Tema Chiaro Mainsail (Light Theme) */
 :root.theme-light, body.theme-light {
-    --bg-main: #f3f4f6;
+    --bg-main: #f5f5f5;
     --bg-sidebar: #ffffff;
     --bg-surface: #ffffff;
     --bg-card: #ffffff;
-    --bg-card-hover: #f9fafb;
-    --bg-input: #f9fafb;
+    --bg-card-hover: #fafafa;
+    --bg-input: #ffffff;
     --border-color: rgba(0, 0, 0, 0.1);
     
-    --text-primary: #111827;
-    --text-secondary: #4b5563;
-    --text-muted: #9ca3af;
+    --text-primary: #18181b;
+    --text-secondary: #71717a;
+    --text-muted: #a1a1aa;
     
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
@@ -96,11 +96,13 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   Mainsail Sidebar Navigation
+   Mainsail Sidebar Navigation (Identica a Mainsail WebUI)
    -------------------------------------------------------------------------- */
 .mainsail-sidebar {
     width: var(--sidebar-width);
     min-width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
+    flex-shrink: 0 !important;
     background-color: var(--bg-sidebar);
     border-right: 1px solid var(--border-color);
     display: flex;
@@ -109,9 +111,9 @@ body {
     top: 0;
     height: 100vh;
     z-index: 200;
-    transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     user-select: none;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .mainsail-sidebar.expanded {
@@ -120,10 +122,10 @@ body {
 
 /* Sidebar Header / Logo */
 .sidebar-header {
-    height: 60px;
+    height: 56px;
+    min-height: 56px;
     display: flex;
     align-items: center;
-    padding: 0 12px;
     border-bottom: 1px solid var(--border-color);
     overflow: hidden;
 }
@@ -131,29 +133,27 @@ body {
 .sidebar-logo-link {
     display: flex;
     align-items: center;
-    gap: 12px;
+    width: 100%;
+    height: 56px;
     text-decoration: none;
     color: var(--text-primary);
-    width: 100%;
     overflow: hidden;
 }
 
 .sidebar-logo-icon {
-    width: 38px;
-    height: 38px;
-    min-width: 38px;
-    border-radius: var(--radius-sm);
+    width: 56px;
+    min-width: 56px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(var(--primary-rgb), 0.12);
     color: var(--primary);
     transition: var(--transition);
 }
 
 .sidebar-logo-icon svg {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     fill: currentColor;
 }
 
@@ -163,14 +163,11 @@ body {
     letter-spacing: -0.02em;
     color: var(--text-primary);
     white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    pointer-events: none;
+    padding-left: 2px;
 }
 
-.mainsail-sidebar.expanded .sidebar-brand-text {
-    opacity: 1;
-    pointer-events: auto;
+.mainsail-sidebar:not(.expanded) .sidebar-brand-text {
+    display: none !important;
 }
 
 /* Sidebar Navigation Items */
@@ -179,7 +176,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding: 10px 8px;
+    padding: 6px 0;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -187,30 +184,39 @@ body {
 .sidebar-nav-item {
     display: flex;
     align-items: center;
-    height: 44px;
-    border-radius: var(--radius-sm);
+    height: 46px;
     text-decoration: none;
     color: var(--text-secondary);
     position: relative;
-    padding: 0 12px;
-    gap: 14px;
     transition: background 0.15s ease, color 0.15s ease;
     white-space: nowrap;
+    width: 100%;
 }
 
-.sidebar-nav-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-primary);
+.mainsail-sidebar:not(.expanded) .sidebar-nav-item {
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+}
+
+.mainsail-sidebar:not(.expanded) .sidebar-nav-item .sidebar-nav-label {
+    display: none !important;
+}
+
+.mainsail-sidebar.expanded .sidebar-nav-item {
+    padding: 0 16px;
+    gap: 16px;
 }
 
 .sidebar-nav-icon {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
+    width: 56px;
+    min-width: 56px;
+    height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: inherit;
+    flex-shrink: 0;
 }
 
 .sidebar-nav-icon svg {
@@ -219,25 +225,13 @@ body {
     fill: currentColor;
 }
 
-.sidebar-nav-label {
-    font-size: 0.885rem;
-    font-weight: 500;
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(-5px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    pointer-events: none;
+.sidebar-nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
 }
 
-.mainsail-sidebar.expanded .sidebar-nav-label {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
-}
-
-/* Active Navigation Item (Klipper Config) */
 .sidebar-nav-item.active {
-    background: rgba(var(--primary-rgb), 0.14);
+    background: rgba(var(--primary-rgb), 0.16);
     color: var(--primary);
     font-weight: 600;
 }
@@ -258,39 +252,35 @@ body {
 }
 
 /* Tooltips when sidebar is collapsed */
-.mainsail-sidebar:not(.expanded) .sidebar-nav-item {
-    justify-content: center;
-    padding: 0;
-}
-
 .mainsail-sidebar:not(.expanded) .sidebar-nav-item::after {
     content: attr(data-tooltip);
     position: absolute;
-    left: calc(100% + 10px);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    padding: 5px 11px;
+    left: 62px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-4px);
+    background: #27272a;
+    color: #ffffff;
+    padding: 6px 12px;
     border-radius: 4px;
     font-size: 0.775rem;
     font-weight: 500;
     white-space: nowrap;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     opacity: 0;
     pointer-events: none;
-    transform: translateX(-6px);
     transition: opacity 0.15s ease, transform 0.15s ease;
-    z-index: 999;
+    z-index: 1000;
 }
 
 .mainsail-sidebar:not(.expanded) .sidebar-nav-item:hover::after {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(-50%) translateX(0);
 }
 
 /* Sidebar Footer & Toggle */
 .sidebar-footer {
-    padding: 8px;
+    padding: 6px 0;
     border-top: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
@@ -300,21 +290,28 @@ body {
 .sidebar-toggle-btn {
     display: flex;
     align-items: center;
-    height: 40px;
+    height: 42px;
     width: 100%;
-    border-radius: var(--radius-sm);
     border: none;
     background: transparent;
     color: var(--text-muted);
     cursor: pointer;
-    padding: 0 12px;
-    gap: 14px;
     transition: var(--transition);
 }
 
 .mainsail-sidebar:not(.expanded) .sidebar-toggle-btn {
     justify-content: center;
     padding: 0;
+    gap: 0;
+}
+
+.mainsail-sidebar:not(.expanded) .sidebar-toggle-btn #sidebar-toggle-label {
+    display: none !important;
+}
+
+.mainsail-sidebar.expanded .sidebar-toggle-btn {
+    padding: 0 16px;
+    gap: 16px;
 }
 
 .sidebar-toggle-btn:hover {
@@ -323,13 +320,14 @@ body {
 }
 
 .sidebar-toggle-icon {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
+    width: 56px;
+    min-width: 56px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.25s ease;
+    flex-shrink: 0;
 }
 
 .mainsail-sidebar.expanded .sidebar-toggle-icon {
@@ -342,7 +340,8 @@ body {
 .navbar {
     background-color: var(--bg-surface);
     border-bottom: 1px solid var(--border-color);
-    padding: 0.75rem 1.5rem;
+    padding: 0 1.25rem;
+    height: 56px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -638,6 +637,33 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
     gap: 1.25rem;
     margin-bottom: 1.25rem;
+}
+
+.grid-2-col {
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+}
+
+.grid-3-col {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.section-divider-title {
+    font-size: 0.825rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin: 1.5rem 0 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-divider-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
 }
 
 .card {

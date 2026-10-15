@@ -75,26 +75,47 @@ class MoonrakerClient {
 
     /**
      * Recupera le impostazioni salvate da Mainsail nel database di Moonraker (tema, colori, preferenze UI)
-     * Endpoint: GET /server/database/item?namespace=mainsail
+     * Tenta l'endpoint globale del namespace 'mainsail' e le chiavi specifiche 'uiSettings' e 'general'.
      */
     async getMainsailSettings() {
         try {
+            // Tentativo 1: scarica l'intero namespace 'mainsail'
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-            const res = await fetch(`${this.baseUrl}/server/database/item?namespace=mainsail`, {
+            const res = await fetch(`${this.baseUrl}/server/database/item?namespace=mainsail&t=${Date.now()}`, {
                 signal: controller.signal
             });
             clearTimeout(timeoutId);
 
             if (res.ok) {
                 const data = await res.json();
-                return { success: true, settings: data.result ? data.result.value : null };
+                if (data && data.result) {
+                    const val = data.result.value !== undefined ? data.result.value : data.result;
+                    if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+                        return { success: true, settings: val };
+                    }
+                }
             }
-            return { success: false, error: `HTTP ${res.status}` };
-        } catch (err) {
-            return { success: false, error: err.message };
-        }
+        } catch (_) {}
+
+        try {
+            // Tentativo 2: scarica esplicitamente la chiave 'uiSettings'
+            const controller2 = new AbortController();
+            const timeoutId2 = setTimeout(() => controller2.abort(), 2500);
+            const resUi = await fetch(`${this.baseUrl}/server/database/item?namespace=mainsail&key=uiSettings&t=${Date.now()}`, {
+                signal: controller2.signal
+            });
+            clearTimeout(timeoutId2);
+
+            if (resUi.ok) {
+                const dataUi = await resUi.json();
+                const uiVal = dataUi.result ? (dataUi.result.value !== undefined ? dataUi.result.value : dataUi.result) : null;
+                return { success: true, settings: { uiSettings: uiVal } };
+            }
+        } catch (_) {}
+
+        return { success: false, error: 'Configurazione database non reperibile' };
     }
 
     /**
@@ -109,6 +130,19 @@ class MoonrakerClient {
         } catch (_) {
             return false;
         }
+    }
+
+    /**
+     * Verifica la presenza di un logo personalizzato in .theme (svg o png)
+     */
+    async getCustomLogoUrl() {
+        try {
+            const resSvg = await fetch(`${this.baseUrl}/server/files/config/.theme/sidebar-logo.svg?t=${Date.now()}`, { method: 'HEAD' });
+            if (resSvg.ok) return `${this.baseUrl}/server/files/config/.theme/sidebar-logo.svg`;
+            const resPng = await fetch(`${this.baseUrl}/server/files/config/.theme/sidebar-logo.png?t=${Date.now()}`, { method: 'HEAD' });
+            if (resPng.ok) return `${this.baseUrl}/server/files/config/.theme/sidebar-logo.png`;
+        } catch (_) {}
+        return null;
     }
 
     /**
