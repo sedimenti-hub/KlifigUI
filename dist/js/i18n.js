@@ -367,7 +367,12 @@
                 "tag.leveling_sensor": "Leveling Sensor",
                 "tag.resonances_z_offset": "Resonances & Z-Offset",
                 "tag.core_features": "Core Features",
-                "tag.delta_geometry": "Delta Geometry"
+                "tag.delta_geometry": "Delta Geometry",
+                "placeholder.max_accel_to_decel": "Leave empty if using minimum_cruise_ratio",
+                "placeholder.gear_ratio": "50:17 or 50:10 or empty",
+                "placeholder.adxl_cs": "rpi:None or PB12",
+                "placeholder.adxl_spi": "spidev0.0 or spi1",
+                "placeholder.moonraker_url": "http://192.168.1.50:7125 or leave empty for auto-detection"
         },
         "it": {
                 "nav.settings": "Impostazioni",
@@ -711,7 +716,12 @@
                 "tag.leveling_sensor": "Sensore Livellamento",
                 "tag.resonances_z_offset": "Risonanze & Z-Offset",
                 "tag.core_features": "Funzioni Principali",
-                "tag.delta_geometry": "Geometria Delta"
+                "tag.delta_geometry": "Geometria Delta",
+                "placeholder.max_accel_to_decel": "Lascia vuoto se usi minimum_cruise_ratio",
+                "placeholder.gear_ratio": "50:17 o 50:10 o vuoto",
+                "placeholder.adxl_cs": "rpi:None o PB12",
+                "placeholder.adxl_spi": "spidev0.0 o spi1",
+                "placeholder.moonraker_url": "http://192.168.1.50:7125 o lascia vuoto per auto-rilevamento"
         },
         "de": {
                 "nav.settings": "Settings",
@@ -1055,7 +1065,12 @@
                 "tag.leveling_sensor": "Leveling Sensor",
                 "tag.resonances_z_offset": "Resonances & Z-Offset",
                 "tag.core_features": "Core Features",
-                "tag.delta_geometry": "Delta Geometry"
+                "tag.delta_geometry": "Delta Geometry",
+                "placeholder.max_accel_to_decel": "Leave empty if using minimum_cruise_ratio",
+                "placeholder.gear_ratio": "50:17 or 50:10 or empty",
+                "placeholder.adxl_cs": "rpi:None or PB12",
+                "placeholder.adxl_spi": "spidev0.0 or spi1",
+                "placeholder.moonraker_url": "http://192.168.1.50:7125 or leave empty for auto-detection"
         },
         "fr": {
                 "nav.settings": "Settings",
@@ -1399,7 +1414,12 @@
                 "tag.leveling_sensor": "Leveling Sensor",
                 "tag.resonances_z_offset": "Resonances & Z-Offset",
                 "tag.core_features": "Core Features",
-                "tag.delta_geometry": "Delta Geometry"
+                "tag.delta_geometry": "Delta Geometry",
+                "placeholder.max_accel_to_decel": "Leave empty if using minimum_cruise_ratio",
+                "placeholder.gear_ratio": "50:17 or 50:10 or empty",
+                "placeholder.adxl_cs": "rpi:None or PB12",
+                "placeholder.adxl_spi": "spidev0.0 or spi1",
+                "placeholder.moonraker_url": "http://192.168.1.50:7125 or leave empty for auto-detection"
         },
         "es": {
                 "nav.settings": "Settings",
@@ -1743,7 +1763,12 @@
                 "tag.leveling_sensor": "Leveling Sensor",
                 "tag.resonances_z_offset": "Resonances & Z-Offset",
                 "tag.core_features": "Core Features",
-                "tag.delta_geometry": "Delta Geometry"
+                "tag.delta_geometry": "Delta Geometry",
+                "placeholder.max_accel_to_decel": "Leave empty if using minimum_cruise_ratio",
+                "placeholder.gear_ratio": "50:17 or 50:10 or empty",
+                "placeholder.adxl_cs": "rpi:None or PB12",
+                "placeholder.adxl_spi": "spidev0.0 or spi1",
+                "placeholder.moonraker_url": "http://192.168.1.50:7125 or leave empty for auto-detection"
         }
 };
 
@@ -4227,6 +4252,15 @@
         document.querySelectorAll('[data-i18n-title]').forEach(el => {
             const key = el.getAttribute('data-i18n-title');
             el.setAttribute('title', t(key));
+        });
+
+        // 2b. Elementi con data-i18n-placeholder
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            const translation = t(key);
+            if (translation && translation !== key) {
+                el.setAttribute('placeholder', translation);
+            }
         });
 
         // 3. Traduzione automatica dei bottoni della topbar e delle azioni

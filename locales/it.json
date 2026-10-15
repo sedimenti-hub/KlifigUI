@@ -347,7 +347,12 @@
     "tag.leveling_sensor": "Sensore Livellamento",
     "tag.resonances_z_offset": "Risonanze & Z-Offset",
     "tag.core_features": "Funzioni Principali",
-    "tag.delta_geometry": "Geometria Delta"
+    "tag.delta_geometry": "Geometria Delta",
+    "placeholder.max_accel_to_decel": "Lascia vuoto se usi minimum_cruise_ratio",
+    "placeholder.gear_ratio": "50:17 o 50:10 o vuoto",
+    "placeholder.adxl_cs": "rpi:None o PB12",
+    "placeholder.adxl_spi": "spidev0.0 o spi1",
+    "placeholder.moonraker_url": "http://192.168.1.50:7125 o lascia vuoto per auto-rilevamento"
   },
   "labels": {
     "printer-kinematics": "Tipo di Cinematica Principale:",

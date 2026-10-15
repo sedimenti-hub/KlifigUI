@@ -229,7 +229,7 @@
                     <div class="form-group" style="margin-top: 0.75rem;">
                         <label class="form-label" for="printer-max-accel-to-decel">Max Accel to Decel (Opzionale legacy):</label>
                         <div class="input-with-unit">
-                            <input type="number" class="form-control" id="printer-max-accel-to-decel" placeholder="Lascia vuoto se usi minimum_cruise_ratio">
+                            <input type="number" class="form-control" id="printer-max-accel-to-decel" placeholder="Lascia vuoto se usi minimum_cruise_ratio" data-i18n-placeholder="placeholder.max_accel_to_decel">
                             <span class="input-unit">mm/s²</span>
                         </div>
                     </div>
@@ -970,7 +970,7 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="extruder-gear-ratio">Rapporto Ingranaggi (gear_ratio):</label>
-                            <input type="text" class="form-control" id="extruder-gear-ratio" placeholder="50:17 o 50:10 o vuoto">
+                            <input type="text" class="form-control" id="extruder-gear-ratio" placeholder="50:17 o 50:10 o vuoto" data-i18n-placeholder="placeholder.gear_ratio">
                         </div>
                     </div>
 
@@ -1518,7 +1518,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label" for="adxl-cs-pin">CS Pin (cs_pin):</label>
-                                <input type="text" class="form-control" id="adxl-cs-pin" placeholder="rpi:None o PB12">
+                                <input type="text" class="form-control" id="adxl-cs-pin" placeholder="rpi:None o PB12" data-i18n-placeholder="placeholder.adxl_cs">
                                 <div class="form-helper" data-i18n="helper.adxl_cs">Es: rpi:None se collegato al Raspberry, oppure un pin SPI CS della MCU.</div>
                             </div>
                             <div class="form-group">
@@ -1532,7 +1532,7 @@
 
                         <div class="form-group" id="adxl-spi-bus-group">
                             <label class="form-label" for="adxl-spi-bus">Bus SPI Hardware (spi_bus):</label>
-                            <input type="text" class="form-control" id="adxl-spi-bus" placeholder="spidev0.0 o spi1">
+                            <input type="text" class="form-control" id="adxl-spi-bus" placeholder="spidev0.0 o spi1" data-i18n-placeholder="placeholder.adxl_spi">
                             <div class="form-helper" data-i18n="helper.adxl_spi_bus">Es: spidev0.0 (su Raspberry Pi) o spi1/spi2 (su MCU).</div>
                         </div>
 
@@ -2076,7 +2076,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="input-moonraker-url" data-i18n="modal.ip_label">Indirizzo IP / Host Moonraker:</label>
-                    <input type="text" class="form-control" id="input-moonraker-url" placeholder="http://192.168.1.50:7125 o lascia vuoto per auto-rilevamento">
+                    <input type="text" class="form-control" id="input-moonraker-url" placeholder="http://192.168.1.50:7125 o lascia vuoto per auto-rilevamento" data-i18n-placeholder="placeholder.moonraker_url">
                     <div class="form-helper" data-i18n="modal.ip_helper">Se Klipper Configurator è installato sulla stessa macchina di Mainsail, lascia l'origine automatica.</div>
                 </div>
 

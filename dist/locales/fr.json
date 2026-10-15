@@ -347,7 +347,12 @@
     "tag.leveling_sensor": "Leveling Sensor",
     "tag.resonances_z_offset": "Resonances & Z-Offset",
     "tag.core_features": "Core Features",
-    "tag.delta_geometry": "Delta Geometry"
+    "tag.delta_geometry": "Delta Geometry",
+    "placeholder.max_accel_to_decel": "Leave empty if using minimum_cruise_ratio",
+    "placeholder.gear_ratio": "50:17 or 50:10 or empty",
+    "placeholder.adxl_cs": "rpi:None or PB12",
+    "placeholder.adxl_spi": "spidev0.0 or spi1",
+    "placeholder.moonraker_url": "http://192.168.1.50:7125 or leave empty for auto-detection"
   },
   "labels": {
     "printer-kinematics": "Main Kinematics Type:",
