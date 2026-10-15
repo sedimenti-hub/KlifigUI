@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.6">
+    <link rel="stylesheet" href="css/style.css?v=0.7.7">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300c0f3'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -59,10 +59,7 @@
             <header class="navbar">
                 <div class="nav-brand">
                     <div class="nav-logo">K</div>
-                    <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
-                        <span class="nav-title">Klipper Configurator</span>
-                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.6</span>
-                    </div>
+                    <span class="nav-title">Klipper Configurator</span>
                 </div>
 
         <div class="nav-actions">
@@ -70,12 +67,6 @@
             <div class="unsaved-changes-pill" id="unsaved-changes-pill" style="display: none;" title="Impostazioni modificate non ancora salvate">
                 <span style="font-size: 0.8rem;">●</span>
                 <span id="unsaved-changes-text">0 modifiche</span>
-            </div>
-
-            <!-- Moonraker Connection Pill -->
-            <div class="connection-pill" id="btn-conn-settings" title="Clicca per configurare la connessione Moonraker e il tema">
-                <span class="status-dot" id="status-dot"></span>
-                <span id="status-text">Moonraker: Connessione...</span>
             </div>
 
             <!-- Selettore File Config -->
@@ -110,10 +101,11 @@
                 Salva & Riavvia
             </button>
 
-            <!-- Selettore Rapido Tema e Colori Mainsail -->
-            <button type="button" class="btn btn-secondary btn-sm" id="btn-quick-theme" title="Personalizza Tema e Colori Mainsail">
-                <span id="quick-theme-dot" style="display: inline-block; width: 11px; height: 11px; border-radius: 50%; background-color: var(--primary); box-shadow: 0 0 6px var(--primary);"></span>
-                <span>Tema</span>
+            <!-- Pulsante Impostazioni (ex Tema + Connessione) -->
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-settings" title="Impostazioni, Connessione Moonraker e Tema">
+                <span id="quick-theme-dot" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary); box-shadow: 0 0 6px var(--primary);"></span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Impostazioni</span>
             </button>
         </div>
     </header>
@@ -2067,14 +2059,25 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL CONNESSIONE MOONRAKER & TEMA ==================== -->
+    <!-- ==================== MODAL IMPOSTAZIONI (CONNESSIONE MOONRAKER & TEMA) ==================== -->
     <div class="modal-backdrop" id="modal-conn">
         <div class="modal-dialog" style="max-width: 520px;">
             <div class="modal-header">
-                <span class="modal-title">Connessione & Tema Mainsail</span>
+                <span class="modal-title">Impostazioni & Tema Mainsail</span>
                 <button class="modal-close" id="btn-close-conn">&times;</button>
             </div>
             <div class="modal-body">
+                <!-- Sezione Stato Connessione e Versione -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <span class="status-dot" id="status-dot"></span>
+                        <span id="status-text" style="font-size: 0.85rem; font-weight: 600;">Moonraker: Connessione...</span>
+                    </div>
+                    <div>
+                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.7</span>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label class="form-label" for="input-moonraker-url">Indirizzo IP / Host Moonraker:</label>
                     <input type="text" class="form-control" id="input-moonraker-url" placeholder="http://192.168.1.50:7125 o lascia vuoto per auto-rilevamento">
@@ -2087,7 +2090,7 @@
                 
                 <div style="padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Stato Sincronizzazione:</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Sincronizzazione Automatica:</span>
                         <span id="theme-sync-status" class="nav-badge" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">Sincronizzato</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
@@ -2175,9 +2178,9 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.7.6"></script>
-    <script src="js/default-config.js?v=0.7.6"></script>
-    <script src="js/moonraker-client.js?v=0.7.6"></script>
-    <script src="js/app.js?v=0.7.6"></script>
+    <script src="js/klipper-parser.js?v=0.7.7"></script>
+    <script src="js/default-config.js?v=0.7.7"></script>
+    <script src="js/moonraker-client.js?v=0.7.7"></script>
+    <script src="js/app.js?v=0.7.7"></script>
 </body>
 </html>

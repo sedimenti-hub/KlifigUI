@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.6';
+    const APP_VERSION = 'v0.7.7';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -249,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         presetColorBtns: document.querySelectorAll('.preset-color-btn'),
         sidebarNavLinks: document.querySelectorAll('.sidebar-nav-item'),
         btnQuickTheme: document.getElementById('btn-quick-theme'),
+        btnSettings: document.getElementById('btn-settings'),
         quickThemeDot: document.getElementById('quick-theme-dot'),
         pickerThemeColor: document.getElementById('picker-theme-color')
     };
@@ -3603,11 +3604,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const THEME_PRESETS = {
-        mainsail: '#00c0f3',
-        voron: '#d32f2f',
-        vzbot: '#00e5ff',
-        ratrig: '#00ff41',
+        mainsail: '#2196f3',
         klipper: '#f97316',
+        voron: '#d32f2f',
+        ldo: '#326799',
+        yumi: '#F6CF3D',
+        vzbot: '#00e5ff',
+        prusa: '#fa6831',
+        btt: '#ef0025',
+        multec: '#234D7A',
+        ratrig: '#00ff41',
         purple: '#9333ea',
         blue: '#0284c7',
         emerald: '#10b981'
@@ -3696,17 +3702,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.success && res.settings) {
                 const s = res.settings;
 
-                // Estrazione Colore Primario
-                if (s.uiSettings && s.uiSettings.primaryColor) {
-                    primaryColor = s.uiSettings.primaryColor;
-                } else if (s.theme && s.theme.primaryColor) {
+                // Estrazione Colore Primario (Mainsail supporta uiSettings.primary, uiSettings.primaryColor, theme.primaryColor, ecc.)
+                if (s.uiSettings) {
+                    if (s.uiSettings.primary && typeof s.uiSettings.primary === 'string') {
+                        primaryColor = s.uiSettings.primary;
+                    } else if (s.uiSettings.primaryColor && typeof s.uiSettings.primaryColor === 'string') {
+                        primaryColor = s.uiSettings.primaryColor;
+                    }
+                }
+                if (!primaryColor && s.theme && s.theme.primaryColor) {
                     primaryColor = s.theme.primaryColor;
-                } else if (typeof s.primaryColor === 'string') {
+                } else if (!primaryColor && typeof s.primaryColor === 'string') {
                     primaryColor = s.primaryColor;
                 }
 
-                // Estrazione preset tema se il colore non è specificato in esadecimale
-                const themePreset = (s.uiSettings && s.uiSettings.theme) || (s.general && s.general.theme);
+                // Estrazione preset tema se il colore primario è legato a un vendor/tema predefinito
+                const themePreset = (s.uiSettings && s.uiSettings.theme) || (s.general && s.general.theme) || s.theme;
                 if (typeof themePreset === 'string' && THEME_PRESETS[themePreset.toLowerCase()]) {
                     if (!primaryColor) {
                         primaryColor = THEME_PRESETS[themePreset.toLowerCase()];
@@ -3714,10 +3725,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Estrazione Modalità Tema (dark / light)
-                if (s.uiSettings && s.uiSettings.theme) {
-                    themeMode = typeof s.uiSettings.theme === 'string' ? s.uiSettings.theme : (s.uiSettings.theme.dark ? 'dark' : 'light');
+                if (s.uiSettings) {
+                    if (s.uiSettings.mode) {
+                        themeMode = s.uiSettings.mode;
+                    } else if (s.uiSettings.theme) {
+                        if (typeof s.uiSettings.theme === 'string') {
+                            themeMode = s.uiSettings.theme === 'light' ? 'light' : 'dark';
+                        } else if (typeof s.uiSettings.theme === 'object') {
+                            themeMode = s.uiSettings.theme.dark ? 'dark' : (s.uiSettings.theme.light ? 'light' : 'dark');
+                        }
+                    }
                 } else if (s.general && s.general.theme) {
-                    themeMode = s.general.theme;
+                    themeMode = s.general.theme === 'light' ? 'light' : 'dark';
                 }
 
                 // Estrazione Nome Stampante
@@ -3793,12 +3812,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Pulsante rapido Tema nella navbar
-        if (dom.btnQuickTheme) {
-            dom.btnQuickTheme.addEventListener('click', () => {
+        // Pulsante rapido Impostazioni nella navbar
+        const openSettingsModal = () => {
+            if (dom.inputMoonrakerUrl && state.moonraker) {
                 dom.inputMoonrakerUrl.value = state.moonraker.baseUrl;
-                dom.modalConn.classList.add('open');
-            });
+            }
+            if (dom.modalConn) dom.modalConn.classList.add('open');
+        };
+
+        if (dom.btnSettings) {
+            dom.btnSettings.addEventListener('click', openSettingsModal);
+        }
+        if (dom.btnQuickTheme) {
+            dom.btnQuickTheme.addEventListener('click', openSettingsModal);
         }
 
         // Color Picker nativo per tema
@@ -3907,11 +3933,13 @@ document.addEventListener('DOMContentLoaded', () => {
     dom.btnReload.addEventListener('click', loadConfigFromMoonraker);
     dom.selectConfigFile.addEventListener('change', loadConfigFromMoonraker);
 
-    // Modal Connessione
-    dom.btnConnSettings.addEventListener('click', () => {
-        dom.inputMoonrakerUrl.value = state.moonraker.baseUrl;
-        dom.modalConn.classList.add('open');
-    });
+    // Modal Connessione & Impostazioni
+    if (dom.btnConnSettings) {
+        dom.btnConnSettings.addEventListener('click', () => {
+            dom.inputMoonrakerUrl.value = state.moonraker.baseUrl;
+            dom.modalConn.classList.add('open');
+        });
+    }
     dom.btnCloseConn.addEventListener('click', () => dom.modalConn.classList.remove('open'));
     dom.btnCancelConn.addEventListener('click', () => dom.modalConn.classList.remove('open'));
     dom.btnSaveConn.addEventListener('click', async () => {
@@ -3930,8 +3958,53 @@ document.addEventListener('DOMContentLoaded', () => {
         if (state.baselineSnapshot) checkDirtyState();
     });
 
+    // -------------------------------------------------------------------------
+    // Sincronizzazione automatica in tempo reale del Tema Mainsail
+    // -------------------------------------------------------------------------
+    function initAutomaticThemeSync() {
+        if (!state.moonraker) return;
+
+        // 1. WebSocket Moonraker per intercettare aggiornamenti e modifiche al volo
+        state.moonraker.on('open', () => {
+            syncMainsailTheme();
+        });
+
+        state.moonraker.on('message', (msg) => {
+            if (!msg) return;
+            // Se arrivano eventi correlati a database, configurazione o sistema, sincronizza tema
+            if (msg.method === 'notify_update_response' || msg.method === 'notify_service_state_changed') {
+                syncMainsailTheme();
+            }
+        });
+
+        // Avvia connessione websocket persistente
+        state.moonraker.connectWebSocket();
+
+        // 2. Polling periodico leggero (ogni 10 secondi) per rilevare se l'utente cambia tema su Mainsail
+        setInterval(() => {
+            if (state.moonraker && state.moonraker.isConnected) {
+                syncMainsailTheme();
+            }
+        }, 10000);
+
+        // 3. Sincronizzazione immediata quando la finestra torna in primo piano (focus)
+        window.addEventListener('focus', () => {
+            if (state.moonraker) {
+                syncMainsailTheme();
+            }
+        });
+
+        // 4. Sincronizzazione immediata tra schede del browser (storage event)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'mainsail_cached_primary_color' || e.key === 'mainsail_cached_theme_mode') {
+                applyMainsailTheme();
+            }
+        });
+    }
+
     // Avvio: Inizializza Sidebar e Tema Mainsail prima della connessione
     initSidebar();
     applyMainsailTheme();
+    initAutomaticThemeSync();
     checkMoonrakerConnection();
 });

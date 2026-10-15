@@ -8,6 +8,9 @@ class MoonrakerClient {
         this.setBaseUrl(baseUrl || this.detectBaseUrl());
         this.isConnected = false;
         this.printerInfo = null;
+        this.ws = null;
+        this.wsReconnectTimer = null;
+        this.wsListeners = [];
     }
 
     /**
@@ -338,6 +341,89 @@ class MoonrakerClient {
     async restartKlipper(firmwareRestart = true) {
         const cmd = firmwareRestart ? 'FIRMWARE_RESTART' : 'RESTART';
         return await this.executeGcode(cmd);
+    }
+
+    /**
+     * Registra un callback per messaggi o notifiche WebSocket Moonraker
+     */
+    on(event, callback) {
+        this.wsListeners.push({ event, callback });
+    }
+
+    off(event, callback) {
+        this.wsListeners = this.wsListeners.filter(l => !(l.event === event && (!callback || l.callback === callback)));
+    }
+
+    _emit(event, data) {
+        this.wsListeners.forEach(l => {
+            if (l.event === event || l.event === '*') {
+                try {
+                    l.callback(data, event);
+                } catch (err) {
+                    console.error('Errore listener WebSocket:', err);
+                }
+            }
+        });
+    }
+
+    /**
+     * Connette il WebSocket Moonraker per ascoltare notifiche push in tempo reale
+     */
+    connectWebSocket() {
+        if (typeof WebSocket === 'undefined') return;
+
+        if (this.ws) {
+            try { this.ws.close(); } catch (_) {}
+            this.ws = null;
+        }
+
+        clearTimeout(this.wsReconnectTimer);
+
+        let wsUrl = '';
+        try {
+            const parsed = new URL(this.baseUrl);
+            const proto = parsed.protocol === 'https:' ? 'wss:' : 'ws:';
+            wsUrl = `${proto}//${parsed.host}/websocket`;
+        } catch (_) {
+            const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            wsUrl = `${proto}//${window.location.host}/websocket`;
+        }
+
+        try {
+            this.ws = new WebSocket(wsUrl);
+
+            this.ws.onopen = () => {
+                this.isConnected = true;
+                this._emit('open', { url: wsUrl });
+            };
+
+            this.ws.onmessage = (event) => {
+                try {
+                    const msg = JSON.parse(event.data);
+                    this._emit('message', msg);
+                    if (msg && msg.method) {
+                        this._emit(msg.method, msg.params);
+                    }
+                } catch (_) {}
+            };
+
+            this.ws.onerror = (err) => {
+                this._emit('error', err);
+            };
+
+            this.ws.onclose = () => {
+                this.ws = null;
+                this._emit('close', {});
+                // Riconnessione automatica dopo 3 secondi
+                this.wsReconnectTimer = setTimeout(() => {
+                    this.connectWebSocket();
+                }, 3000);
+            };
+        } catch (err) {
+            this.wsReconnectTimer = setTimeout(() => {
+                this.connectWebSocket();
+            }, 3000);
+        }
     }
 }
 

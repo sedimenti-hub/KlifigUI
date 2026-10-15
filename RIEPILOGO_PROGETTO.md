@@ -51,6 +51,7 @@ gitGraph
     commit id: "Fix Sidebar & Tema Neutrale" tag: "v0.7.4"
     commit id: "Icone Esatte Mainsail v2" tag: "v0.7.5"
     commit id: "Sidebar Fedele Mainsail Reale" tag: "v0.7.6"
+    commit id: "Sync Tema Realtime & Topbar Impostazioni" tag: "v0.7.7"
 ```
 
 ### Tabella Sintetica delle Versioni e Richieste
@@ -68,6 +69,7 @@ gitGraph
 | **v0.7.4** | *"Il tema non è uguale a Mainsail; la barra laterale è rotta e elementi non allineati"* | Riconversione colori al Dark Charcoal originale Mainsail (`#121212`, `#1e1e1e`, `#00c0f3`); correzione flexbox sidebar (icone non più tagliate quando compressa); griglie bilanciate per Cinematica e Assi XYZ; aggiunta color picker nativo e preset vendor. |
 | **v0.7.5** | *"Allineamento perfetto icone e navigazione"* | Adozione delle icone SVG Material Design ufficiali di Mainsail v2 (Webcam, Controllo Movimento, Heightmap, File, Visualizzatore 3D, Cronologia, Macchina, Impostazioni, Configurator); chevron collassa/espandi. |
 | **v0.7.6** | *"Rendi la sidebar di klipper config uguale a quella di mainsails recuperando stile, icone e posizionamento"* | Sidebar clonata da `TheSidebar.vue`/`SidebarItem.vue`: colore sfondo grigio `#4f4f4f` identico a Mainsail; icone MDI ufficiali (Dashboard, Webcam, Console `mdiConsoleLine`, Heightmap, File G-Code, 3D Viewer, History, Timelapse, Machine); posizionamento e visibilità dinamici recuperati da Moonraker (`/server/info`, webcams, configfile settings, `.theme/navi.json` e `gui.navigation.entries`); indicatore attivo bordo destro 4px color primario; logo Mainsail ufficiale topbar. |
+| **v0.7.7** | *"Tema applicato in automatico come Mainsail in tempo reale; elimina Moonraker connesso e versione dalla navbar e spostali in Impostazioni"* | Sincronizzazione automatica tema Mainsail in tempo reale via WebSocket, polling continuo e focus window; riorganizzazione completa topbar (eliminato bottone "Moonraker Connesso" e badge versione); nuovo tasto "Impostazioni" (ex "Tema"); lo stato di connessione con led e il badge versione sono integrati direttamente nel modale Impostazioni. |
 
 ---
 
@@ -179,7 +181,15 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.6`.
+- ✅ **Versione corrente**: `v0.7.7`.
+- ✅ **Sincronizzazione Automatica Tema in Tempo Reale**:
+  - Il tema e i colori di Klipper Configurator si sincronizzano automaticamente con Mainsail. Se l'utente cambia tema, colore primario o modalità (chiaro/scuro) su Mainsail, le modifiche si riflettono istantaneamente su KlifigUI via WebSocket Moonraker, polling ogni 10s e listener di focus sulla finestra.
+  - Supportati tutti i temi e preset vendor di Mainsail (`mainsail: #2196f3`, `klipper: #f97316`, `voron: #d32f2f`, `vzbot: #00e5ff`, `ratrig: #00ff41`, `ldo`, `yumi`, `prusa`, `btt`, `multec`, ecc.).
+- ✅ **Top Bar Riorganizzata & Sezione Impostazioni**:
+  - Eliminato il pulsante pill "Moonraker connesso" dalla barra superiore.
+  - Eliminato il tag/badge della versione dalla testata della barra superiore.
+  - Rinominato il tasto "Tema" in **"Impostazioni"** con icona ingranaggio e dot cromatico attivo.
+  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.7`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
 - ✅ **Sidebar Mainsail Fedele al 100%**:
   - Colore di sfondo grigio `#4f4f4f` (`--sidebar-bg-color`) estratto direttamente dal tema attivo di Mainsail.
   - Voci e icone Material Design ufficiali (@mdi/js) allineate all'architettura Vue/Vuetify di Mainsail (`TheSidebar.vue`, `SidebarItem.vue`, `src/routes/index.ts`).
