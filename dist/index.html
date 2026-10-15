@@ -61,7 +61,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" id="btn-settings" title="Impostazioni, Connessione Moonraker e Tema">
                         <span id="quick-theme-dot" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary); box-shadow: 0 0 6px var(--primary);"></span>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                        <span class="btn-text">Impostazioni</span>
+                        <span class="btn-text" data-i18n="nav.settings">Impostazioni</span>
                     </button>
                 </div>
 
@@ -81,27 +81,27 @@
                     <!-- Pulsanti Azione Principali -->
                     <button class="btn btn-secondary btn-sm" id="btn-reload" title="Ricarica configurazione da Moonraker">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                        <span class="btn-text">Ricarica</span>
+                        <span class="btn-text" data-i18n="nav.reload">Ricarica</span>
                     </button>
 
                     <button class="btn btn-secondary btn-sm" id="btn-preview" title="Visualizza anteprima codice generato">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        <span class="btn-text">Anteprima</span>
+                        <span class="btn-text" data-i18n="nav.preview">Anteprima</span>
                     </button>
 
                     <button class="btn btn-secondary btn-sm" id="btn-download" title="Scarica file .cfg sul tuo computer">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                        <span class="btn-text">Scarica</span>
+                        <span class="btn-text" data-i18n="nav.download">Scarica</span>
                     </button>
 
                     <button class="btn btn-secondary btn-sm" id="btn-save" title="Salva modifiche su Moonraker (crea backup automatico)">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                        <span class="btn-text">Salva</span>
+                        <span class="btn-text" data-i18n="nav.save">Salva</span>
                     </button>
 
                     <button class="btn btn-primary btn-sm" id="btn-save-restart" title="Salva e riavvia Klipper (FIRMWARE_RESTART)">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                        <span class="btn-text">Salva & Riavvia</span>
+                        <span class="btn-text" data-i18n="nav.save_restart">Salva & Riavvia</span>
                     </button>
                 </div>
             </header>
@@ -113,39 +113,39 @@
         <nav class="tabs-navigation">
             <button class="tab-btn active" data-tab="tab-kinematics" title="Cinematica & Stampante">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24M14.83 14.83l4.24 4.24M14.83 9.17l4.24-4.24M4.93 19.07l4.24-4.24"/></svg>
-                <span class="tab-text">1. Cinematica</span>
+                <span class="tab-text" data-i18n="tab.kinematics_label">1. Cinematica</span>
             </button>
             <button class="tab-btn" data-tab="tab-host-mcu" title="Host & MCU">
                 <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
-                <span class="tab-text">2. Host/MCU</span>
+                <span class="tab-text" data-i18n="tab.host_mcu_label">2. Host/MCU</span>
             </button>
             <button class="tab-btn" data-tab="tab-stepper" title="Stepper Motion">
                 <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/><circle cx="12" cy="12" r="2"/></svg>
-                <span class="tab-text">3. Stepper Motion</span>
+                <span class="tab-text" data-i18n="tab.stepper_label">3. Stepper Motion</span>
             </button>
             <button class="tab-btn" data-tab="tab-extruder" title="Estrusore">
                 <svg viewBox="0 0 24 24"><path d="M7 2h10v4l-3 4v3h-4v-3L7 6V2zm1 2v1.5l2.5 3.33V11h3V8.83L16 5.5V4H8zm3 9h2v4l-1 2-1-2v-4z" fill="currentColor"/></svg>
-                <span class="tab-text">4. Extruder</span>
+                <span class="tab-text" data-i18n="tab.extruder_label">4. Extruder</span>
             </button>
             <button class="tab-btn" data-tab="tab-bed" title="Bed & Livellamento">
                 <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M6 3v4M10 3v4M14 3v4M18 3v4"/></svg>
-                <span class="tab-text">5. Bed</span>
+                <span class="tab-text" data-i18n="tab.bed_label">5. Bed</span>
             </button>
             <button class="tab-btn" data-tab="tab-misc" title="Ventole & Ausiliari">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span class="tab-text">6. Misceleus</span>
+                <span class="tab-text" data-i18n="tab.misc_label">6. Misceleus</span>
             </button>
             <button class="tab-btn" data-tab="tab-include" title="Include Files">
                 <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
-                <span class="tab-text">7. Include</span>
+                <span class="tab-text" data-i18n="tab.include_label">7. Include</span>
             </button>
             <button class="tab-btn" data-tab="tab-macro" title="Macro G-Code">
                 <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                <span class="tab-text">8. Macro</span>
+                <span class="tab-text" data-i18n="tab.macro_label">8. Macro</span>
             </button>
             <button class="tab-btn" data-tab="tab-calibration" title="Calibrazione & Test">
                 <svg viewBox="0 0 24 24"><path d="M2 12h20M12 2v20M4.93 4.93l14.14 14.14M19.07 4.93 4.93 19.07"/></svg>
-                <span class="tab-text">9. Calibration</span>
+                <span class="tab-text" data-i18n="tab.calibration_label">9. Calibration</span>
             </button>
         </nav>
 
@@ -165,16 +165,16 @@
                     <div class="form-group">
                         <label class="form-label" for="printer-kinematics">Tipo di Cinematica Principale:</label>
                         <select class="form-control" id="printer-kinematics">
-                            <option value="cartesian">Cartesiana (Ender 3, Prusa i3, Sovol)</option>
-                            <option value="corexy">CoreXY (Voron 2.4/Trident, RatRig, Bambu)</option>
-                            <option value="corexz">CoreXZ (Voron Switchwire)</option>
-                            <option value="delta">Delta (Kossel, Flsun)</option>
-                            <option value="hybrid_corexy">Hybrid CoreXY (IDEX CoreXY)</option>
-                            <option value="rotary_delta">Rotary Delta</option>
-                            <option value="polar">Polare</option>
-                            <option value="none">Nessuna</option>
+                            <option value="cartesian" data-i18n="opt.kinematics_cartesian">Cartesiana (Ender 3, Prusa i3, Sovol)</option>
+                            <option value="corexy" data-i18n="opt.kinematics_corexy">CoreXY (Voron 2.4/Trident, RatRig, Bambu)</option>
+                            <option value="corexz" data-i18n="opt.kinematics_corexz">CoreXZ (Voron Switchwire)</option>
+                            <option value="delta" data-i18n="opt.kinematics_delta">Delta (Kossel, Flsun)</option>
+                            <option value="hybrid_corexy" data-i18n="opt.kinematics_hybrid_corexy">Hybrid CoreXY (IDEX CoreXY)</option>
+                            <option value="rotary_delta" data-i18n="opt.kinematics_rotary_delta">Rotary Delta</option>
+                            <option value="polar" data-i18n="opt.kinematics_polar">Polare</option>
+                            <option value="none" data-i18n="opt.kinematics_none">Nessuna</option>
                         </select>
-                        <div class="form-helper">Specifica il modello cinematico della testina e degli assi.</div>
+                        <div class="form-helper" data-i18n="helper.kinematics">Specifica il modello cinematico della testina e degli assi.</div>
                     </div>
 
                     <div class="form-group">
@@ -246,9 +246,9 @@
                     <div class="form-group" style="padding: 0.9rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-idex">
-                            <strong style="color: var(--primary-light); font-size: 0.95rem;">Abilita Sistema IDEX (Dual Carriage / Doppio Carrello X)</strong>
+                            <strong style="color: var(--primary-light); font-size: 0.95rem;" data-i18n="idex.enable_label">Abilita Sistema IDEX (Dual Carriage / Doppio Carrello X)</strong>
                         </label>
-                        <div class="form-helper" style="margin-top: 0.4rem;">
+                        <div class="form-helper" style="margin-top: 0.4rem;" data-i18n="helper.enable_idex">
                             Abilita il secondo carrello <code>[dual_carriage]</code> indipendente sull'asse X e il secondo estrusore <code>[extruder1]</code>.
                         </div>
                     </div>
@@ -257,12 +257,12 @@
                     <div class="form-group" style="margin-top: 1.25rem;">
                         <label class="form-label" for="select-z-motor-count">Numero di Motori Asse Z (Multi-Asse Z):</label>
                         <select class="form-control" id="select-z-motor-count">
-                            <option value="1">1 Motore Z (Standard singolo asse [stepper_z])</option>
-                            <option value="2">2 Motori Z (Dual Z: [stepper_z], [stepper_z1])</option>
-                            <option value="3">3 Motori Z (Triple Z: [stepper_z], [stepper_z1], [stepper_z2] - es. Trident)</option>
-                            <option value="4">4 Motori Z (Quad Z: [stepper_z], [stepper_z1], [stepper_z2], [stepper_z3] - es. Voron 2.4)</option>
+                            <option value="1" data-i18n="opt.z_motor_1">1 Motore Z (Standard singolo asse [stepper_z])</option>
+                            <option value="2" data-i18n="opt.z_motor_2">2 Motori Z (Dual Z: [stepper_z], [stepper_z1])</option>
+                            <option value="3" data-i18n="opt.z_motor_3">3 Motori Z (Triple Z: [stepper_z], [stepper_z1], [stepper_z2] - es. Trident)</option>
+                            <option value="4" data-i18n="opt.z_motor_4">4 Motori Z (Quad Z: [stepper_z], [stepper_z1], [stepper_z2], [stepper_z3] - es. Voron 2.4)</option>
                         </select>
-                        <div class="form-helper" style="margin-top: 0.4rem;">
+                        <div class="form-helper" style="margin-top: 0.4rem;" data-i18n="helper.z_motor_count">
                             Modifica automaticamente i motori disponibili nella scheda <strong>Stepper</strong> e aggiorna le opzioni di livellamento nella scheda <strong>Calibration</strong> (abilitando <code>[z_tilt]</code> o <code>[quad_gantry_level]</code>).
                         </div>
                     </div>
@@ -349,7 +349,7 @@
                                     <input type="number" class="form-control" id="x-homing-speed" placeholder="0" value="50.0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="x-homing-retract-dist">homing_retract_dist:</label>
@@ -357,7 +357,7 @@
                                     <input type="number" step="0.5" class="form-control" id="x-homing-retract-dist" placeholder="0" value="5.0">
                                     <span class="input-unit">mm</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="x-homing-retract-speed">homing_retract_speed:</label>
@@ -365,7 +365,7 @@
                                     <input type="number" class="form-control" id="x-homing-retract-speed" placeholder="0" value="0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                         </div>
                     </div>
@@ -410,7 +410,7 @@
                                     <input type="number" class="form-control" id="dc-homing-speed" placeholder="0" value="50.0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="dc-homing-retract-dist">homing_retract_dist:</label>
@@ -418,7 +418,7 @@
                                     <input type="number" step="0.5" class="form-control" id="dc-homing-retract-dist" placeholder="0" value="5.0">
                                     <span class="input-unit">mm</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="dc-homing-retract-speed">homing_retract_speed:</label>
@@ -426,7 +426,7 @@
                                     <input type="number" class="form-control" id="dc-homing-retract-speed" placeholder="0" value="0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                         </div>
                     </div>
@@ -471,7 +471,7 @@
                                     <input type="number" class="form-control" id="y-homing-speed" placeholder="0" value="50.0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="y-homing-retract-dist">homing_retract_dist:</label>
@@ -479,7 +479,7 @@
                                     <input type="number" step="0.5" class="form-control" id="y-homing-retract-dist" placeholder="0" value="5.0">
                                     <span class="input-unit">mm</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="y-homing-retract-speed">homing_retract_speed:</label>
@@ -487,7 +487,7 @@
                                     <input type="number" class="form-control" id="y-homing-retract-speed" placeholder="0" value="0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                         </div>
                     </div>
@@ -532,7 +532,7 @@
                                     <input type="number" class="form-control" id="z-homing-speed" placeholder="0" value="10.0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="z-homing-retract-dist">homing_retract_dist:</label>
@@ -540,7 +540,7 @@
                                     <input type="number" step="0.5" class="form-control" id="z-homing-retract-dist" placeholder="0" value="3.0">
                                     <span class="input-unit">mm</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="z-homing-retract-speed">homing_retract_speed:</label>
@@ -548,7 +548,7 @@
                                     <input type="number" class="form-control" id="z-homing-retract-speed" placeholder="0" value="0">
                                     <span class="input-unit">mm/s</span>
                                 </div>
-                                <div class="form-helper">0 per disabilitare</div>
+                                <div class="form-helper" data-i18n="helper.zero_to_disable">0 per disabilitare</div>
                             </div>
                         </div>
                     </div>
@@ -571,29 +571,29 @@
                     <div class="form-group">
                         <label class="form-label" for="mcu-conn-type">Metodo di Connessione:</label>
                         <select class="form-control" id="mcu-conn-type">
-                            <option value="serial">USB / Seriale (/dev/serial/by-id/...)</option>
-                            <option value="canbus">CAN Bus (canbus_uuid)</option>
-                            <option value="uart">UART GPIO (/dev/ttyAMA0 o /dev/ttyS0)</option>
+                            <option value="serial" data-i18n="opt.conn_usb_serial">USB / Seriale (/dev/serial/by-id/...)</option>
+                            <option value="canbus" data-i18n="opt.conn_canbus_uuid">CAN Bus (canbus_uuid)</option>
+                            <option value="uart" data-i18n="opt.conn_uart_gpio">UART GPIO (/dev/ttyAMA0 o /dev/ttyS0)</option>
                         </select>
                     </div>
 
                     <div class="form-group" id="group-mcu-serial">
                         <label class="form-label" for="mcu-serial">Porta Seriale USB (serial):</label>
                         <input type="text" class="form-control" id="mcu-serial" placeholder="/dev/serial/by-id/usb-Klipper_stm32...">
-                        <div class="form-helper">Percorso identificativo univoco della porta seriale USB.</div>
+                        <div class="form-helper" data-i18n="helper.mcu_serial">Percorso identificativo univoco della porta seriale USB.</div>
                     </div>
 
                     <div class="form-group" id="group-mcu-canbus" style="display: none;">
                         <label class="form-label" for="mcu-canbus-uuid">UUID CAN Bus (canbus_uuid):</label>
                         <input type="text" class="form-control" id="mcu-canbus-uuid" placeholder="es. 43b0d2d3a1f8">
-                        <div class="form-helper">Indirizzo a 12 cifre della scheda su bus CAN.</div>
+                        <div class="form-helper" data-i18n="helper.mcu_canbus">Indirizzo a 12 cifre della scheda su bus CAN.</div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label" for="mcu-baud">Baud Rate:</label>
                             <select class="form-control" id="mcu-baud">
-                                <option value="250000">250000 (Standard)</option>
+                                <option value="250000" data-i18n="opt.baud_250k">250000 (Standard)</option>
                                 <option value="115200">115200</option>
                                 <option value="500000">500000</option>
                             </select>
@@ -602,7 +602,7 @@
                         <div class="form-group">
                             <label class="form-label" for="mcu-restart-method">Metodo di Riavvio:</label>
                             <select class="form-control" id="mcu-restart-method">
-                                <option value="command">command (Predefinito)</option>
+                                <option value="command" data-i18n="opt.restart_cmd_default">command (Predefinito)</option>
                                 <option value="rpi_usb">rpi_usb</option>
                                 <option value="cheetah">cheetah</option>
                             </select>
@@ -622,7 +622,7 @@
                             <input type="checkbox" id="check-enable-host-temp" checked>
                             <strong>Abilita Sensore Temperatura Raspberry Pi / Host</strong>
                         </label>
-                        <div class="form-helper">Visualizza la temperatura della CPU del Raspberry in Mainsail.</div>
+                        <div class="form-helper" data-i18n="helper.host_temp">Visualizza la temperatura della CPU del Raspberry in Mainsail.</div>
                     </div>
 
                     <div class="form-group">
@@ -630,7 +630,7 @@
                             <input type="checkbox" id="check-enable-mcu-temp" checked>
                             <strong>Abilita Sensore Temperatura Chip Scheda Madre (MCU)</strong>
                         </label>
-                        <div class="form-helper">Visualizza la temperatura del microcontrollore STM32/RP2040.</div>
+                        <div class="form-helper" data-i18n="helper.mcu_temp">Visualizza la temperatura del microcontrollore STM32/RP2040.</div>
                     </div>
 
                 </div>
@@ -644,9 +644,9 @@
                                 Gestisci schede ausiliarie (CAN bus toolhead EBB/SB2209, Raspberry Pi GPIO, expander).
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm" id="btn-add-mcu">
+                        <button type="button" class="btn btn-primary btn-sm" id="btn-add-mcu" data-i18n="btn.add_mcu_full">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            + Aggiungi Nuovo MCU
+                            <span class="btn-text">+ Aggiungi Nuovo MCU</span>
                         </button>
                     </div>
 
@@ -664,13 +664,13 @@
         <section class="tab-pane" id="tab-stepper">
             <!-- Sub-tabs generati/aggiornati dinamicamente per: X, Dual Carriage (se IDEX), Y, Z, Z1, Z2, Z3 -->
             <div class="subtabs" id="stepper-subtabs-container">
-                <button class="subtab-btn active" data-stepper="stepper_x">Asse X [stepper_x]</button>
-                <button class="subtab-btn" data-stepper="dual_carriage" id="btn-subtab-dual-carriage" style="display: none;">Dual Carriage X2 [dual_carriage]</button>
-                <button class="subtab-btn" data-stepper="stepper_y">Asse Y [stepper_y]</button>
-                <button class="subtab-btn" data-stepper="stepper_z">Asse Z [stepper_z]</button>
-                <button class="subtab-btn" data-stepper="stepper_z1" id="btn-subtab-z1" style="display: none;">Asse Z1 [stepper_z1]</button>
-                <button class="subtab-btn" data-stepper="stepper_z2" id="btn-subtab-z2" style="display: none;">Asse Z2 [stepper_z2]</button>
-                <button class="subtab-btn" data-stepper="stepper_z3" id="btn-subtab-z3" style="display: none;">Asse Z3 [stepper_z3]</button>
+                <button class="subtab-btn active" data-stepper="stepper_x" data-i18n="subtab.stepper_x">Asse X [stepper_x]</button>
+                <button class="subtab-btn" data-stepper="dual_carriage" id="btn-subtab-dual-carriage" data-i18n="subtab.dual_carriage" style="display: none;">Dual Carriage X2 [dual_carriage]</button>
+                <button class="subtab-btn" data-stepper="stepper_y" data-i18n="subtab.stepper_y">Asse Y [stepper_y]</button>
+                <button class="subtab-btn" data-stepper="stepper_z" data-i18n="subtab.stepper_z">Asse Z [stepper_z]</button>
+                <button class="subtab-btn" data-stepper="stepper_z1" id="btn-subtab-z1" data-i18n="subtab.stepper_z1" style="display: none;">Asse Z1 [stepper_z1]</button>
+                <button class="subtab-btn" data-stepper="stepper_z2" id="btn-subtab-z2" data-i18n="subtab.stepper_z2" style="display: none;">Asse Z2 [stepper_z2]</button>
+                <button class="subtab-btn" data-stepper="stepper_z3" id="btn-subtab-z3" data-i18n="subtab.stepper_z3" style="display: none;">Asse Z3 [stepper_z3]</button>
             </div>
 
             <div class="grid-container">
@@ -706,7 +706,7 @@
                         <div class="form-group">
                             <label class="form-label" for="stepper-microsteps">Microsteps:</label>
                             <select class="form-control" id="stepper-microsteps">
-                                <option value="16">16 (Standard consigliato)</option>
+                                <option value="16" data-i18n="opt.microsteps_16">16 (Standard consigliato)</option>
                                 <option value="32">32</option>
                                 <option value="64">64</option>
                                 <option value="128">128</option>
@@ -716,8 +716,8 @@
                         <div class="form-group">
                             <label class="form-label" for="stepper-steps-rotation">Gradi Motore:</label>
                             <select class="form-control" id="stepper-steps-rotation">
-                                <option value="200">200 passi (Motore 1.8° standard)</option>
-                                <option value="400">400 passi (Motore 0.9° alta precisione)</option>
+                                <option value="200" data-i18n="opt.steps_200">200 passi (Motore 1.8° standard)</option>
+                                <option value="400" data-i18n="opt.steps_400">400 passi (Motore 0.9° alta precisione)</option>
                             </select>
                         </div>
                     </div>
@@ -725,24 +725,24 @@
                     <div class="form-group" style="margin-top: 1rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
                             <label class="form-label" for="stepper-rotation-distance" style="margin-bottom:0;">Rotation Distance:</label>
-                            <button type="button" class="btn-link" id="btn-calc-rot-dist">Calcolatore Passi & Cinghie</button>
+                            <button type="button" class="btn-link" id="btn-calc-rot-dist" data-i18n="btn.calc_rot_dist">Calcolatore Passi & Cinghie</button>
                         </div>
                         <div class="input-with-unit">
                             <input type="number" step="0.001" class="form-control" id="stepper-rotation-distance" placeholder="40.0">
                             <span class="input-unit">mm</span>
                         </div>
-                        <div class="form-helper">40 per cinghie GT2 a 20 denti, 8.0 per barra trapezia T8x8, 4.0 per T8x4.</div>
+                        <div class="form-helper" data-i18n="helper.stepper_rot_dist">40 per cinghie GT2 a 20 denti, 8.0 per barra trapezia T8x8, 4.0 per T8x4.</div>
                     </div>
 
                     <!-- Endstop Pin (solo per X, Y, Z primario e Dual Carriage) -->
                     <div class="form-group" id="group-stepper-endstop">
                         <label class="form-label" for="stepper-endstop-pin">Finecorsa / Endstop Pin:</label>
                         <input type="text" class="form-control" id="stepper-endstop-pin" placeholder="^PA5 o probe:z_virtual_endstop">
-                        <div class="form-helper">Usa '^' per pull-up interno. Per sensorless homing: tmc2209_stepper_x:virtual_endstop</div>
+                        <div class="form-helper" data-i18n="helper.stepper_endstop">Usa '^' per pull-up interno. Per sensorless homing: tmc2209_stepper_x:virtual_endstop</div>
                     </div>
 
                     <div id="notice-aux-z" style="display: none; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-secondary);">
-                        ℹ️ <em>I limiti di corsa ed endstop per gli assi Z ausiliari (Z1, Z2, Z3) sono gestiti centralmente dall'asse principale [stepper_z].</em>
+                        ℹ️ <em data-i18n="helper.stepper_z_notice">I limiti di corsa ed endstop per gli assi Z ausiliari (Z1, Z2, Z3) sono gestiti centralmente dall'asse principale [stepper_z].</em>
                     </div>
                 </div>
 
@@ -764,15 +764,15 @@
                                 <option value="tmc2240">TMC2240</option>
                                 <option value="tmc2130">TMC2130</option>
                                 <option value="tmc2660">TMC2660</option>
-                                <option value="generic">A4988 / Generico (Standalone)</option>
+                                <option value="generic" data-i18n="opt.driver_generic">A4988 / Generico (Standalone)</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="driver-conn-type-select">Tipo Connessione Driver:</label>
                             <select class="form-control" id="driver-conn-type-select">
-                                <option value="uart">UART (Seriale 1/2 pin - TMC2209 / TMC2208 / ecc.)</option>
-                                <option value="spi">SPI (Bus SPI - TMC5160 / TMC2130 / ecc.)</option>
-                                <option value="standalone">Standalone (Nessun bus dati / A4988 / Ponticelli)</option>
+                                <option value="uart" data-i18n="opt.driver_uart">UART (Seriale 1/2 pin - TMC2209 / TMC2208 / ecc.)</option>
+                                <option value="spi" data-i18n="opt.driver_spi">SPI (Bus SPI - TMC5160 / TMC2130 / ecc.)</option>
+                                <option value="standalone" data-i18n="opt.driver_standalone">Standalone (Nessun bus dati / A4988 / Ponticelli)</option>
                             </select>
                         </div>
                     </div>
@@ -790,17 +790,17 @@
                             <div class="form-group">
                                 <label class="form-label" for="driver-uart-pin">Pin UART (uart_pin):</label>
                                 <input type="text" class="form-control" id="driver-uart-pin" placeholder="PC11">
-                                <div class="form-helper">Pin di comunicazione seriale UART per questo asse.</div>
+                                <div class="form-helper" data-i18n="helper.driver_uart">Pin di comunicazione seriale UART per questo asse.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="driver-tx-pin">Pin TX (tx_pin - Opzionale):</label>
                                 <input type="text" class="form-control" id="driver-tx-pin" placeholder="PC10">
-                                <div class="form-helper">Opzionale. Da specificare solo se la board usa pin RX e TX separati.</div>
+                                <div class="form-helper" data-i18n="helper.driver_tx">Opzionale. Da specificare solo se la board usa pin RX e TX separati.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="driver-uart-address">Indirizzo UART (uart_address):</label>
                                 <input type="number" class="form-control" id="driver-uart-address" placeholder="0" min="0" max="3">
-                                <div class="form-helper">Opzionale (0-3). Usato quando più driver condividono lo stesso pin UART.</div>
+                                <div class="form-helper" data-i18n="helper.driver_address">Opzionale (0-3). Usato quando più driver condividono lo stesso pin UART.</div>
                             </div>
                         </div>
                     </div>
@@ -811,20 +811,20 @@
                             <div class="form-group">
                                 <label class="form-label" for="driver-cs-pin">Pin Chip Select (cs_pin):</label>
                                 <input type="text" class="form-control" id="driver-cs-pin" placeholder="PD11">
-                                <div class="form-helper">Pin CS dedicato a questo driver.</div>
+                                <div class="form-helper" data-i18n="helper.driver_cs">Pin CS dedicato a questo driver.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="driver-spi-mode">Modalità Bus SPI:</label>
                                 <select class="form-control" id="driver-spi-mode">
-                                    <option value="hardware">Hardware SPI (Bus MCU)</option>
-                                    <option value="software">Software SPI (Bit-banging)</option>
+                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI (Bus MCU)</option>
+                                    <option value="software" data-i18n="opt.spi_software">Software SPI (Bit-banging)</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group" id="driver-spi-bus-group">
                             <label class="form-label" for="driver-spi-bus">Bus SPI Hardware (spi_bus):</label>
                             <input type="text" class="form-control" id="driver-spi-bus" placeholder="spi1">
-                            <div class="form-helper">Bus SPI configurato sulla MCU (es. spi1, spi2, spi3a).</div>
+                            <div class="form-helper" data-i18n="helper.driver_spi_bus">Bus SPI configurato sulla MCU (es. spi1, spi2, spi3a).</div>
                         </div>
                         <div class="form-row" id="driver-spi-soft-group" style="display: none;">
                             <div class="form-group">
@@ -851,14 +851,14 @@
                                     <input type="number" step="0.05" class="form-control" id="driver-run-current" placeholder="0.800" min="0.1" max="2.5">
                                     <span class="input-unit">A RMS</span>
                                 </div>
-                                <div class="form-helper">Tipicamente 0.600A - 0.900A per NEMA17 standard.</div>
+                                <div class="form-helper" data-i18n="helper.driver_run_current">Tipicamente 0.600A - 0.900A per NEMA17 standard.</div>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="driver-stealthchop">Modalità StealthChop:</label>
                                 <select class="form-control" id="driver-stealthchop">
-                                    <option value="999999">Silenziosa (StealthChop attivo)</option>
-                                    <option value="0">SpreadCycle (Più coppia / Meno passi persi)</option>
+                                    <option value="999999" data-i18n="opt.stealthchop_silent">Silenziosa (StealthChop attivo)</option>
+                                    <option value="0" data-i18n="opt.spreadcycle_torque">SpreadCycle (Più coppia / Meno passi persi)</option>
                                 </select>
                             </div>
                         </div>
@@ -875,7 +875,7 @@
                                     <input type="number" step="0.05" class="form-control" id="driver-hold-current" placeholder="0.500" min="0.05" max="2.5">
                                     <span class="input-unit">A RMS</span>
                                 </div>
-                                <div class="form-helper">Corrente ridotta a motore fermo. Evita surriscaldamenti. Se non abilitato, Klipper mantiene run_current costante.</div>
+                                <div class="form-helper" data-i18n="helper.driver_hold_current">Corrente ridotta a motore fermo. Evita surriscaldamenti. Se non abilitato, Klipper mantiene run_current costante.</div>
                             </div>
                         </div>
 
@@ -891,7 +891,7 @@
                                     <input type="number" step="0.005" class="form-control" id="driver-sense-resistor" placeholder="0.110" min="0.010" max="0.500">
                                     <span class="input-unit">Ω</span>
                                 </div>
-                                <div class="form-helper">Default di Klipper: 0.110 Ω per TMC2209/2208/2226, 0.075 Ω per TMC5160. Attiva solo se la tua scheda usa un resistore non standard.</div>
+                                <div class="form-helper" data-i18n="helper.driver_sense_resistor">Default di Klipper: 0.110 Ω per TMC2209/2208/2226, 0.075 Ω per TMC5160. Attiva solo se la tua scheda usa un resistore non standard.</div>
                             </div>
                         </div>
 
@@ -917,7 +917,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="driver-sgthrs">Sensibilità StallGuard (driver_SGTHRS / driver_SGT):</label>
                                         <input type="number" class="form-control" id="driver-sgthrs" placeholder="100" min="-64" max="255">
-                                        <div class="form-helper">TMC2209/2240: 0-255 (più alto = più sensibile). TMC5160: -64 a 63 (più basso = più sensibile).</div>
+                                        <div class="form-helper" data-i18n="helper.driver_stallguard">TMC2209/2240: 0-255 (più alto = più sensibile). TMC5160: -64 a 63 (più basso = più sensibile).</div>
                                     </div>
                                 </div>
                             </div>
@@ -933,8 +933,8 @@
         <section class="tab-pane" id="tab-extruder">
             <!-- Selettore Estrusore per IDEX -->
             <div class="subtabs" id="extruder-subtabs-container">
-                <button class="subtab-btn active" data-extruder="extruder">Estrusore 0 [extruder]</button>
-                <button class="subtab-btn" data-extruder="extruder1" id="btn-subtab-extruder1" style="display: none;">Estrusore 1 IDEX [extruder1]</button>
+                <button class="subtab-btn active" data-extruder="extruder" data-i18n="subtab.extruder">Estrusore 0 [extruder]</button>
+                <button class="subtab-btn" data-extruder="extruder1" id="btn-subtab-extruder1" data-i18n="subtab.extruder1" style="display: none;">Estrusore 1 IDEX [extruder1]</button>
             </div>
 
             <div class="grid-container">
@@ -985,7 +985,7 @@
                         <div class="form-group">
                             <label class="form-label" for="extruder-filament-dia">Diametro Filamento:</label>
                             <select class="form-control" id="extruder-filament-dia">
-                                <option value="1.750">1.75 mm (Standard)</option>
+                                <option value="1.750" data-i18n="opt.filament_175">1.75 mm (Standard)</option>
                                 <option value="2.850">2.85 mm</option>
                             </select>
                         </div>
@@ -995,7 +995,7 @@
                     <div class="form-group" style="margin-top: 1rem;">
                         <label class="form-label" for="extruder-pressure-advance">Pressure Advance:</label>
                         <input type="number" step="0.005" class="form-control" id="extruder-pressure-advance" placeholder="0.040" min="0" max="1">
-                        <div class="form-helper">Tipicamente 0.02 - 0.06 per Direct Drive, 0.3 - 0.8 per Bowden.</div>
+                        <div class="form-helper" data-i18n="helper.pressure_advance">Tipicamente 0.02 - 0.06 per Direct Drive, 0.3 - 0.8 per Bowden.</div>
                     </div>
                 </div>
 
@@ -1009,15 +1009,15 @@
                     <div class="form-group">
                         <label class="form-label" for="extruder-sensor-type">Tipo di Sensore (sensor_type):</label>
                         <select class="form-control" id="extruder-sensor-type">
-                            <option value="EPCOS 100K B57560G104F">EPCOS 100K B57560G104F (Creality / Stock)</option>
-                            <option value="Generic 3950">Generic 3950 (Molto comune / Voron)</option>
-                            <option value="ATC Semitec 104GT-2">ATC Semitec 104GT-2 (E3D V6 / Prusa)</option>
-                            <option value="ATC Semitec 104NT-4-R025H42G">ATC Semitec 104NT (E3D Revo)</option>
-                            <option value="PT1000">PT1000 (Analogico a 2 fili su pullup 4.7K)</option>
-                            <option value="MAX31865">MAX31865 (Amplificatore SPI RTD PT100/PT1000)</option>
-                            <option value="MAX6675">MAX6675 (Termocoppia Tipo K SPI)</option>
-                            <option value="MAX31855">MAX31855 (Termocoppia SPI)</option>
-                            <option value="MAX31856">MAX31856 (Termocoppia SPI avanzata)</option>
+                            <option value="EPCOS 100K B57560G104F" data-i18n="opt.therm_epcos">EPCOS 100K B57560G104F (Creality / Stock)</option>
+                            <option value="Generic 3950" data-i18n="opt.therm_generic_3950">Generic 3950 (Molto comune / Voron)</option>
+                            <option value="ATC Semitec 104GT-2" data-i18n="opt.therm_atc_semitec">ATC Semitec 104GT-2 (E3D V6 / Prusa)</option>
+                            <option value="ATC Semitec 104NT-4-R025H42G" data-i18n="opt.therm_atc_revo">ATC Semitec 104NT (E3D Revo)</option>
+                            <option value="PT1000" data-i18n="opt.therm_pt1000">PT1000 (Analogico a 2 fili su pullup 4.7K)</option>
+                            <option value="MAX31865" data-i18n="opt.therm_max31865">MAX31865 (Amplificatore SPI RTD PT100/PT1000)</option>
+                            <option value="MAX6675" data-i18n="opt.therm_max6675">MAX6675 (Termocoppia Tipo K SPI)</option>
+                            <option value="MAX31855" data-i18n="opt.therm_max31855">MAX31855 (Termocoppia SPI)</option>
+                            <option value="MAX31856" data-i18n="opt.therm_max31856">MAX31856 (Termocoppia SPI avanzata)</option>
                             <option value="SliceEngineering 450">Slice Engineering 450</option>
                         </select>
                     </div>
@@ -1032,14 +1032,14 @@
                             <div class="form-group">
                                 <label class="form-label" for="extruder-sensor-spi-mode">Modalità Bus SPI:</label>
                                 <select class="form-control" id="extruder-sensor-spi-mode">
-                                    <option value="hardware">Hardware SPI (Bus MCU)</option>
-                                    <option value="software">Software SPI (Bit-banging)</option>
+                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI (Bus MCU)</option>
+                                    <option value="software" data-i18n="opt.spi_software">Software SPI (Bit-banging)</option>
                                 </select>
                             </div>
                             <div class="form-group" id="extruder-sensor-spi-bus-group">
                                 <label class="form-label" for="extruder-sensor-spi-bus">Bus SPI (spi_bus):</label>
                                 <input type="text" class="form-control" id="extruder-sensor-spi-bus" placeholder="spi1">
-                                <div class="form-helper">Es: spi1, spi2, spi3a, ecc.</div>
+                                <div class="form-helper" data-i18n="helper.extruder_sensor_spi">Es: spi1, spi2, spi3a, ecc.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="extruder-sensor-spi-speed">Velocità SPI (spi_speed):</label>
@@ -1047,7 +1047,7 @@
                                     <input type="number" class="form-control" id="extruder-sensor-spi-speed" placeholder="4000000" value="4000000">
                                     <span class="input-unit">Hz</span>
                                 </div>
-                                <div class="form-helper">Default di Klipper: 4000000 (4 MHz).</div>
+                                <div class="form-helper" data-i18n="helper.extruder_sensor_speed">Default di Klipper: 4000000 (4 MHz).</div>
                             </div>
                         </div>
 
@@ -1077,10 +1077,10 @@
                                 <div class="form-group">
                                     <label class="form-label" for="extruder-rtd-nominal-r">Resistenza Nominale a 0°C (rtd_nominal_r):</label>
                                     <select class="form-control" id="extruder-rtd-nominal-r">
-                                        <option value="100">100 Ω (Sonda PT100)</option>
-                                        <option value="1000">1000 Ω (Sonda PT1000)</option>
+                                        <option value="100" data-i18n="opt.rtd_100">100 Ω (Sonda PT100)</option>
+                                        <option value="1000" data-i18n="opt.rtd_1000">1000 Ω (Sonda PT1000)</option>
                                     </select>
-                                    <div class="form-helper">100 Ω per PT100 standard, 1000 Ω per PT1000.</div>
+                                    <div class="form-helper" data-i18n="helper.extruder_rtd_nominal">100 Ω per PT100 standard, 1000 Ω per PT1000.</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="extruder-rtd-reference-r">Resistenza di Riferimento (rtd_reference_r):</label>
@@ -1088,7 +1088,7 @@
                                         <input type="number" step="1" class="form-control" id="extruder-rtd-reference-r" placeholder="430" value="430">
                                         <span class="input-unit">Ω</span>
                                     </div>
-                                    <div class="form-helper">430 Ω per board PT100 (Adafruit/BTT), 4300 Ω per board PT1000.</div>
+                                    <div class="form-helper" data-i18n="helper.extruder_rtd_reference">430 Ω per board PT100 (Adafruit/BTT), 4300 Ω per board PT1000.</div>
                                 </div>
                             </div>
 
@@ -1096,19 +1096,19 @@
                                 <div class="form-group">
                                     <label class="form-label" for="extruder-rtd-num-wires">Numero di Fili Sonda (rtd_num_of_wires):</label>
                                     <select class="form-control" id="extruder-rtd-num-wires">
-                                        <option value="2">2 fili</option>
-                                        <option value="3">3 fili</option>
-                                        <option value="4">4 fili (Massima accuratezza)</option>
+                                        <option value="2" data-i18n="opt.wires_2">2 fili</option>
+                                        <option value="3" data-i18n="opt.wires_3">3 fili</option>
+                                        <option value="4" data-i18n="opt.wires_4">4 fili (Massima accuratezza)</option>
                                     </select>
-                                    <div class="form-helper">Numero di conduttori fisici della sonda RTD.</div>
+                                    <div class="form-helper" data-i18n="helper.extruder_rtd_wires">Numero di conduttori fisici della sonda RTD.</div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="extruder-rtd-filter">Filtro Rumore AC (rtd_use_50Hz_filter):</label>
                                     <select class="form-control" id="extruder-rtd-filter">
-                                        <option value="True">50 Hz (Frequenza Rete Elettrica Italia / Europa)</option>
-                                        <option value="False">60 Hz (Frequenza Rete USA / America)</option>
+                                        <option value="True" data-i18n="opt.filter_50hz_mains">50 Hz (Frequenza Rete Elettrica Italia / Europa)</option>
+                                        <option value="False" data-i18n="opt.filter_60hz_mains">60 Hz (Frequenza Rete USA / America)</option>
                                     </select>
-                                    <div class="form-helper">Filtra le oscillazioni introdotte dalla linea elettrica.</div>
+                                    <div class="form-helper" data-i18n="helper.extruder_rtd_filter">Filtra le oscillazioni introdotte dalla linea elettrica.</div>
                                 </div>
                             </div>
                         </div>
@@ -1157,10 +1157,10 @@
                     <div class="form-group">
                         <label class="form-label" for="extruder-control-type">Tipologia di Controllo (control):</label>
                         <select class="form-control" id="extruder-control-type">
-                            <option value="pid">PID (Regolazione continua proporzionale-integrale-derivativa)</option>
-                            <option value="watermark">Watermark (Controllo isteresi bang-bang on/off)</option>
+                            <option value="pid" data-i18n="opt.ctrl_pid_cont">PID (Regolazione continua proporzionale-integrale-derivativa)</option>
+                            <option value="watermark" data-i18n="opt.ctrl_watermark_hyst">Watermark (Controllo isteresi bang-bang on/off)</option>
                         </select>
-                        <div class="form-helper">Seleziona PID per mantenere una temperatura costante e precisa sull'hotend.</div>
+                        <div class="form-helper" data-i18n="helper.extruder_control">Seleziona PID per mantenere una temperatura costante e precisa sull'hotend.</div>
                     </div>
 
                     <div class="form-row" id="extruder-pid-fields">
@@ -1185,7 +1185,7 @@
                                 <input type="number" step="0.1" class="form-control" id="extruder-max-delta" placeholder="2.0" value="2.0">
                                 <span class="input-unit">°C</span>
                             </div>
-                            <div class="form-helper">Default di Klipper: 2.0°C. Il riscaldatore viene disattivato quando supera la temperatura target + max_delta.</div>
+                            <div class="form-helper" data-i18n="helper.extruder_max_delta">Default di Klipper: 2.0°C. Il riscaldatore viene disattivato quando supera la temperatura target + max_delta.</div>
                         </div>
                     </div>
                 </div>
@@ -1208,15 +1208,15 @@
                                 <option value="tmc2240">TMC2240</option>
                                 <option value="tmc2130">TMC2130</option>
                                 <option value="tmc2660">TMC2660</option>
-                                <option value="generic">A4988 / Generico (Standalone)</option>
+                                <option value="generic" data-i18n="opt.driver_generic">A4988 / Generico (Standalone)</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="extruder-driver-conn-type-select">Tipo Connessione Driver:</label>
                             <select class="form-control" id="extruder-driver-conn-type-select">
-                                <option value="uart">UART (Seriale 1/2 pin - TMC2209 / TMC2208 / ecc.)</option>
-                                <option value="spi">SPI (Bus SPI - TMC5160 / TMC2130 / ecc.)</option>
-                                <option value="standalone">Standalone (Nessun bus dati / A4988 / Ponticelli)</option>
+                                <option value="uart" data-i18n="opt.driver_uart">UART (Seriale 1/2 pin - TMC2209 / TMC2208 / ecc.)</option>
+                                <option value="spi" data-i18n="opt.driver_spi">SPI (Bus SPI - TMC5160 / TMC2130 / ecc.)</option>
+                                <option value="standalone" data-i18n="opt.driver_standalone">Standalone (Nessun bus dati / A4988 / Ponticelli)</option>
                             </select>
                         </div>
                     </div>
@@ -1234,17 +1234,17 @@
                             <div class="form-group">
                                 <label class="form-label" for="extruder-driver-uart-pin">Pin UART (uart_pin):</label>
                                 <input type="text" class="form-control" id="extruder-driver-uart-pin" placeholder="PC11">
-                                <div class="form-helper">Pin di comunicazione seriale UART per l'estrusore.</div>
+                                <div class="form-helper" data-i18n="helper.extruder_driver_uart">Pin di comunicazione seriale UART per l'estrusore.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="extruder-driver-tx-pin">Pin TX (tx_pin - Opzionale):</label>
                                 <input type="text" class="form-control" id="extruder-driver-tx-pin" placeholder="PC10">
-                                <div class="form-helper">Opzionale. Da specificare solo se la board usa pin RX e TX separati.</div>
+                                <div class="form-helper" data-i18n="helper.driver_tx">Opzionale. Da specificare solo se la board usa pin RX e TX separati.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="extruder-driver-uart-address">Indirizzo UART (uart_address):</label>
                                 <input type="number" class="form-control" id="extruder-driver-uart-address" placeholder="0" min="0" max="3">
-                                <div class="form-helper">Opzionale (0-3). Usato quando più driver condividono lo stesso pin UART.</div>
+                                <div class="form-helper" data-i18n="helper.driver_address">Opzionale (0-3). Usato quando più driver condividono lo stesso pin UART.</div>
                             </div>
                         </div>
                     </div>
@@ -1255,20 +1255,20 @@
                             <div class="form-group">
                                 <label class="form-label" for="extruder-driver-cs-pin">Pin Chip Select (cs_pin):</label>
                                 <input type="text" class="form-control" id="extruder-driver-cs-pin" placeholder="PD11">
-                                <div class="form-helper">Pin CS dedicato al driver dell'estrusore.</div>
+                                <div class="form-helper" data-i18n="helper.extruder_driver_cs">Pin CS dedicato al driver dell'estrusore.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="extruder-driver-spi-mode">Modalità Bus SPI:</label>
                                 <select class="form-control" id="extruder-driver-spi-mode">
-                                    <option value="hardware">Hardware SPI (Bus MCU)</option>
-                                    <option value="software">Software SPI (Bit-banging)</option>
+                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI (Bus MCU)</option>
+                                    <option value="software" data-i18n="opt.spi_software">Software SPI (Bit-banging)</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group" id="extruder-driver-spi-bus-group">
                             <label class="form-label" for="extruder-driver-spi-bus">Bus SPI Hardware (spi_bus):</label>
                             <input type="text" class="form-control" id="extruder-driver-spi-bus" placeholder="spi1">
-                            <div class="form-helper">Bus SPI configurato sulla MCU (es. spi1, spi2, spi3a).</div>
+                            <div class="form-helper" data-i18n="helper.driver_spi_bus">Bus SPI configurato sulla MCU (es. spi1, spi2, spi3a).</div>
                         </div>
                         <div class="form-row" id="extruder-driver-spi-soft-group" style="display: none;">
                             <div class="form-group">
@@ -1295,14 +1295,14 @@
                                     <input type="number" step="0.05" class="form-control" id="extruder-driver-run-current" placeholder="0.650" min="0.1" max="2.0">
                                     <span class="input-unit">A RMS</span>
                                 </div>
-                                <div class="form-helper">Tipicamente 0.500A - 0.700A per motori pancake / mini estrusori (es. Orbiter, Stealthburner, BMG).</div>
+                                <div class="form-helper" data-i18n="helper.extruder_current">Tipicamente 0.500A - 0.700A per motori pancake / mini estrusori (es. Orbiter, Stealthburner, BMG).</div>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="extruder-driver-stealthchop">Modalità StealthChop:</label>
                                 <select class="form-control" id="extruder-driver-stealthchop">
-                                    <option value="0">SpreadCycle (Consigliato per estrusore - Più coppia e precisione)</option>
-                                    <option value="999999">Silenziosa (StealthChop attivo)</option>
+                                    <option value="0" data-i18n="opt.spreadcycle_extruder">SpreadCycle (Consigliato per estrusore - Più coppia e precisione)</option>
+                                    <option value="999999" data-i18n="opt.stealthchop_silent">Silenziosa (StealthChop attivo)</option>
                                 </select>
                             </div>
                         </div>
@@ -1319,7 +1319,7 @@
                                     <input type="number" step="0.05" class="form-control" id="extruder-driver-hold-current" placeholder="0.400" min="0.05" max="2.0">
                                     <span class="input-unit">A RMS</span>
                                 </div>
-                                <div class="form-helper">Corrente ridotta a motore fermo. NOTA: Sugli estrusori è generalmente sconsigliato impostare valori troppo bassi per evitare perdite di passi alla ripresa dell'estrusione.</div>
+                                <div class="form-helper" data-i18n="helper.extruder_hold_current_warn">Corrente ridotta a motore fermo. NOTA: Sugli estrusori è generalmente sconsigliato impostare valori troppo bassi per evitare perdite di passi alla ripresa dell'estrusione.</div>
                             </div>
                         </div>
 
@@ -1335,7 +1335,7 @@
                                     <input type="number" step="0.005" class="form-control" id="extruder-driver-sense-resistor" placeholder="0.110" min="0.010" max="0.500">
                                     <span class="input-unit">Ω</span>
                                 </div>
-                                <div class="form-helper">Default di Klipper: 0.110 Ω per TMC2209/2208/2226, 0.075 Ω per TMC5160. Attiva solo se la tua scheda usa un resistore non standard.</div>
+                                <div class="form-helper" data-i18n="helper.driver_sense_resistor">Default di Klipper: 0.110 Ω per TMC2209/2208/2226, 0.075 Ω per TMC5160. Attiva solo se la tua scheda usa un resistore non standard.</div>
                             </div>
                         </div>
 
@@ -1364,8 +1364,8 @@
                     <div class="form-group">
                         <label class="form-label" for="bed-sensor-type">Tipo di Sensore Piatto (sensor_type):</label>
                         <select class="form-control" id="bed-sensor-type">
-                            <option value="EPCOS 100K B57560G104F">EPCOS 100K B57560G104F (Creality / Standard)</option>
-                            <option value="Generic 3950">Generic 3950 (Molto comune su Voron)</option>
+                            <option value="EPCOS 100K B57560G104F" data-i18n="opt.therm_epcos_std">EPCOS 100K B57560G104F (Creality / Standard)</option>
+                            <option value="Generic 3950" data-i18n="opt.therm_generic_3950_voron">Generic 3950 (Molto comune su Voron)</option>
                             <option value="ATC Semitec 104GT-2">ATC Semitec 104GT-2</option>
                             <option value="NTC 100K MGB18">NTC 100K MGB18</option>
                         </select>
@@ -1410,8 +1410,8 @@
                     <div class="form-group">
                         <label class="form-label" for="bed-control-type">Algoritmo di Controllo:</label>
                         <select class="form-control" id="bed-control-type">
-                            <option value="pid">PID (Regolazione continua precisa)</option>
-                            <option value="watermark">Watermark (Bang-bang semplice on/off)</option>
+                            <option value="pid" data-i18n="opt.ctrl_pid_precise">PID (Regolazione continua precisa)</option>
+                            <option value="watermark" data-i18n="opt.ctrl_watermark_simple">Watermark (Bang-bang semplice on/off)</option>
                         </select>
                     </div>
 
@@ -1437,11 +1437,11 @@
                                 <input type="number" step="0.1" class="form-control" id="bed-max-delta" placeholder="2.0" value="2.0">
                                 <span class="input-unit">°C</span>
                             </div>
-                            <div class="form-helper">Default di Klipper: 2.0°C. Spegne il piatto quando supera la temperatura target + max_delta.</div>
+                            <div class="form-helper" data-i18n="helper.bed_max_delta">Default di Klipper: 2.0°C. Spegne il piatto quando supera la temperatura target + max_delta.</div>
                         </div>
                     </div>
 
-                    <div class="form-helper" style="margin-top: 1rem;">
+                    <div class="form-helper" style="margin-top: 1rem;" data-i18n="helper.bed_pid_tip">
                         Suggerimento: Per calibrare il PID del piatto da console Mainsail invia: <code>PID_CALIBRATE HEATER=heater_bed TARGET=60</code>
                     </div>
                 </div>
@@ -1463,9 +1463,9 @@
                             <span class="card-title" data-i18n="card.fans_cooling">Ventole di Raffreddamento Klipper</span>
                             <span class="card-tag">[fan], [heater_fan], [controller_fan], [temperature_fan], [fan_generic]</span>
                         </div>
-                        <button class="btn btn-secondary btn-sm" id="btn-add-fan" type="button">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            + Aggiungi Ventola
+                        <button class="btn btn-secondary btn-sm" id="btn-add-fan" type="button" data-i18n="btn.add_fan_full">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 12c0-3 2.5-5.5 5.5-5.5S23 9 23 12s-2.5 5.5-5.5 5.5S12 15 12 12z"/><path d="M12 12c-3 0-5.5-2.5-5.5-5.5S9 1 12 1s5.5 2.5 5.5 5.5S15 12 12 12z"/><path d="M12 12c0 3-2.5 5.5-5.5 5.5S1 15 1 12s2.5-5.5 5.5-5.5S12 9 12 12z"/><path d="M12 12c3 0 5.5 2.5 5.5 5.5S15 23 12 23s-5.5-2.5-5.5-5.5S9 12 12 12z"/></svg>
+                            <span class="btn-text">+ Aggiungi Ventola</span>
                         </button>
                     </div>
 
@@ -1478,7 +1478,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="fan-part-pin">Pin Ventola Pezzo (pin):</label>
                                 <input type="text" class="form-control" id="fan-part-pin" placeholder="PA8">
-                                <div class="form-helper">Controllata dallo slicer tramite comandi M106 / M107.</div>
+                                <div class="form-helper" data-i18n="helper.fan_part">Controllata dallo slicer tramite comandi M106 / M107.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="fan-part-kick">Kick Start Time (s):</label>
@@ -1519,13 +1519,13 @@
                             <div class="form-group">
                                 <label class="form-label" for="adxl-cs-pin">CS Pin (cs_pin):</label>
                                 <input type="text" class="form-control" id="adxl-cs-pin" placeholder="rpi:None o PB12">
-                                <div class="form-helper">Es: rpi:None se collegato al Raspberry, oppure un pin SPI CS della MCU.</div>
+                                <div class="form-helper" data-i18n="helper.adxl_cs">Es: rpi:None se collegato al Raspberry, oppure un pin SPI CS della MCU.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="adxl-spi-mode">Modalità Connessione SPI:</label>
                                 <select class="form-control" id="adxl-spi-mode">
-                                    <option value="hardware">Hardware SPI (spi_bus)</option>
-                                    <option value="software">Software SPI (Bit-banging)</option>
+                                    <option value="hardware" data-i18n="opt.spi_hardware">Hardware SPI (spi_bus)</option>
+                                    <option value="software" data-i18n="opt.spi_software">Software SPI (Bit-banging)</option>
                                 </select>
                             </div>
                         </div>
@@ -1533,7 +1533,7 @@
                         <div class="form-group" id="adxl-spi-bus-group">
                             <label class="form-label" for="adxl-spi-bus">Bus SPI Hardware (spi_bus):</label>
                             <input type="text" class="form-control" id="adxl-spi-bus" placeholder="spidev0.0 o spi1">
-                            <div class="form-helper">Es: spidev0.0 (su Raspberry Pi) o spi1/spi2 (su MCU).</div>
+                            <div class="form-helper" data-i18n="helper.adxl_spi_bus">Es: spidev0.0 (su Raspberry Pi) o spi1/spi2 (su MCU).</div>
                         </div>
 
                         <div class="form-row" id="adxl-spi-soft-group" style="display: none;">
@@ -1555,12 +1555,12 @@
                             <div class="form-group">
                                 <label class="form-label" for="adxl-axes-map">Mappatura Assi (axes_map):</label>
                                 <input type="text" class="form-control" id="adxl-axes-map" placeholder="x, y, z" value="x, y, z">
-                                <div class="form-helper">Es: x, y, z oppure x, -z, y per orientare correttamente il sensore.</div>
+                                <div class="form-helper" data-i18n="helper.adxl_axes_map">Es: x, y, z oppure x, -z, y per orientare correttamente il sensore.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="adxl-rate">Frequenza Campionamento (rate):</label>
                                 <input type="number" class="form-control" id="adxl-rate" placeholder="3200" value="3200">
-                                <div class="form-helper">Default consigliato da Klipper: 3200 Hz.</div>
+                                <div class="form-helper" data-i18n="helper.adxl_rate">Default consigliato da Klipper: 3200 Hz.</div>
                             </div>
                         </div>
                     </div>
@@ -1573,9 +1573,9 @@
                             <span class="card-title" data-i18n="card.leds">Illuminazione LED & Neopixel</span>
                             <span class="card-tag">[neopixel] & [output_pin]</span>
                         </div>
-                        <button class="btn btn-secondary btn-sm" id="btn-add-led" type="button">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            + Aggiungi LED
+                        <button class="btn btn-secondary btn-sm" id="btn-add-led" type="button" data-i18n="btn.add_led_full">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                            <span class="btn-text">+ Aggiungi LED</span>
                         </button>
                     </div>
 
@@ -1627,7 +1627,7 @@
                             <input type="number" class="form-control" id="idle-timeout" placeholder="1800">
                             <span class="input-unit">sec</span>
                         </div>
-                        <div class="form-helper">1800 secondi = 30 minuti di inattività.</div>
+                        <div class="form-helper" data-i18n="helper.idle_timeout">1800 secondi = 30 minuti di inattività.</div>
                     </div>
                 </div>
             </div>
@@ -1643,9 +1643,9 @@
                     <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="include.desc">Organizza la tua configurazione Klipper modulare includendo file .cfg esterni.</p>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-primary btn-sm" id="btn-add-include" type="button">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        Nuovo File Include
+                    <button class="btn btn-primary btn-sm" id="btn-add-include" type="button" data-i18n="btn.add_include_full">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+                        <span class="btn-text">Nuovo File Include</span>
                     </button>
                 </div>
             </div>
@@ -1681,13 +1681,13 @@
                     <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="macro.desc">Gestisci, crea e modifica le macro per la gestione stampe in Mainsail.</p>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-secondary btn-sm" id="btn-insert-macro-template">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-                        Inserisci Template Predefiniti
+                    <button class="btn btn-secondary btn-sm" id="btn-insert-macro-template" data-i18n="btn.insert_macro_template_full">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                        <span class="btn-text">Inserisci Template Predefiniti</span>
                     </button>
-                    <button class="btn btn-primary btn-sm" id="btn-add-macro">
+                    <button class="btn btn-primary btn-sm" id="btn-add-macro" data-i18n="btn.add_macro_full">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        Nuova Macro
+                        <span class="btn-text">Nuova Macro</span>
                     </button>
                 </div>
             </div>
@@ -1714,9 +1714,9 @@
                     <div class="form-group">
                         <label class="form-label" for="probe-type-select">Tipo di Sonda Installata:</label>
                         <select class="form-control" id="probe-type-select">
-                            <option value="none">Nessuna Sonda (Endstop Z Meccanico Standard)</option>
-                            <option value="bltouch">BLTouch / 3DTouch / CR Touch ([bltouch])</option>
-                            <option value="probe">Sonda Induttiva / Microswitch / Klipper Tap ([probe])</option>
+                            <option value="none" data-i18n="opt.probe_none">Nessuna Sonda (Endstop Z Meccanico Standard)</option>
+                            <option value="bltouch" data-i18n="opt.probe_bltouch">BLTouch / 3DTouch / CR Touch ([bltouch])</option>
+                            <option value="probe" data-i18n="opt.probe_inductive">Sonda Induttiva / Microswitch / Klipper Tap ([probe])</option>
                         </select>
                     </div>
 
@@ -1761,16 +1761,16 @@
                             <div class="form-group">
                                 <label class="form-label" for="probe-samples">Campioni per punto:</label>
                                 <select class="form-control" id="probe-samples">
-                                    <option value="1">1 lettura</option>
-                                    <option value="2" selected>2 letture (consigliato)</option>
-                                    <option value="3">3 letture (massima precisione)</option>
+                                    <option value="1" data-i18n="opt.sample_1">1 lettura</option>
+                                    <option value="2" selected data-i18n="opt.sample_2">2 letture (consigliato)</option>
+                                    <option value="3" data-i18n="opt.sample_3">3 letture (massima precisione)</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="probe-samples-result">Risultato Campioni:</label>
                                 <select class="form-control" id="probe-samples-result">
-                                    <option value="median">median (Mediana)</option>
-                                    <option value="average">average (Media)</option>
+                                    <option value="median" data-i18n="opt.sample_median">median (Mediana)</option>
+                                    <option value="average" data-i18n="opt.sample_average">average (Media)</option>
                                 </select>
                             </div>
                         </div>
@@ -1825,12 +1825,12 @@
                     <div class="form-group">
                         <label class="form-label" for="z-tilt-positions">Posizioni Punti Pivot Motori Z (z_positions):</label>
                         <input type="text" class="form-control" id="z-tilt-positions" placeholder="-50, 18 \n 350, 18">
-                        <div class="form-helper">Coordinate fisiche dei perni dei motori Z (una per riga o separate da virgola).</div>
+                        <div class="form-helper" data-i18n="helper.z_tilt_positions">Coordinate fisiche dei perni dei motori Z (una per riga o separate da virgola).</div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="z-tilt-points">Punti Sonda Piatto da Verificare (points):</label>
                         <input type="text" class="form-control" id="z-tilt-points" placeholder="30, 110 \n 200, 110">
-                        <div class="form-helper">Coordinate del piatto dove la sonda misurerà l'inclinazione.</div>
+                        <div class="form-helper" data-i18n="helper.z_tilt_points">Coordinate del piatto dove la sonda misurerà l'inclinazione.</div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -1898,15 +1898,15 @@
                         <div class="form-group">
                             <label class="form-label" for="mesh-probe-count">Punti Griglia (probe_count):</label>
                             <select class="form-control" id="mesh-probe-count">
-                                <option value="3, 3">3x3 (9 punti - veloce)</option>
-                                <option value="5, 5" selected>5x5 (25 punti - standard)</option>
-                                <option value="7, 7">7x7 (49 punti - alta densità)</option>
+                                <option value="3, 3" data-i18n="opt.mesh_3x3">3x3 (9 punti - veloce)</option>
+                                <option value="5, 5" selected data-i18n="opt.mesh_5x5">5x5 (25 punti - standard)</option>
+                                <option value="7, 7" data-i18n="opt.mesh_7x7">7x7 (49 punti - alta densità)</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="mesh-algorithm">Algoritmo di Interpolazione:</label>
                             <select class="form-control" id="mesh-algorithm">
-                                <option value="bicubic" selected>bicubic (Curva fluida)</option>
+                                <option value="bicubic" selected data-i18n="opt.mesh_bicubic">bicubic (Curva fluida)</option>
                                 <option value="lagrange">lagrange</option>
                             </select>
                         </div>
@@ -1940,7 +1940,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="shaper-type-x">Tipo Filtro X:</label>
                                 <select class="form-control" id="shaper-type-x">
-                                    <option value="mzv">mzv (Consigliato)</option>
+                                    <option value="mzv" data-i18n="opt.shaper_mzv">mzv (Consigliato)</option>
                                     <option value="zv">zv</option>
                                     <option value="ei">ei</option>
                                     <option value="2hump_ei">2hump_ei</option>
@@ -1960,7 +1960,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="shaper-type-y">Tipo Filtro Y:</label>
                                 <select class="form-control" id="shaper-type-y">
-                                    <option value="mzv">mzv (Consigliato)</option>
+                                    <option value="mzv" data-i18n="opt.shaper_mzv">mzv (Consigliato)</option>
                                     <option value="zv">zv</option>
                                     <option value="ei">ei</option>
                                     <option value="2hump_ei">2hump_ei</option>
@@ -1989,12 +1989,12 @@
                             <div class="form-group">
                                 <label class="form-label" for="res-accel-chip">Chip Accelerometro (accel_chip):</label>
                                 <input type="text" class="form-control" id="res-accel-chip" placeholder="adxl345" value="adxl345">
-                                <div class="form-helper">Nome del sensore accelerometro definito nel file (es. adxl345).</div>
+                                <div class="form-helper" data-i18n="helper.res_accel_chip">Nome del sensore accelerometro definito nel file (es. adxl345).</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="res-probe-points">Punto di Test X, Y, Z (probe_points):</label>
                                 <input type="text" class="form-control" id="res-probe-points" placeholder="100, 100, 20" value="100, 100, 20">
-                                <div class="form-helper">Coordinate fisiche del piatto (es. centro piatto: 100, 100, 20).</div>
+                                <div class="form-helper" data-i18n="helper.res_probe_points">Coordinate fisiche del piatto (es. centro piatto: 100, 100, 20).</div>
                             </div>
                         </div>
 
@@ -2002,12 +2002,12 @@
                             <div class="form-group">
                                 <label class="form-label" for="res-accel-per-hz">Accelerazione per Hz (accel_per_hz):</label>
                                 <input type="number" step="5" class="form-control" id="res-accel-per-hz" placeholder="75" value="75">
-                                <div class="form-helper">Default consigliato da Klipper: 75.</div>
+                                <div class="form-helper" data-i18n="helper.res_accel_per_hz">Default consigliato da Klipper: 75.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="res-max-smoothing">Max Smoothing (max_smoothing):</label>
                                 <input type="number" step="0.01" class="form-control" id="res-max-smoothing" placeholder="0.25">
-                                <div class="form-helper">Lascia vuoto per il valore automatico calcolato da Klipper.</div>
+                                <div class="form-helper" data-i18n="helper.res_max_smoothing">Lascia vuoto per il valore automatico calcolato da Klipper.</div>
                             </div>
                         </div>
                     </div>
@@ -2025,7 +2025,7 @@
                                 <input type="number" step="0.005" class="form-control" id="calibration-z-offset" placeholder="2.500">
                                 <span class="input-unit">mm</span>
                             </div>
-                            <div class="form-helper">Distanza di trigger Z tra la sonda e l'ugello (sincronizzato con il valore Sonda).</div>
+                            <div class="form-helper" data-i18n="helper.calib_z_offset">Distanza di trigger Z tra la sonda e l'ugello (sincronizzato con il valore Sonda).</div>
                         </div>
                     </div>
                 </div>
@@ -2049,8 +2049,8 @@
                 <pre class="code-preview" id="preview-code-block"></pre>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" id="btn-copy-preview">Copia negli Appunti</button>
-                <button class="btn btn-primary" id="btn-modal-save">Salva su Moonraker</button>
+                <button class="btn btn-secondary" id="btn-copy-preview" data-i18n="btn.copy_preview">Copia negli Appunti</button>
+                <button class="btn btn-primary" id="btn-modal-save" data-i18n="btn.save_moonraker">Salva su Moonraker</button>
             </div>
         </div>
     </div>
@@ -2086,20 +2086,20 @@
 
                 <div style="padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Lingua Rilevata:</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="modal.detected_lang">Lingua Rilevata:</span>
                         <span id="active-detected-lang-text" class="nav-badge" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">🇮🇹 Italiano (Auto)</span>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label" for="select-ui-language">Lingua Interfaccia:</label>
                         <select class="form-control" id="select-ui-language">
-                            <option value="auto">Automatica (Sincronizza con Mainsail)</option>
+                            <option value="auto" data-i18n="opt.lang_auto">Automatica (Sincronizza con Mainsail)</option>
                             <option value="it">🇮🇹 Italiano</option>
                             <option value="en">🇬🇧 English</option>
                             <option value="de">🇩🇪 Deutsch</option>
                             <option value="fr">🇫🇷 Français</option>
                             <option value="es">🇪🇸 Español</option>
                         </select>
-                        <div class="form-helper">Se impostato su Automatica, Klipper Configurator rileva e adotta la stessa lingua usata in Mainsail.</div>
+                        <div class="form-helper" data-i18n="modal.auto_lang_helper">Se impostato su Automatica, Klipper Configurator rileva e adotta la stessa lingua usata in Mainsail.</div>
                     </div>
                 </div>
 
@@ -2109,11 +2109,11 @@
                 
                 <div style="padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Sincronizzazione Automatica:</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="modal.auto_sync">Sincronizzazione Automatica:</span>
                         <span id="theme-sync-status" class="nav-badge" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">Sincronizzato</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Colore Primario Accento:</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="modal.primary_accent">Colore Primario Accento:</span>
                         <div style="display: flex; align-items: center; gap: 0.6rem;">
                             <input type="color" id="picker-theme-color" value="#00c0f3" title="Scegli qualsiasi colore con il selettore cromatico" style="width: 28px; height: 28px; padding: 0; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; background: transparent;">
                             <span id="active-theme-color-dot" style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background-color: var(--primary);"></span>
@@ -2121,13 +2121,13 @@
                         </div>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Modalità Tema:</span>
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="modal.theme_mode_label">Modalità Tema:</span>
                         <span id="active-theme-mode-text" style="font-size: 0.85rem; font-weight: 600;">Scuro (Dark)</span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Preset Temi Ufficiali Mainsail / Vendor:</label>
+                    <label class="form-label" data-i18n="modal.preset_vendor">Preset Temi Ufficiali Mainsail / Vendor:</label>
                     <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;" id="theme-preset-buttons">
                         <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#00c0f3" title="Mainsail Cyan (Default)" style="border-left: 4px solid #00c0f3;">Mainsail</button>
                         <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#d32f2f" title="Voron Design Red" style="border-left: 4px solid #d32f2f;">Voron</button>
@@ -2143,13 +2143,13 @@
                 <div class="form-group" style="margin-bottom: 0;">
                     <label class="checkbox-inline">
                         <input type="checkbox" id="check-force-light-mode">
-                        <strong>Forza Modalità Chiara (Light Theme)</strong>
+                        <strong data-i18n="modal.force_light_label">Forza Modalità Chiara (Light Theme)</strong>
                     </label>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" id="btn-cancel-conn">Annulla</button>
-                <button class="btn btn-primary" id="btn-save-conn">Salva & Sincronizza</button>
+                <button class="btn btn-secondary" id="btn-cancel-conn" data-i18n="btn.cancel">Annulla</button>
+                <button class="btn btn-primary" id="btn-save-conn" data-i18n="btn.save_sync">Salva & Sincronizza</button>
             </div>
         </div>
     </div>
@@ -2163,32 +2163,32 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="form-label">Tipo di Trasmissione:</label>
+                    <label class="form-label" data-i18n="calc.drive_type">Tipo di Trasmissione:</label>
                     <select class="form-control" id="calc-drive-type">
-                        <option value="belt">Cinghia Dentata (GT2 2mm)</option>
-                        <option value="leadscrew">Barra Filettata / Vite Trapezia</option>
+                        <option value="belt" data-i18n="calc.belt_lead">Cinghia Dentata (GT2 2mm)</option>
+                        <option value="leadscrew" data-i18n="calc.leadscrew">Barra Filettata / Vite Trapezia</option>
                     </select>
                 </div>
                 <div id="calc-belt-fields">
                     <div class="form-group">
-                        <label class="form-label">Numero Denti Puleggia (es: 16 o 20 denti):</label>
+                        <label class="form-label" data-i18n="calc.pulley_teeth">Numero Denti Puleggia (es: 16 o 20 denti):</label>
                         <input type="number" class="form-control" id="calc-pulley-teeth" value="20">
                     </div>
                 </div>
                 <div id="calc-lead-fields" style="display: none;">
                     <div class="form-group">
-                        <label class="form-label">Passo Barra (Lead in mm per giro - es: T8x8 = 8, T8x4 = 4):</label>
+                        <label class="form-label" data-i18n="calc.lead_pitch">Passo Barra (Lead in mm per giro - es: T8x8 = 8, T8x4 = 4):</label>
                         <input type="number" class="form-control" id="calc-leadscrew-pitch" value="8">
                     </div>
                 </div>
                 <div class="form-group" style="margin-top: 1rem; padding: 1rem; background: var(--bg-card); border-radius: var(--radius-sm); text-align: center;">
-                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Valore Calcolato:</span>
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="calc.result_label">Valore Calcolato:</span>
                     <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-light); margin-top: 0.25rem;" id="calc-result-val">40.000 mm</div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" id="btn-cancel-calc">Chiudi</button>
-                <button class="btn btn-primary" id="btn-apply-calc">Applica a Stepper</button>
+                <button class="btn btn-secondary" id="btn-cancel-calc" data-i18n="btn.close">Chiudi</button>
+                <button class="btn btn-primary" id="btn-apply-calc" data-i18n="btn.apply_calc">Applica a Stepper</button>
             </div>
         </div>
     </div>
