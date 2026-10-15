@@ -239,7 +239,7 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title" data-i18n="card.mechanical_arch">Architettura Meccanica (IDEX & Multi-Z)</span>
-                        <span class="card-tag">Hardware Layout</span>
+                        <span class="card-tag" data-i18n="tag.hardware_layout">Hardware Layout</span>
                     </div>
 
                     <!-- Abilitazione IDEX -->
@@ -268,7 +268,7 @@
                     </div>
 
                     <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0, 192, 243, 0.08); border-radius: var(--radius-sm); border-left: 3px solid var(--primary); font-size: 0.8rem; color: var(--text-secondary);">
-                        ℹ️ <strong>Nota:</strong> I parametri di homing impostati a <code>0</code> vengono omessi dal file di configurazione per lasciare attivi i default interni di Klipper.
+                        <span data-i18n="notice.homing_zero">ℹ️ <strong>Nota:</strong> I parametri di homing impostati a <code>0</code> vengono omessi dal file di configurazione per lasciare attivi i default interni di Klipper.</span>
                     </div>
                 </div>
 
@@ -276,7 +276,7 @@
                 <div class="card" id="card-delta-params" style="display: none;">
                     <div class="card-header">
                         <span class="card-title" data-i18n="card.delta_geometry">Geometria Delta (Opzionale)</span>
-                        <span class="card-tag">Delta Geometry</span>
+                        <span class="card-tag" data-i18n="tag.delta_geometry">Geometria Delta</span>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -341,7 +341,7 @@
                     </div>
                     
                     <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
-                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Parametri Homing Asse X</span>
+                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;" data-i18n="subtitle.homing_x">Parametri Homing Asse X</span>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label" for="x-homing-speed">homing_speed:</label>
@@ -402,7 +402,7 @@
                     </div>
 
                     <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
-                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Parametri Homing Dual Carriage</span>
+                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;" data-i18n="subtitle.homing_dc">Parametri Homing Dual Carriage</span>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label" for="dc-homing-speed">homing_speed:</label>
@@ -463,7 +463,7 @@
                     </div>
 
                     <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
-                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Parametri Homing Asse Y</span>
+                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;" data-i18n="subtitle.homing_y">Parametri Homing Asse Y</span>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label" for="y-homing-speed">homing_speed:</label>
@@ -524,7 +524,7 @@
                     </div>
 
                     <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.85rem;">
-                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Parametri Homing Asse Z</span>
+                        <span style="font-size: 0.825rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;" data-i18n="subtitle.homing_z">Parametri Homing Asse Z</span>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label" for="z-homing-speed">homing_speed:</label>
@@ -614,13 +614,13 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title" data-i18n="card.mcu_temp">Monitoraggio Termico Host & Chip</span>
-                        <span class="card-tag">Thermal Sensors</span>
+                        <span class="card-tag" data-i18n="tag.thermal_sensors">Sensori Termici</span>
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-host-temp" checked>
-                            <strong>Abilita Sensore Temperatura Raspberry Pi / Host</strong>
+                            <strong data-i18n="chk.host_temp">Abilita Sensore Temperatura Raspberry Pi / Host</strong>
                         </label>
                         <div class="form-helper" data-i18n="helper.host_temp">Visualizza la temperatura della CPU del Raspberry in Mainsail.</div>
                     </div>
@@ -628,7 +628,7 @@
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-mcu-temp" checked>
-                            <strong>Abilita Sensore Temperatura Chip Scheda Madre (MCU)</strong>
+                            <strong data-i18n="chk.mcu_temp">Abilita Sensore Temperatura Chip Scheda Madre (MCU)</strong>
                         </label>
                         <div class="form-helper" data-i18n="helper.mcu_temp">Visualizza la temperatura del microcontrollore STM32/RP2040.</div>
                     </div>
@@ -640,7 +640,7 @@
                     <div class="card-header">
                         <div>
                             <span class="card-title" data-i18n="card.mcu_extra">Microcontrollori Secondari & Toolhead ([mcu &lt;nome&gt;])</span>
-                            <div class="card-subtitle" style="margin: 0; margin-top: 0.25rem;">
+                            <div class="card-subtitle" style="margin: 0; margin-top: 0.25rem;" data-i18n="subtitle.mcu_extra_desc">
                                 Gestisci schede ausiliarie (CAN bus toolhead EBB/SB2209, Raspberry Pi GPIO, expander).
                             </div>
                         </div>
@@ -780,7 +780,7 @@
                     <!-- Campi Connessione: STANDALONE -->
                     <div id="driver-conn-standalone-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                         <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-                            ℹ️ <strong>Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper (es. A4988, DRV8825 o TMC configurato con ponticelli fisici). Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC in <code>printer.cfg</code>.
+                            ℹ️ <strong data-i18n="chk.standalone_mode">Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper (es. A4988, DRV8825 o TMC configurato con ponticelli fisici). Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC in <code>printer.cfg</code>.
                         </div>
                     </div>
 
@@ -867,7 +867,7 @@
                         <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="check-enable-hold-current">
-                                <strong>Abilita Corrente di Mantenimento (hold_current)</strong>
+                                <strong data-i18n="chk.hold_current">Abilita Corrente di Mantenimento (hold_current)</strong>
                             </label>
                             <div id="group-hold-current-field" style="display: none; margin-top: 0.75rem;">
                                 <label class="form-label" for="driver-hold-current">Corrente a Riposo (hold_current):</label>
@@ -883,7 +883,7 @@
                         <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="check-enable-sense-resistor">
-                                <strong>Specifica Valore Resistenza di Sense (sense_resistor)</strong>
+                                <strong data-i18n="chk.sense_resistor">Specifica Valore Resistenza di Sense (sense_resistor)</strong>
                             </label>
                             <div id="group-sense-resistor-field" style="display: none; margin-top: 0.75rem;">
                                 <label class="form-label" for="driver-sense-resistor">Resistenza di Sense (sense_resistor):</label>
@@ -898,7 +898,7 @@
                         <div class="form-group">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="driver-interpolate" checked>
-                                <strong>Interpolazione a 256 microstep (interpolate: True)</strong>
+                                <strong data-i18n="chk.interpolate">Interpolazione a 256 microstep (interpolate: True)</strong>
                             </label>
                         </div>
 
@@ -906,7 +906,7 @@
                         <div class="form-group" id="group-sensorless-homing" style="margin-top: 1rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm);">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="driver-sensorless-enable">
-                                <strong>Homing Senza Finecorsa Fisico (Sensorless Homing)</strong>
+                                <strong data-i18n="chk.sensorless">Homing Senza Finecorsa Fisico (Sensorless Homing)</strong>
                             </label>
                             <div id="sensorless-details" style="display: none; margin-top: 0.75rem;">
                                 <div class="form-row">
@@ -1003,7 +1003,7 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title" data-i18n="card.extruder_thermal">Riscaldatore & Sensore Temperatura Hotend</span>
-                        <span class="card-tag">Hotend Thermal</span>
+                        <span class="card-tag" data-i18n="tag.hotend_thermal">Termica Hotend</span>
                     </div>
 
                     <div class="form-group">
@@ -1024,7 +1024,7 @@
 
                     <!-- Parametri Controller Sensore SPI (es. MAX31865, MAX6675, MAX31855) -->
                     <div id="extruder-sensor-spi-container" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
-                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.spi_sensor">
                             🔌 Parametri Comunicazione Bus SPI Sensore
                         </div>
 
@@ -1069,7 +1069,7 @@
 
                         <!-- Parametri RTD specifici per MAX31865 -->
                         <div id="extruder-sensor-rtd-fields" style="display: none; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px dashed rgba(255,255,255,0.08);">
-                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem;">
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem;" data-i18n="subtitle.rtd_sensor">
                                 🌡️ Parametri Sensore RTD (MAX31865)
                             </div>
 
@@ -1224,7 +1224,7 @@
                     <!-- Campi Connessione: STANDALONE -->
                     <div id="extruder-driver-conn-standalone-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                         <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-                            ℹ️ <strong>Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper (es. A4988, DRV8825 o TMC configurato con ponticelli fisici). Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC per l'estrusore in <code>printer.cfg</code>.
+                            ℹ️ <strong data-i18n="chk.standalone_mode">Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper (es. A4988, DRV8825 o TMC configurato con ponticelli fisici). Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC per l'estrusore in <code>printer.cfg</code>.
                         </div>
                     </div>
 
@@ -1311,7 +1311,7 @@
                         <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="extruder-check-enable-hold-current">
-                                <strong>Abilita Corrente di Mantenimento (hold_current)</strong>
+                                <strong data-i18n="chk.hold_current">Abilita Corrente di Mantenimento (hold_current)</strong>
                             </label>
                             <div id="extruder-group-hold-current-field" style="display: none; margin-top: 0.75rem;">
                                 <label class="form-label" for="extruder-driver-hold-current">Corrente a Riposo (hold_current):</label>
@@ -1327,7 +1327,7 @@
                         <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="extruder-check-enable-sense-resistor">
-                                <strong>Specifica Valore Resistenza di Sense (sense_resistor)</strong>
+                                <strong data-i18n="chk.sense_resistor">Specifica Valore Resistenza di Sense (sense_resistor)</strong>
                             </label>
                             <div id="extruder-group-sense-resistor-field" style="display: none; margin-top: 0.75rem;">
                                 <label class="form-label" for="extruder-driver-sense-resistor">Resistenza di Sense (sense_resistor):</label>
@@ -1342,7 +1342,7 @@
                         <div class="form-group">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="extruder-driver-interpolate" checked>
-                                <strong>Interpolazione a 256 microstep (interpolate: True)</strong>
+                                <strong data-i18n="chk.interpolate">Interpolazione a 256 microstep (interpolate: True)</strong>
                             </label>
                         </div>
                     </div>
@@ -1404,7 +1404,7 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title" data-i18n="card.bed_pid">Regolazione PID Piatto</span>
-                        <span class="card-tag">PID Control</span>
+                        <span class="card-tag" data-i18n="tag.pid_control">Controllo PID</span>
                     </div>
 
                     <div class="form-group">
@@ -1471,7 +1471,7 @@
 
                     <!-- Ventola Raffreddamento Pezzo Principale ([fan]) -->
                     <div style="padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
-                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;">
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.fan_part">
                             💨 Ventola Raffreddamento Pezzo Principale ([fan])
                         </div>
                         <div class="form-row">
@@ -1510,7 +1510,7 @@
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-adxl">
-                            <strong>Abilita Accelerometro ADXL345 (Misurazione risonanze testa/piatto)</strong>
+                            <strong data-i18n="chk.adxl">Abilita Accelerometro ADXL345 (Misurazione risonanze testa/piatto)</strong>
                         </label>
                     </div>
 
@@ -1589,13 +1589,13 @@
                 <div class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
                         <span class="card-title" data-i18n="card.core_features">Funzionalità Essenziali Klipper & Mainsail</span>
-                        <span class="card-tag">Core Features</span>
+                        <span class="card-tag" data-i18n="tag.core_features">Funzioni Principali</span>
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-virtual-sd" checked>
-                            <strong>[virtual_sdcard] - Abilita stampa file gcode da Moonraker</strong>
+                            <strong data-i18n="chk.virtual_sd">[virtual_sdcard] - Abilita stampa file gcode da Moonraker</strong>
                         </label>
                         <input type="text" class="form-control" id="virtual-sd-path" value="~/printer_data/gcodes" style="margin-top: 0.4rem;">
                     </div>
@@ -1603,21 +1603,21 @@
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-pause-resume" checked>
-                            <strong>[pause_resume] - Abilita comandi di Pausa e Ripresa</strong>
+                            <strong data-i18n="chk.pause_resume">[pause_resume] - Abilita comandi di Pausa e Ripresa</strong>
                         </label>
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-display-status" checked>
-                            <strong>[display_status] - Abilita aggiornamento stato e percentuali</strong>
+                            <strong data-i18n="chk.display_status">[display_status] - Abilita aggiornamento stato e percentuali</strong>
                         </label>
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-respond">
-                            <strong>[respond] - Abilita messaggi e comandi M118 nella console</strong>
+                            <strong data-i18n="chk.respond">[respond] - Abilita messaggi e comandi M118 nella console</strong>
                         </label>
                     </div>
 
@@ -1708,7 +1708,7 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="card-title" data-i18n="card.probe">Sonda Livellamento (Probe / BLTouch)</span>
-                        <span class="card-tag">Leveling Sensor</span>
+                        <span class="card-tag" data-i18n="tag.leveling_sensor">Sensore Livellamento</span>
                     </div>
 
                     <div class="form-group">
@@ -1787,7 +1787,7 @@
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-safe-z" checked>
-                            <strong>Abilita Safe Z Home (Homing Z al centro del piatto)</strong>
+                            <strong data-i18n="chk.safe_z_home">Abilita Safe Z Home (Homing Z al centro del piatto)</strong>
                         </label>
                     </div>
 
@@ -1917,14 +1917,14 @@
                 <div class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
                         <span class="card-title" data-i18n="card.resonance_tester">Compensazione Risonanze & Calibrazione ([input_shaper] / [resonance_tester])</span>
-                        <span class="card-tag">Resonances & Z-Offset</span>
+                        <span class="card-tag" data-i18n="tag.resonances_z_offset">Risonanze & Z-Offset</span>
                     </div>
 
                     <!-- Sezione 1: Parametri Manuali Input Shaper -->
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-shaper" checked>
-                            <strong>Abilita Filtro Input Shaper (Elimina il Ghosting / Ringing)</strong>
+                            <strong data-i18n="chk.input_shaper">Abilita Filtro Input Shaper (Elimina il Ghosting / Ringing)</strong>
                         </label>
                     </div>
 
@@ -1973,14 +1973,14 @@
                     <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
 
                     <!-- Sezione 2: Resonance Tester Automatico ([resonance_tester]) -->
-                    <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem;">
+                    <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.res_tester">
                         📊 Resonance Tester Automatico ([resonance_tester])
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-resonance-tester">
-                            <strong>Abilita Sezione Resonance Tester (Test automatico risonanze con accelerometro)</strong>
+                            <strong data-i18n="chk.resonance_tester">Abilita Sezione Resonance Tester (Test automatico risonanze con accelerometro)</strong>
                         </label>
                     </div>
 
@@ -2015,7 +2015,7 @@
                     <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
 
                     <!-- Sezione 3: Z-Offset Rapido nello Stesso Box -->
-                    <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem;">
+                    <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.probe_z_offset">
                         📏 Regolazione Z-Offset Sonda ([probe] / [bltouch])
                     </div>
                     <div class="form-row">

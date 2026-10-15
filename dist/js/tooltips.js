@@ -10,6 +10,7 @@
     // =========================================================================
     // Dizionario Completo dei Parametri Klipper e Controlli KlifigUI
     // =========================================================================
+    // Assicura che ogni entry in KLIPPER_TOOLTIPS abbia il proprio id
     const KLIPPER_TOOLTIPS = {
         // --- Tab 1: Cinematica & Stampante ---
         'select-config-file': {
@@ -997,6 +998,10 @@
         }
     };
 
+    for (const [k, v] of Object.entries(KLIPPER_TOOLTIPS)) {
+        v.id = k;
+    }
+
     // =========================================================================
     // Funzioni di Lookup Intelligente (per ID, name, label o keyword)
     // =========================================================================
@@ -1005,13 +1010,13 @@
 
         const id = el?.id || labelEl?.getAttribute('for') || '';
         if (id && KLIPPER_TOOLTIPS[id]) {
-            return KLIPPER_TOOLTIPS[id];
+            return Object.assign({ id }, KLIPPER_TOOLTIPS[id]);
         }
 
         // Cerca per name
         const name = el?.name || '';
         if (name && KLIPPER_TOOLTIPS[name]) {
-            return KLIPPER_TOOLTIPS[name];
+            return Object.assign({ id: name }, KLIPPER_TOOLTIPS[name]);
         }
 
         // Ricerca per parole chiave e pattern frequenti nei parametri Klipper
@@ -1262,7 +1267,12 @@
 
         // Dizionario localizzato caricato dal file di lingua (dist/locales/<lang>.json)
         const localeTooltips = window.LOCALE_TOOLTIPS && window.LOCALE_TOOLTIPS[activeLang];
-        const localized = localeTooltips && (localeTooltips[data.param] || (data.id && localeTooltips[data.id]));
+        const lookupId = data.id || (targetBadge?.parentElement?.getAttribute('for')) || (targetBadge?.closest('.form-group')?.querySelector('input, select, textarea')?.id);
+        const localized = localeTooltips && (
+            (lookupId && localeTooltips[lookupId]) ||
+            (data.id && localeTooltips[data.id]) ||
+            (data.param && localeTooltips[data.param])
+        );
         if (localized) {
             if (localized.title) displayTitle = localized.title;
             if (localized.desc) displayDesc = localized.desc;
