@@ -142,7 +142,7 @@ body {
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
-    border-right: 1px solid var(--sidebar-border);
+    border-right: none;
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -164,6 +164,7 @@ body {
 
 /* Logo (in Mainsail si trova nella topbar alta 48px, sopra la sidebar) */
 .sidebar-header {
+    border-right: none;
     height: var(--topbar-height);
     min-height: var(--topbar-height);
     display: flex;
@@ -222,6 +223,7 @@ body {
 
 /* Lista voci (v-list pt-0) */
 .sidebar-nav {
+    border-right: 1px solid var(--sidebar-border);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -351,6 +353,7 @@ body {
 
 /* Append (AboutDialog, v-list-item.small-list-item.mb-2) */
 .sidebar-append {
+    border-right: 1px solid var(--sidebar-border);
     padding: 0 0 8px 0;
 }
 

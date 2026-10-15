@@ -183,7 +183,11 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.12`.
+- ✅ **Versione corrente**: `v0.7.13`.
+- ✅ **Eliminazione Linea Verticale a Destra del Logo nella Topbar**:
+  - Rimossa la linea divisoria verticale tra l'icona/box del logo (`.sidebar-header`) e la barra superiore (`.navbar`), convertendo `border-right: none` sul contenitore del logo e sulla sidebar principale a livello testata.
+  - Applicato `border-right: 1px solid var(--sidebar-border)` esclusivamente al di sotto della barra superiore (su `.sidebar-nav` e `.sidebar-append`).
+  - La topbar (comprendente logo e controlli di navigazione) si presenta ora come una superficie orizzontale continua, pulita e priva di interruzioni grafiche verticali, perfettamente identica all'header di Mainsail.
 - ✅ **Barra dei Titoli delle Sezioni Pienamente Responsive & Eliminazione Totale Scrollbar**:
   - Eliminata categoricamente ogni barra di scorrimento orizzontale (`overflow: hidden`, `::-webkit-scrollbar { display: none }`) dalla barra di navigazione delle sezioni (`.tabs-navigation`) e dai sotto-tab (`.subtabs`).
   - Implementato layout flessibile responsivo avanzato con `flex-wrap: wrap; align-items: center; gap: 0.35rem;` e distribuzione proporzionale delle schede con `flex: 1 1 auto; min-width: fit-content;`.
@@ -216,7 +220,7 @@ KlipperUI / KlifigUI/
   - Eliminato il pulsante pill "Moonraker connesso" dalla barra superiore.
   - Eliminato il tag/badge della versione dalla testata della barra superiore.
   - Rinominato il tasto "Tema" in **"Impostazioni"** con icona ingranaggio e dot cromatico attivo.
-  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.12`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
+  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.13`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
 - ✅ **Sidebar Mainsail Fedele al 100%**:
   - Colore di sfondo grigio `#4f4f4f` (`--sidebar-bg-color`) estratto direttamente dal tema attivo di Mainsail.
   - Voci e icone Material Design ufficiali (@mdi/js) allineate all'architettura Vue/Vuetify di Mainsail (`TheSidebar.vue`, `SidebarItem.vue`, `src/routes/index.ts`).
@@ -235,4 +239,4 @@ KlipperUI / KlifigUI/
   cd d:\Antigravity\KlifigUI
   git push origin main
   ```
-  Tutti i commit fino a `v0.7.12` sono già stati generati e validati localmente.
+  Tutti i commit fino a `v0.7.13` sono già stati generati e validati localmente.
