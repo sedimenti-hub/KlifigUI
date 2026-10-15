@@ -6,6 +6,12 @@ It installs with a single command and adds a dedicated navigation entry (**Klipp
 
 ---
 
+<p align="center">
+  <img src="assets/screenshot.png" alt="Klipper Configurator Interface" width="100%">
+</p>
+
+---
+
 ## 📸 Key Features
 
 - **Native Mainsail Integration**: Seamlessly embeds into Mainsail's sidebar with a dedicated configuration icon and full theme/color synchronization.
