@@ -1,55 +1,77 @@
-# 🎛️ Klipper Configurator per Mainsail WebUI
+# 🎛️ Klipper Configurator for Mainsail WebUI
 
-Un modulo visuale e moderno per la WebUI di **Mainsail**, progettato per permettere la configurazione guidata di Klipper (`printer.cfg` o `config.cfg`) attraverso un'interfaccia ricca di tab, formbox, interruttori e menu a tendina.
+A modern, visual configuration module for the **Mainsail** WebUI, designed to provide a guided configuration experience for Klipper (`printer.cfg` or included `.cfg` files) through an intuitive interface packed with tabs, forms, toggle switches, and smart dropdowns.
 
-Si installa con un solo comando ed inserisce una scheda dedicata (**Klipper Config**) direttamente nel menu laterale di Mainsail grazie al sistema nativo di navigazione (`.theme/navi.json`).
-
----
-
-## 📸 Caratteristiche Principali
-
-- **Integrazione Nativa in Mainsail**: Aggiunge una voce con icona ingranaggio nella sidebar sinistra di Mainsail.
-- **Design Mainsail Dark Theme**: Perfetta coerenza grafica con l'interfaccia scura di Mainsail, ottimizzata per desktop, tablet e smartphone.
-- **8 Categorie di Configurazione Dedicate**:
-  1. **Cinematica**:
-     - Parametri generali della stampante (`[printer]`): tipo cinematica (`cartesian`, `corexy`, `corexz`, `delta`, `hybrid_corexy`, ecc.), velocità massima, accelerazione, `minimum_cruise_ratio`, `square_corner_velocity`, dinamica asse Z (`max_z_velocity`, `max_z_accel`).
-     - **Abilitazione IDEX (Independent Dual Extruder)**: toggle per abilitare il secondo carrello indipendente `[dual_carriage]` e il secondo estrusore `[extruder1]`.
-     - **Configurazione Multi-Asse Z**: selezione del numero di motori Z (1 motore standard, 2 motori Dual-Z, 3 motori Triple-Z es. Trident, 4 motori Quad-Z es. Voron 2.4) con aggiornamento automatico dei motori in Stepper e del livellamento (`[z_tilt]` o `[quad_gantry_level]`) in Calibration.
-     - **Limiti e Settaggi Homing Avanzati per Asse (X, Dual Carriage X2, Y, Z)**:
-       - `position_min`, `position_max`, `position_endstop`.
-       - Parametri homing dedicati: `homing_speed`, `homing_retract_dist`, `homing_retract_speed` (impostabili a `0` per disabilitarli/ometterli dal config).
-  2. **Host/MCU**:
-     - Configurazione connessione Seriale USB / CAN Bus (`canbus_uuid`) o UART; baud rate; monitoraggio temperature CPU Host (`raspberry_pi`) e MCU chip; supporto schede secondarie (es. Toolhead CAN).
-  3. **Stepper & Driver (Adattivo a IDEX e Multi-Z)**:
-     - Gestione dinamica degli assi: Asse X, Dual Carriage X2 (se IDEX attivo), Asse Y, Asse Z, e motori ausiliari Z1, Z2, Z3 (in base al conteggio Multi-Z impostato).
-     - Pin di controllo (step, dir, enable con inversione `!`), microstep (16, 32, 64, 128, 256), calcolatore di `rotation_distance`, finecorsa fisici o **Sensorless Homing** (StallGuard).
-     - Driver TMC intelligenti (`tmc2209`, `tmc2208`, `tmc2226`, `tmc5160`, `tmc2240`): pin UART/CS, corrente operativa RMS (`run_current`), StealthChop e soglia `SGTHRS`.
-  4. **Extruder (Supporto IDEX Extruder 0 & Extruder 1)**:
-     - Gestione selettore estrusori: `[extruder]` ed `[extruder1]` (se IDEX attivo).
-     - Diametro ugello e filamento, Pressure Advance, selezione tipo termistore da menu a tendina (EPCOS 100K, Generic 3950, ATC Semitec, PT1000, MAX31865, ecc.), pin riscaldatore e regolazione PID.
-  5. **Bed**:
-     - Sensore temperatura piatto, pin riscaldatore, temperature min/max e algoritmo di controllo (PID con parametri Kp/Ki/Kd oppure Watermark).
-  6. **Misceleus**:
-     - Ventole pezzo (`[fan]`) e hotend (`[heater_fan]`), moduli core Klipper per Mainsail (`[virtual_sdcard]`, `[pause_resume]`, `[display_status]`, `[respond]`) e tempo di `idle_timeout`.
-  7. **Macro**:
-     - Gestione visuale delle macro G-Code (`[gcode_macro ...]`), con editor di script multiriga, descrizioni e pulsante **"Inserisci Template Predefiniti"** (`START_PRINT`, `END_PRINT`, `CANCEL_PRINT`, `PAUSE`, `RESUME`, `M600`).
-  8. **Calibration**:
-     - Configurazione sonda o BLTouch/CR Touch (offset X, Y, Z, pin e campioni), Homing sicuro al centro (`[safe_z_home]`), griglia di livellamento piatto (`[bed_mesh]`), compensazione risonanze (`[input_shaper]`).
-     - **Livellamento Multi-Z Dinamico**:
-       - Con 2 o 3 motori Z: allineamento automatico `[z_tilt]` (Z-Tilt Leveling con z_positions e points).
-       - Con 4 motori Z: allineamento automatico `[quad_gantry_level]` (QGL con gantry_corners e points).
-
-- **Sicurezza Totale dei File**:
-  - **Backup Automatico**: Prima di ogni salvataggio su Moonraker, viene generata una copia di sicurezza timestamped (es. `printer.cfg.bak.20261013180000`).
-  - **Preservazione SAVE_CONFIG**: Il blocco generato automaticamente da Klipper per calibrazioni PID, offset e mesh (`#*# <---------------------- SAVE_CONFIG ---------------------->`) viene mantenuto intatto al 100%.
-  - **Anteprima CFG & Diff**: Visualizza il codice generato prima di salvare con un clic.
-  - **Salva & Riavvia**: Salva la configurazione e invia immediatamente il comando `FIRMWARE_RESTART` a Klipper.
+It installs with a single command and adds a dedicated navigation entry (**Klipper Config**) directly into Mainsail's sidebar using the native navigation system (`.theme/navi.json`).
 
 ---
 
-## 🚀 Installazione Rapida (Raspberry Pi / MainsailOS)
+## 📸 Key Features
 
-Collegati alla tua stampante tramite SSH ed esegui i seguenti comandi:
+- **Native Mainsail Integration**: Seamlessly embeds into Mainsail's sidebar with a dedicated configuration icon and full theme/color synchronization.
+- **Mainsail Theme & Palette Sync**: Automatically matches Mainsail's active theme (Dark/Light mode) and primary accent color (Cyan, Voron Red, VzBot Cyan, RatRig Green, Klipper Orange, etc.) in real time.
+- **Multilingual Support (Automatic Mainsail Locale Sync)**: Automatically detects Mainsail's configured language (English, Italian, German, French, Spanish) and translates the UI instantly.
+- **Interactive Parameter Tooltips ("i" badge)**: Informative circle icon next to every parameter providing official Klipper directives, units of measurement, detailed explanations, and recommended values.
+- **Real-Time Unsaved Changes Tracking**: Visual amber highlighting and a status bar pill counter for modified parameters before saving.
+- **Mobile-Optimized Compact Mode**: Responsive UI that automatically transforms topbar action buttons and section tabs into clean, space-saving SVG icons on smartphone displays (`<= 768px`).
+- **Responsive `.cfg` File Selector**: Dynamically sizes itself to fit the selected file name without wasting navbar space or cutting off filenames.
+
+### 8 Dedicated Configuration Categories:
+
+1. **Kinematics & Printer**:
+   - General printer parameters (`[printer]`): kinematics type (`cartesian`, `corexy`, `corexz`, `delta`, `hybrid_corexy`, etc.), maximum velocity, maximum acceleration, `minimum_cruise_ratio`, `square_corner_velocity`, and Z-axis dynamics (`max_z_velocity`, `max_z_accel`).
+   - **IDEX (Independent Dual Extruder) Support**: Toggle to enable the secondary independent carriage (`[dual_carriage]`) and second extruder (`[extruder1]`).
+   - **Multi-Z Axis Configuration**: Select the number of Z motors (1 standard, 2 Dual-Z, 3 Triple-Z e.g., Trident, 4 Quad-Z e.g., Voron 2.4) with automatic synchronization of stepper driver sections and calibration leveling (`[z_tilt]` or `[quad_gantry_level]`).
+   - **Advanced Axis Limits & Homing Settings (X, Dual Carriage X2, Y, Z)**:
+     - `position_min`, `position_max`, `position_endstop`.
+     - Dedicated homing parameters: `homing_speed`, `homing_retract_dist`, and `homing_retract_speed` (set to `0` to disable/omit from config).
+
+2. **Host / MCU**:
+   - Connection types: USB Serial, CAN Bus (`canbus_uuid`), or UART; baud rate; secondary MCU toolhead boards (e.g., EBB36, SB2209); Host CPU (`raspberry_pi`) and MCU temperature monitoring.
+
+3. **Stepper Motion & Drivers (Adaptive to IDEX & Multi-Z)**:
+   - Dynamic axis management: X Axis, Dual Carriage X2 (if IDEX is enabled), Y Axis, Z Axis, and auxiliary motors Z1, Z2, Z3 (based on Multi-Z count).
+   - Control pins (step, dir, enable with `!` inversion), microstepping (16, 32, 64, 128, 256), built-in `rotation_distance` calculator, physical endstops, or **Sensorless Homing** (StallGuard / SGTHRS).
+   - Smart TMC drivers (`tmc2209`, `tmc2208`, `tmc2226`, `tmc5160`, `tmc2240`): Standalone, UART, or SPI connection modes; RMS run current (`run_current`), optional `hold_current`, custom `sense_resistor`, and StealthChop.
+
+4. **Extruder (IDEX Extruder 0 & Extruder 1 Support)**:
+   - Extruder selector: `[extruder]` and `[extruder1]` (when IDEX is active).
+   - Nozzle and filament diameter, Pressure Advance, full thermistor selection (EPCOS 100K, Generic 3950, ATC Semitec, PT1000, etc.), heater pins, and PID or Watermark thermal control.
+   - **SPI / RTD Temperature Sensors**: Support for MAX31865, MAX6675, MAX31855 with hardware/software SPI bus, RTD nominal and reference resistances, and 2/3/4-wire modes.
+
+5. **Heated Bed**:
+   - Bed temperature sensor, heater pin, min/max limits, and thermal control algorithm (PID with Kp/Ki/Kd or Watermark with `max_delta`).
+
+6. **Misceleus (Fans, Accelerometer, LEDs)**:
+   - Part cooling (`[fan]`), hotend heatsink (`[heater_fan]`), and auxiliary fans (`[fan_generic]`, `[controller_fan]`, `[temperature_fan]`).
+   - ADXL345 accelerometer on SPI bus with axis mapping (`axes_map`) and data rate.
+   - LED lighting (Neopixel WS2812B, DotStar, PWM).
+   - Core Klipper helper modules (`[virtual_sdcard]`, `[pause_resume]`, `[display_status]`, `[respond]`) and `idle_timeout`.
+
+7. **Include Files**:
+   - Visual management of external file inclusions (`[include filename.cfg]`) with quick-insert presets for popular modular setups (`macros.cfg`, `steppers.cfg`, `fans.cfg`, `canbus.cfg`, `ebb36.cfg`, `sensorless.cfg`).
+
+8. **Calibration**:
+   - Probe or BLTouch/CR Touch configuration (X, Y, Z offsets, pin, samples).
+   - Safe Z Homing (`[safe_z_home]`), Bed Mesh leveling grid (`[bed_mesh]`), Resonance Tester & Input Shaper (`[resonance_tester]`, `[input_shaper]`).
+   - **Dynamic Multi-Z Leveling**:
+     - 2 or 3 Z motors: automatic `[z_tilt]` alignment (Z-Tilt Leveling with z_positions and probe points).
+     - 4 Z motors: automatic `[quad_gantry_level]` alignment (QGL with gantry_corners and probe points).
+
+---
+
+## 🛡️ Total Configuration Safety
+
+- **Automatic Backups**: Prior to saving changes via Moonraker, a timestamped backup copy is automatically created (e.g., `printer.cfg.bak.20261013180000`).
+- **SAVE_CONFIG Block Preservation**: The automatic section generated by Klipper for PID tunes, Z-offsets, and bed meshes (`#*# <---------------------- SAVE_CONFIG ---------------------->`) is 100% preserved.
+- **CFG Preview & Diff**: Inspect the generated code before committing any changes with a single click.
+- **Save & Firmware Restart**: Save configurations and immediately trigger a `FIRMWARE_RESTART` with one click.
+
+---
+
+## 🚀 Quick Installation (Raspberry Pi / MainsailOS)
+
+Connect to your printer host via SSH and run:
 
 ```bash
 cd ~
@@ -59,21 +81,21 @@ chmod +x install.sh
 ./install.sh
 ```
 
-Lo script automatico:
-1. Individua la tua cartella di configurazione Klipper (`~/printer_data/config`).
-2. Copia i file dell'interfaccia web in `/var/www/klipper-configurator`.
-3. Configura Nginx aggiungendo la rotta `/configurator`.
-4. Aggiunge la nuova voce **Klipper Config** nel file `.theme/navi.json` di Mainsail.
+The automated installer will:
+1. Locate your Klipper configuration directory (`~/printer_data/config`).
+2. Deploy the web interface files to `/var/www/klipper-configurator`.
+3. Configure Nginx by routing `/configurator`.
+4. Register the new **Klipper Config** item in Mainsail's `.theme/navi.json`.
 
-Al termine, apri Mainsail nel browser e ricarica con **CTRL + F5**: troverai la nuova scheda nel menu laterale!
+Once installed, open Mainsail in your browser and press **CTRL + F5**: the new configuration tab will appear in your sidebar!
 
 ---
 
-## 🔄 Aggiornamenti Automatici da Mainsail
+## 🔄 Automatic Updates via Mainsail
 
-Puoi abilitare gli aggiornamenti con 1 clic direttamente dall'interfaccia di Mainsail (sezione **Macchina -> Gestore Aggiornamenti**).
+You can update KlifigUI with 1 click directly from the Mainsail interface (**Machine -> Update Manager**).
 
-Aggiungi questo blocco in fondo al tuo file `~/printer_data/config/moonraker.conf`:
+Add the following block to the bottom of your `~/printer_data/config/moonraker.conf` file:
 
 ```ini
 [update_manager KlifigUI]
@@ -86,9 +108,9 @@ is_system_service: False
 
 ---
 
-## 🗑️ Disinstallazione
+## 🗑️ Uninstallation
 
-Se desideri rimuovere il configuratore:
+To remove Klipper Configurator:
 
 ```bash
 cd ~/KlifigUI
