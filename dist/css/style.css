@@ -372,7 +372,8 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
-.nav-brand {
+.nav-brand,
+.nav-left {
     display: flex;
     align-items: center;
     gap: 0.85rem;

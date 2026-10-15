@@ -181,7 +181,11 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.7`.
+- ✅ **Versione corrente**: `v0.7.8`.
+- ✅ **Fix Apertura Popup Impostazioni & Layout Topbar Sinistra**:
+  - Risolta la mancata apertura del modal impostazioni causata da un'uscita prematura in `initSidebar()` (dovuta a un selettore obsoleto della vecchia sidebar) e unificati i gestori di eventi per `#btn-settings`.
+  - Spostato il pulsante **"Impostazioni"** all'estrema sinistra della barra di navigazione (`.nav-left`), garantendo un accesso immediato a configurazione connessione e tema.
+  - Rimossi il logo "K" e la scritta testuale "Klipper Configurator" dalla barra superiore per un'interfaccia più pulita e coerente con la dashboard Mainsail.
 - ✅ **Sincronizzazione Automatica Tema in Tempo Reale**:
   - Il tema e i colori di Klipper Configurator si sincronizzano automaticamente con Mainsail. Se l'utente cambia tema, colore primario o modalità (chiaro/scuro) su Mainsail, le modifiche si riflettono istantaneamente su KlifigUI via WebSocket Moonraker, polling ogni 10s e listener di focus sulla finestra.
   - Supportati tutti i temi e preset vendor di Mainsail (`mainsail: #2196f3`, `klipper: #f97316`, `voron: #d32f2f`, `vzbot: #00e5ff`, `ratrig: #00ff41`, `ldo`, `yumi`, `prusa`, `btt`, `multec`, ecc.).
@@ -189,7 +193,7 @@ KlipperUI / KlifigUI/
   - Eliminato il pulsante pill "Moonraker connesso" dalla barra superiore.
   - Eliminato il tag/badge della versione dalla testata della barra superiore.
   - Rinominato il tasto "Tema" in **"Impostazioni"** con icona ingranaggio e dot cromatico attivo.
-  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.7`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
+  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.8`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
 - ✅ **Sidebar Mainsail Fedele al 100%**:
   - Colore di sfondo grigio `#4f4f4f` (`--sidebar-bg-color`) estratto direttamente dal tema attivo di Mainsail.
   - Voci e icone Material Design ufficiali (@mdi/js) allineate all'architettura Vue/Vuetify di Mainsail (`TheSidebar.vue`, `SidebarItem.vue`, `src/routes/index.ts`).
@@ -208,4 +212,4 @@ KlipperUI / KlifigUI/
   cd d:\Antigravity\KlifigUI
   git push origin main
   ```
-  Tutti i commit `v0.7.4` e `v0.7.5` sono già stati generati e validati localmente.
+  Tutti i commit fino a `v0.7.8` sono già stati generati e validati localmente.

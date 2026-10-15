@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.7';
+    const APP_VERSION = 'v0.7.8';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -35,7 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         unsavedChangesText: document.getElementById('unsaved-changes-text'),
         statusDot: document.getElementById('status-dot'),
         statusText: document.getElementById('status-text'),
-        btnConnSettings: document.getElementById('btn-conn-settings'),
+        btnConnSettings: document.getElementById('btn-conn-settings') || document.getElementById('btn-settings'),
+        btnSettings: document.getElementById('btn-settings') || document.getElementById('btn-conn-settings'),
         selectConfigFile: document.getElementById('select-config-file'),
         btnReload: document.getElementById('btn-reload'),
         btnPreview: document.getElementById('btn-preview'),
@@ -3791,26 +3792,28 @@ document.addEventListener('DOMContentLoaded', () => {
      * Inizializzazione della Sidebar Mainsail (espansione / compressione e memoria stato)
      */
     function initSidebar() {
-        if (!dom.sidebar || !dom.btnToggleSidebar) return;
-
-        // Recupera stato memorizzato
-        const savedExpanded = localStorage.getItem('mainsail_sidebar_expanded') === 'true';
-        if (savedExpanded) {
-            dom.sidebar.classList.add('expanded');
-            if (dom.sidebarToggleLabel) dom.sidebarToggleLabel.textContent = 'Comprimi';
-        } else {
-            dom.sidebar.classList.remove('expanded');
-            if (dom.sidebarToggleLabel) dom.sidebarToggleLabel.textContent = 'Espandi';
-        }
-
-        dom.btnToggleSidebar.addEventListener('click', () => {
-            dom.sidebar.classList.toggle('expanded');
-            const isNowExpanded = dom.sidebar.classList.contains('expanded');
-            localStorage.setItem('mainsail_sidebar_expanded', isNowExpanded);
-            if (dom.sidebarToggleLabel) {
-                dom.sidebarToggleLabel.textContent = isNowExpanded ? 'Comprimi' : 'Espandi';
+        if (dom.sidebar) {
+            // Recupera stato memorizzato
+            const savedExpanded = localStorage.getItem('mainsail_sidebar_expanded') === 'true';
+            if (savedExpanded) {
+                dom.sidebar.classList.add('expanded');
+                if (dom.sidebarToggleLabel) dom.sidebarToggleLabel.textContent = 'Comprimi';
+            } else {
+                dom.sidebar.classList.remove('expanded');
+                if (dom.sidebarToggleLabel) dom.sidebarToggleLabel.textContent = 'Espandi';
             }
-        });
+
+            if (dom.btnToggleSidebar) {
+                dom.btnToggleSidebar.addEventListener('click', () => {
+                    dom.sidebar.classList.toggle('expanded');
+                    const isNowExpanded = dom.sidebar.classList.contains('expanded');
+                    localStorage.setItem('mainsail_sidebar_expanded', isNowExpanded);
+                    if (dom.sidebarToggleLabel) {
+                        dom.sidebarToggleLabel.textContent = isNowExpanded ? 'Comprimi' : 'Espandi';
+                    }
+                });
+            }
+        }
 
         // Pulsante rapido Impostazioni nella navbar
         const openSettingsModal = () => {
@@ -3820,8 +3823,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dom.modalConn) dom.modalConn.classList.add('open');
         };
 
-        if (dom.btnSettings) {
-            dom.btnSettings.addEventListener('click', openSettingsModal);
+        const targetSettingsBtn = dom.btnSettings || dom.btnConnSettings || document.getElementById('btn-settings');
+        if (targetSettingsBtn) {
+            targetSettingsBtn.addEventListener('click', openSettingsModal);
         }
         if (dom.btnQuickTheme) {
             dom.btnQuickTheme.addEventListener('click', openSettingsModal);
@@ -3934,21 +3938,38 @@ document.addEventListener('DOMContentLoaded', () => {
     dom.selectConfigFile.addEventListener('change', loadConfigFromMoonraker);
 
     // Modal Connessione & Impostazioni
-    if (dom.btnConnSettings) {
-        dom.btnConnSettings.addEventListener('click', () => {
+    const openConnSettings = () => {
+        if (dom.inputMoonrakerUrl && state.moonraker) {
             dom.inputMoonrakerUrl.value = state.moonraker.baseUrl;
-            dom.modalConn.classList.add('open');
+        }
+        if (dom.modalConn) dom.modalConn.classList.add('open');
+    };
+
+    const targetSettingsBtn = dom.btnSettings || dom.btnConnSettings || document.getElementById('btn-settings');
+    if (targetSettingsBtn) {
+        targetSettingsBtn.addEventListener('click', openConnSettings);
+    }
+    if (dom.btnConnSettings && dom.btnConnSettings !== targetSettingsBtn) {
+        dom.btnConnSettings.addEventListener('click', openConnSettings);
+    }
+
+    if (dom.btnCloseConn) dom.btnCloseConn.addEventListener('click', () => dom.modalConn?.classList.remove('open'));
+    if (dom.btnCancelConn) dom.btnCancelConn.addEventListener('click', () => dom.modalConn?.classList.remove('open'));
+    if (dom.modalConn) {
+        dom.modalConn.addEventListener('click', (e) => {
+            if (e.target === dom.modalConn) dom.modalConn.classList.remove('open');
         });
     }
-    dom.btnCloseConn.addEventListener('click', () => dom.modalConn.classList.remove('open'));
-    dom.btnCancelConn.addEventListener('click', () => dom.modalConn.classList.remove('open'));
-    dom.btnSaveConn.addEventListener('click', async () => {
-        const url = dom.inputMoonrakerUrl.value.trim();
-        state.moonraker.setBaseUrl(url);
-        localStorage.setItem('moonraker_url', url);
-        dom.modalConn.classList.remove('open');
-        await checkMoonrakerConnection();
-    });
+
+    if (dom.btnSaveConn) {
+        dom.btnSaveConn.addEventListener('click', async () => {
+            const url = dom.inputMoonrakerUrl?.value.trim() || '';
+            state.moonraker.setBaseUrl(url);
+            localStorage.setItem('moonraker_url', url);
+            if (dom.modalConn) dom.modalConn.classList.remove('open');
+            await checkMoonrakerConnection();
+        });
+    }
 
     // Rilevamento modifiche in tempo reale su qualsiasi controllo
     document.addEventListener('input', () => {
