@@ -1163,6 +1163,60 @@
     }
 
     // =========================================================================
+    // Dizionario Tooltip in Inglese (TOOLTIPS_EN)
+    // =========================================================================
+    const TOOLTIPS_EN = {
+        'kinematics': { title: 'Main Kinematics Type', desc: 'Defines the mechanical kinematic structure of the printer (Cartesian, CoreXY, CoreXZ, Delta, Hybrid CoreXY, etc.).', tip: 'Ender 3: cartesian | Voron: corexy | Delta: delta' },
+        'max_velocity': { title: 'Maximum Velocity', desc: 'Maximum toolhead travel speed allowed on the horizontal XY plane.', tip: 'Typical: 150 - 300 mm/s (bedslinger), 300 - 600+ mm/s (CoreXY)' },
+        'max_accel': { title: 'Maximum Acceleration', desc: 'Maximum acceleration permitted for the toolhead.', tip: 'Typical: 3000 - 5000 mm/s² (Cartesian), 5000 - 20000+ mm/s² (CoreXY with input shaper)' },
+        'minimum_cruise_ratio': { title: 'Minimum Cruise Ratio', desc: 'Minimum fraction of travel distance spent at constant cruise velocity before decelerating. Replaces max_accel_to_decel.', tip: 'Default: 0.5 (50%)' },
+        'square_corner_velocity': { title: 'Square Corner Velocity', desc: 'Maximum velocity at which the toolhead may negotiate a 90° turn without decelerating to zero.', tip: 'Typical: 5.0 - 10.0 mm/s' },
+        'max_z_velocity': { title: 'Maximum Z Velocity', desc: 'Maximum vertical travel speed allowed for the Z axis.', tip: 'Lead screws: 10 - 25 mm/s | Belts: 30 - 60 mm/s' },
+        'max_z_accel': { title: 'Maximum Z Acceleration', desc: 'Maximum acceleration applied during Z axis vertical motions and hops.', tip: 'Typical: 100 - 350 mm/s²' },
+        'rotation_distance': { title: 'Rotation Distance', desc: 'Linear distance (in mm) traveled by the axis for one full 360° turn of the stepper motor.', tip: 'GT2 20T: 40.0 | Lead screw T8x8: 8.0' },
+        'microsteps': { title: 'Microstep Resolution', desc: 'Microstepping multiplier set inside the driver for smooth motion.', tip: 'Recommended: 16 or 32' },
+        'run_current': { title: 'Operating Run Current', desc: 'RMS current supplied to the stepper motor windings during movement.', tip: 'NEMA17 standard: 0.65 - 0.85A | High-torque: 1.0 - 1.4A' },
+        'hold_current': { title: 'Hold Current', desc: 'Current supplied when motor is standing still in stationary position.' },
+        'sense_resistor': { title: 'Current Sense Resistor', desc: 'Value of the shunt resistor on the driver module to measure current.', tip: 'TMC2209: 0.110 ohm' },
+        'stealthchop_threshold': { title: 'StealthChop Mode', desc: 'Enables ultra-quiet StealthChop mode. Disable (0) for high-speed SpreadCycle power.' },
+        'interpolate': { title: '256 Microstep Interpolation', desc: 'Driver automatically interpolates microsteps to 256 internal microsteps.' },
+        'step_pin': { title: 'Step Signal Pin', desc: 'Microcontroller pin that pulses step clock cycles to the stepper driver.' },
+        'dir_pin': { title: 'Direction Pin', desc: 'Pin setting the motor rotation direction. Prepend ! to invert direction.' },
+        'enable_pin': { title: 'Enable Pin', desc: 'Pin enabling driver power (usually active-low, requiring !).' },
+        'uart_pin': { title: 'UART Pin', desc: 'MCU digital serial pin configuring TMC driver registers.' },
+        'diag_pin': { title: 'StallGuard Diag Pin', desc: 'Pin signaling mechanical stall for sensorless homing.' },
+        'driver_SGTHRS / driver_SGT': { title: 'StallGuard Sensitivity', desc: 'Collision sensitivity for sensorless homing. TMC2209: 0 to 255 (typical 60 - 120).' },
+        'nozzle_diameter': { title: 'Nozzle Orifice Diameter', desc: 'Hole diameter of the installed nozzle on the hotend.', tip: 'Standard: 0.40 mm' },
+        'filament_diameter': { title: 'Filament Diameter', desc: 'Nominal diameter of the thermoplastic filament (1.75 mm or 2.85 mm).' },
+        'pressure_advance': { title: 'Pressure Advance', desc: 'Active compensation for filament elasticity and nozzle chamber pressure during acceleration.', tip: 'Direct Drive: 0.02 - 0.06 | Bowden: 0.3 - 0.8' },
+        'sensor_type': { title: 'Temperature Sensor Model', desc: 'Exact model of thermistor, thermocouple or RTD probe.' },
+        'heater_pin': { title: 'Heater Cartridge Pin', desc: 'MCU MOSFET pin driving heater PWM power.' },
+        'sensor_pin': { title: 'Sensor ADC Pin', desc: 'Microcontroller analog ADC pin reading temperature.' },
+        'min_temp': { title: 'Thermal Safety Minimum', desc: 'Minimum allowed temperature (°C). Triggers shutdown if disconnected.' },
+        'max_temp': { title: 'Thermal Safety Maximum', desc: 'Maximum allowed temperature before emergency thermal shutdown.' },
+        'min_extrude_temp': { title: 'Minimum Extrude Temperature', desc: 'Safety threshold preventing cold extrusion commands.' },
+        'control': { title: 'Thermal Control Algorithm', desc: 'PID (Proportional Integral Derivative) or Watermark hysteresis.' },
+        'pid_Kp': { title: 'PID Proportional Gain', desc: 'Calibrated using PID_CALIBRATE command.' },
+        'pid_Ki': { title: 'PID Integral Gain', desc: 'Corrects accumulated thermal drift.' },
+        'pid_Kd': { title: 'PID Derivative Gain', desc: 'Damps rapid temperature fluctuations.' },
+        'position_min': { title: 'Minimum Travel Position', desc: 'Minimum coordinate reachable on this axis.' },
+        'position_max': { title: 'Maximum Travel Position', desc: 'Maximum coordinate reachable on this axis (print volume limit).' },
+        'position_endstop': { title: 'Endstop Trigger Position', desc: 'Exact coordinate assigned when endstop is triggered.' },
+        'homing_speed': { title: 'Homing Travel Speed', desc: 'Speed at which the axis moves towards endstop during homing.' },
+        'z_offset': { title: 'Probe Z-Offset', desc: 'Vertical distance between nozzle tip and probe trigger point.' },
+        'mesh_min': { title: 'Bed Mesh Minimum', desc: 'Minimum X,Y probe coordinates for heightmap leveling.' },
+        'mesh_max': { title: 'Bed Mesh Maximum', desc: 'Maximum X,Y probe coordinates for heightmap leveling.' },
+        'probe_count': { title: 'Mesh Grid Resolution', desc: 'Number of sample points along X and Y (e.g. 5,5 or 7,7).' },
+        'shaper_freq_x': { title: 'X Resonance Frequency', desc: 'Natural vibration resonance frequency of X axis in Hz.' },
+        'shaper_freq_y': { title: 'Y Resonance Frequency', desc: 'Natural vibration resonance frequency of Y axis in Hz.' },
+        'shaper_type_x': { title: 'X Shaper Filter Type', desc: 'Vibration damping algorithm (e.g. MZV, EI, ZV).' },
+        'shaper_type_y': { title: 'Y Shaper Filter Type', desc: 'Vibration damping algorithm for Y axis.' },
+        'serial': { title: 'MCU Serial Path', desc: 'Linux USB serial device path (/dev/serial/by-id/...).' },
+        'canbus_uuid': { title: 'CAN Bus UUID', desc: '12-digit hexadecimal unique identifier for CAN board.' },
+        'baud': { title: 'Baud Rate', desc: 'Serial baud rate speed (default 250000).' }
+    };
+
+    // =========================================================================
     // Gestione Tooltip Fluttuante Globale (Singleton)
     // =========================================================================
     let tooltipEl = null;
@@ -1201,8 +1255,23 @@
         const tipEl = tt.querySelector('#tt-tip');
 
         if (paramEl) paramEl.textContent = data.param || 'Parametro';
-        if (titleEl) titleEl.textContent = data.title || '';
-        if (descEl) descEl.textContent = data.desc || '';
+        const activeLang = (window.i18n && window.i18n.getActiveLanguage()) || 'it';
+        let displayTitle = data.title || '';
+        let displayDesc = data.desc || '';
+        let displayTip = data.tip || '';
+
+        if (activeLang === 'en' && typeof TOOLTIPS_EN !== 'undefined') {
+            const en = TOOLTIPS_EN[data.param] || (data.id && TOOLTIPS_EN[data.id]);
+            if (en) {
+                if (en.title) displayTitle = en.title;
+                if (en.desc) displayDesc = en.desc;
+                if (en.tip) displayTip = en.tip;
+            }
+        }
+
+        if (paramEl) paramEl.textContent = data.param || (activeLang === 'en' ? 'Parameter' : 'Parametro');
+        if (titleEl) titleEl.textContent = displayTitle;
+        if (descEl) descEl.textContent = displayDesc;
 
         if (unitEl) {
             if (data.unit) {
@@ -1214,8 +1283,8 @@
         }
 
         if (tipEl) {
-            if (data.tip) {
-                tipEl.textContent = `💡 ${data.tip}`;
+            if (displayTip) {
+                tipEl.textContent = `💡 ${displayTip}`;
                 tipEl.style.display = 'block';
             } else {
                 tipEl.style.display = 'none';

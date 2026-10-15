@@ -169,6 +169,7 @@ KlipperUI / KlifigUI/
 │       ├── klipper-parser.js   # Parser e generatore bidirezionale formato INI Klipper
 │       ├── default-config.js   # Valori di fallback e template di riferimento
 │       ├── moonraker-client.js # Client HTTP/WebSocket per API Moonraker e DB Mainsail
+│       ├── i18n.js             # Modulo internazionalizzazione e sincronizzazione lingua Mainsail
 │       ├── tooltips.js         # Modulo documentazione parametri, badge 'i' e tooltip fluttuante
 │       └── app.js              # Controller applicativo, reattività DOM e sincronizzazione
 ├── scripts/
@@ -182,7 +183,13 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.9`.
+- ✅ **Versione corrente**: `v0.7.10`.
+- ✅ **Rilevamento Lingua Mainsail & Traduzione Automatica dell'Interfaccia**:
+  - Implementato il modulo dedicato [`dist/js/i18n.js`](file:///d:/Antigravity/KlifigUI/dist/js/i18n.js) che interroga Moonraker (`/server/database/item?namespace=mainsail`) e rileva automaticamente la lingua configurata dall'utente in Mainsail (`general.locale`, `general.language` o `uiSettings.locale`).
+  - Traduzione istantanea e completa di tutti gli elementi grafici dell'applicazione: pulsanti topbar (Impostazioni, Ricarica, Anteprima, Scarica, Salva, Salva & Riavvia), etichette delle 9 schede principali, titoli e tag delle card, oltre 160 form-label e checkbox, opzioni dei menu a tendina, modali e messaggi toast.
+  - Sincronizzazione in tempo reale: al cambio lingua su Mainsail, l'interfaccia si aggiorna istantaneamente senza dover ricaricare la pagina (via WebSocket Moonraker `notify_database_update`, polling periodico e listener di focus).
+  - Aggiunto selettore lingua dedicato nel modale **Impostazioni** con modalità **"Automatica (Sincronizza con Mainsail)"** predefinita e possibilità di override manuale (Italiano, English, Deutsch, Français, Español).
+  - Integrazione con i tooltip informativi multilingua in [`dist/js/tooltips.js`](file:///d:/Antigravity/KlifigUI/dist/js/tooltips.js).
 - ✅ **Badge Informativo "i" e Tooltip Contestuali su Ogni Valore**:
   - Inserito un piccolo cerchietto con una "i" (`.info-circle`) accanto a ogni parametro, campo input, selettore e checkbox dell'applicazione.
   - Al passaggio del mouse (hover) viene visualizzato un tooltip fluttuante ricco (`#klifig-tooltip`) con posizionamento automatico intelligente sopra o sotto l'elemento e rilevamento dei bordi dello schermo (anti-collisione).
@@ -200,7 +207,7 @@ KlipperUI / KlifigUI/
   - Eliminato il pulsante pill "Moonraker connesso" dalla barra superiore.
   - Eliminato il tag/badge della versione dalla testata della barra superiore.
   - Rinominato il tasto "Tema" in **"Impostazioni"** con icona ingranaggio e dot cromatico attivo.
-  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.9`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
+  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.10`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
 - ✅ **Sidebar Mainsail Fedele al 100%**:
   - Colore di sfondo grigio `#4f4f4f` (`--sidebar-bg-color`) estratto direttamente dal tema attivo di Mainsail.
   - Voci e icone Material Design ufficiali (@mdi/js) allineate all'architettura Vue/Vuetify di Mainsail (`TheSidebar.vue`, `SidebarItem.vue`, `src/routes/index.ts`).
@@ -219,4 +226,4 @@ KlipperUI / KlifigUI/
   cd d:\Antigravity\KlifigUI
   git push origin main
   ```
-  Tutti i commit fino a `v0.7.9` sono già stati generati e validati localmente.
+  Tutti i commit fino a `v0.7.10` sono già stati generati e validati localmente.

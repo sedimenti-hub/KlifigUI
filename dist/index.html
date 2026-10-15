@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.9">
+    <link rel="stylesheet" href="css/style.css?v=0.7.10">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300c0f3'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -2070,14 +2070,37 @@
                         <span id="status-text" style="font-size: 0.85rem; font-weight: 600;">Moonraker: Connessione...</span>
                     </div>
                     <div>
-                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.9</span>
+                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.10</span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="input-moonraker-url">Indirizzo IP / Host Moonraker:</label>
+                    <label class="form-label" for="input-moonraker-url" data-i18n="modal.ip_label">Indirizzo IP / Host Moonraker:</label>
                     <input type="text" class="form-control" id="input-moonraker-url" placeholder="http://192.168.1.50:7125 o lascia vuoto per auto-rilevamento">
-                    <div class="form-helper">Se Klipper Configurator è installato sulla stessa macchina di Mainsail, lascia l'origine automatica.</div>
+                    <div class="form-helper" data-i18n="modal.ip_helper">Se Klipper Configurator è installato sulla stessa macchina di Mainsail, lascia l'origine automatica.</div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
+
+                <div class="card-title" style="margin-bottom: 0.75rem; font-size: 0.95rem;">Lingua & Localizzazione (Mainsail Sync)</div>
+
+                <div style="padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Lingua Rilevata:</span>
+                        <span id="active-detected-lang-text" class="nav-badge" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">🇮🇹 Italiano (Auto)</span>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label" for="select-ui-language">Lingua Interfaccia:</label>
+                        <select class="form-control" id="select-ui-language">
+                            <option value="auto">Automatica (Sincronizza con Mainsail)</option>
+                            <option value="it">🇮🇹 Italiano</option>
+                            <option value="en">🇬🇧 English</option>
+                            <option value="de">🇩🇪 Deutsch</option>
+                            <option value="fr">🇫🇷 Français</option>
+                            <option value="es">🇪🇸 Español</option>
+                        </select>
+                        <div class="form-helper">Se impostato su Automatica, Klipper Configurator rileva e adotta la stessa lingua usata in Mainsail.</div>
+                    </div>
                 </div>
 
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
@@ -2174,10 +2197,11 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.7.9"></script>
-    <script src="js/default-config.js?v=0.7.9"></script>
-    <script src="js/moonraker-client.js?v=0.7.9"></script>
-    <script src="js/tooltips.js?v=0.7.9"></script>
-    <script src="js/app.js?v=0.7.9"></script>
+    <script src="js/klipper-parser.js?v=0.7.10"></script>
+    <script src="js/default-config.js?v=0.7.10"></script>
+    <script src="js/moonraker-client.js?v=0.7.10"></script>
+    <script src="js/i18n.js?v=0.7.10"></script>
+    <script src="js/tooltips.js?v=0.7.10"></script>
+    <script src="js/app.js?v=0.7.10"></script>
 </body>
 </html>

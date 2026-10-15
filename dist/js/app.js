@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.9';
+    const APP_VERSION = 'v0.7.10';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -2812,6 +2812,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Salva snapshot iniziale della configurazione pulita
         clearAllModifiedIndicators();
         state.baselineSnapshot = takeFullUiSnapshot();
+        if (window.i18n) window.i18n.applyTranslations();
         if (window.refreshTooltips) window.refreshTooltips();
     }
 
@@ -3746,6 +3747,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     printerName = s.general.printername;
                 }
 
+                // Estrazione e sincronizzazione Lingua Mainsail
+                if (window.i18n) {
+                    const detectedLang = window.i18n.detectMainsailLanguageFromSettings(s);
+                    if (detectedLang) {
+                        window.i18n.setLanguage(detectedLang, false);
+                    }
+                }
+
                 // Memorizza in cache locale
                 if (primaryColor) localStorage.setItem('mainsail_cached_primary_color', primaryColor);
                 if (themeMode) localStorage.setItem('mainsail_cached_theme_mode', themeMode);
@@ -3872,6 +3881,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 localStorage.setItem('mainsail_force_light_mode', forceLight);
                 applyMainsailTheme({ themeMode: forceLight ? 'light' : 'dark' });
                 showToast(`Modalità tema: ${forceLight ? 'Chiaro' : 'Scuro'}`, 'info', 1500);
+            });
+        }
+
+        // Selettore Lingua Interfaccia (Mainsail Auto vs Manuale)
+        const selectUiLang = document.getElementById('select-ui-language');
+        if (selectUiLang) {
+            selectUiLang.value = localStorage.getItem('klifig_manual_language') || 'auto';
+            selectUiLang.addEventListener('change', (e) => {
+                const val = e.target.value;
+                if (window.i18n) {
+                    if (val === 'auto') {
+                        localStorage.removeItem('klifig_manual_language');
+                        const mainsailLang = localStorage.getItem('mainsail_cached_language') || 'it';
+                        window.i18n.setLanguage(mainsailLang, false);
+                    } else {
+                        window.i18n.setLanguage(val, true);
+                    }
+                }
+                const langName = (selectUiLang.options[selectUiLang.selectedIndex] || {}).textContent || val;
+                showToast(window.i18n ? window.i18n.t('toast.lang_set', { lang: langName }) : `Lingua: ${langName}`, 'info', 1800);
             });
         }
 
@@ -4028,6 +4057,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     applyMainsailTheme();
     initAutomaticThemeSync();
+    if (window.i18n) window.i18n.applyTranslations();
     if (window.initTooltips) window.initTooltips();
     checkMoonrakerConnection();
 });
