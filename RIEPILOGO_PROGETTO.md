@@ -1,6 +1,6 @@
 # 📋 Riepilogo Completo Progetto: Klipper Configurator (KlifigUI)
 
-Questo documento raccoglie in maniera dettagliata l'intera cronologia delle richieste, l'evoluzione del codice, l'architettura dei moduli e tutte le versioni implementate dall'inizio della sessione fino alla versione corrente (**v0.7.16**).
+Questo documento raccoglie in maniera dettagliata l'intera cronologia delle richieste, l'evoluzione del codice, l'architettura dei moduli e tutte le versioni implementate dall'inizio della sessione fino alla versione corrente (**v0.7.17**).
 
 ---
 
@@ -59,6 +59,7 @@ gitGraph
     commit id: "Topbar Ancorata Fissa con Scroll Contenuto" tag: "v0.7.14"
     commit id: "Modalità Mobile Icon-Only Topbar & Schede" tag: "v0.7.15"
     commit id: "Selettore File .cfg Dinamico & Responsive" tag: "v0.7.16"
+    commit id: "Traduzione Completa Titoli Schede & Sezioni" tag: "v0.7.17"
 ```
 
 ### Tabella Sintetica delle Versioni e Richieste
@@ -84,6 +85,7 @@ gitGraph
 | **v0.7.14** | *"la top bar deve restare ancorata mentre il contenuto della pagina durante lo scroll deve scorrere sotto"* | Topbar convertita in `position: fixed` a tutta larghezza con coordinate dinamiche su espansione sidebar; contenuto con `padding-top` per scorrimento fluido sotto di essa. |
 | **v0.7.15** | *"nella modalita mobile trasforma i tasti in icone in modo da non rendere la UI inutilizzabile e fai lo stesso con la barra dei titoli delle sezioni"* | Modalità mobile ottimizzata per smartphone (`<= 768px`): testi pulsanti topbar e titoli schede sezioni nascosti mantenendo solo le icone SVG. La navbar si riduce a un'unica riga da 48px e le 9 schede si dispongono ordinatamente su una riga da 40px senza avvolgimenti ingombranti. |
 | **v0.7.16** | *"Il tasto di selezione file.cfg rendilo responsive rispetto al nome del file selezionato"* | Selettore `.cfg` con larghezza dinamica e responsive basata sul testo dell'opzione selezionata (canvas font measurement + `field-sizing: content`), limiti adattivi mobile e desktop per evitare sovrapposizioni e troncare intelligentemente con ellipsis solo quando necessario. |
+| **v0.7.17** | *"il titolo delle schede all'interno delle sezioni non viene tradotto, ad esempio 'Parametri Generali Klipper' oppure 'Ventole di raffreddamento klipper' ecc"* | Aggiunti attributi `data-i18n` a tutte le 27 card-title, divisori di sezione, header di tab (Include, Macro) e finestre modali; esteso il dizionario multilingua in `i18n.js` per tutte le 5 lingue (IT, EN, DE, FR, ES) e collegati i titoli dinamici di Stepper ed Estrusore in `app.js` all'evento `klifig:languageChanged`. |
 
 ---
 
@@ -197,7 +199,11 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.16`.
+- ✅ **Versione corrente**: `v0.7.17`.
+- ✅ **Traduzione Completa e Dinamica di Tutti i Titoli delle Schede (Card) e Sezioni**:
+  - Risolta la mancata traduzione dei titoli interni ai box di configurazione: tutti i 27 elementi `.card-title`, i titoli delle sezioni interne (es. *Limiti Assi & Configurazione Homing*), gli header di tab (Include e Macro) e i titoli dei modali (Anteprima, Calcolatore, Impostazioni) sono stati equipaggiati con attributi semantici `data-i18n`.
+  - Esteso il vocabolario di localizzazione in `i18n.js` per tutte le 5 lingue supportate (Italiano, English, Deutsch, Français, Español), traducendo puntualmente voci come *Parametri Generali Klipper*, *Ventole di Raffreddamento Klipper*, *Monitoraggio Termico*, *Accelerometro Risonanze*, *Allineamento Z-Tilt/QGL*, ecc.
+  - Sincronizzati i titoli dinamici di Stepper (es. *Configurazione Motore Asse X/Y/Z/Dual Carriage*) ed Estrusore in `app.js` mediante helper localizzato `t()` e listener all'evento globale `klifig:languageChanged`, garantendo che l'interfaccia si aggiorni istantaneamente al cambio lingua in Mainsail o nel popup Impostazioni senza ricaricare la pagina.
 - ✅ **Tasto / Menu di Selezione File .cfg Dinamico e Responsive rispetto al Nome del File**:
   - Risolto il problema del dimensionamento del menu a tendina (`#select-config-file`): nei browser standard un elemento `<select>` si espande alla larghezza dell'opzione più lunga dell'intero elenco (lasciando ampi spazi vuoti quando è selezionato un file dal nome breve), oppure veniva forzato a valori rigidi su schermi piccoli (`max-width: 86px`).
   - Implementato un calcolo dinamico della larghezza del testo tramite `CanvasRenderingContext2D.measureText()` combinato alla proprietà standard moderna CSS `field-sizing: content`:

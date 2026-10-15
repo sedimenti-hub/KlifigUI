@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.16';
+    const APP_VERSION = 'v0.7.17';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -1411,17 +1411,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const isAuxZ = s === 'stepper_z1' || s === 'stepper_z2' || s === 'stepper_z3';
         const isDualCarriage = s === 'dual_carriage';
 
-        // Etichette
+        // Etichette tradotte
+        const t = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
         if (isDualCarriage) {
-            dom.stepperCardTitle.textContent = 'Configurazione Dual Carriage X2';
+            dom.stepperCardTitle.textContent = t('card.stepper_dual_carriage', 'Configurazione Dual Carriage X2');
             dom.stepperCardTag.textContent = '[dual_carriage]';
         } else if (isAuxZ) {
             const zNum = s.replace('stepper_', '').toUpperCase();
-            dom.stepperCardTitle.textContent = `Configurazione Motore Asse ${zNum}`;
+            dom.stepperCardTitle.textContent = `${t('card.stepper_motor_axis', 'Configurazione Motore Asse')} ${zNum}`;
             dom.stepperCardTag.textContent = `[${s}]`;
         } else {
             const axisLetter = s.replace('stepper_', '').toUpperCase();
-            dom.stepperCardTitle.textContent = `Configurazione Motore Asse ${axisLetter}`;
+            dom.stepperCardTitle.textContent = `${t('card.stepper_motor_axis', 'Configurazione Motore Asse')} ${axisLetter}`;
             dom.stepperCardTag.textContent = `[${s}]`;
         }
 
@@ -1456,7 +1457,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const driverInfo = getDriverSectionName(s);
         const hasDriver = !!(driverInfo.section && state.parser.hasSection(driverInfo.section));
 
-        dom.driverCardTitle.textContent = `Driver Stepper Motion [${s}]`;
+        const tDriver = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
+        dom.driverCardTitle.textContent = `${tDriver('card.driver_stepper_motion', 'Driver Stepper Motion')} [${s}]`;
 
         if (!hasDriver) {
             dom.driverCardTag.textContent = '[Standalone / Nessun TMC]';
@@ -1643,7 +1645,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     function loadCurrentExtruderFromParser() {
         const ext = state.currentExtruder;
-        dom.extruderCardTitle.textContent = ext === 'extruder1' ? 'Meccanica Secondo Estrusore IDEX' : 'Meccanica Estrusore Principale';
+        const tExt = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
+        dom.extruderCardTitle.textContent = ext === 'extruder1' ? tExt('card.extruder_mech_secondary', 'Meccanica Secondo Estrusore IDEX') : tExt('card.extruder_mech_primary', 'Meccanica Estrusore Principale');
         dom.extruderCardTag.textContent = `[${ext}]`;
 
         document.getElementById('extruder-step-pin').value = state.parser.get(ext, 'step_pin', '');
@@ -1715,7 +1718,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const hasDriver = !!(driverInfo.section && state.parser.hasSection(driverInfo.section));
 
         if (dom.extruderDriverCardTitle) {
-            dom.extruderDriverCardTitle.textContent = ext === 'extruder1' ? 'Driver Secondo Estrusore IDEX [extruder1]' : 'Driver Estrusore Principale [extruder]';
+            const tDrv = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
+            dom.extruderDriverCardTitle.textContent = ext === 'extruder1'
+                ? `${tDrv('card.extruder_driver_secondary', 'Driver Secondo Estrusore IDEX')} [extruder1]`
+                : `${tDrv('card.extruder_driver_primary', 'Driver Estrusore Principale')} [extruder]`;
         }
 
         if (!hasDriver) {
@@ -4102,5 +4108,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updateConfigFileSelectWidth();
     if (window.i18n) window.i18n.applyTranslations();
     if (window.initTooltips) window.initTooltips();
+
+    window.addEventListener('klifig:languageChanged', () => {
+        if (state.currentStepper) loadCurrentStepperFromParser();
+        if (state.currentExtruder) loadCurrentExtruderFromParser();
+    });
+
     checkMoonrakerConnection();
 });
