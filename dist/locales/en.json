@@ -309,91 +309,91 @@
   "tooltips": {
     "select-config-file": {
       "param": "Config File",
-      "title": "File di Configurazione Attivo",
-      "desc": "Seleziona quale file di configurazione Klipper caricare, visualizzare o modificare da Moonraker.",
-      "tip": "Tipicamente printer.cfg"
+      "title": "Active Configuration File",
+      "desc": "Select which Klipper configuration file to load, view, or edit from Moonraker.",
+      "tip": "Typically printer.cfg"
     },
     "printer-kinematics": {
       "param": "kinematics",
       "title": "Main Kinematics Type",
-      "desc": "Defines the mechanical kinematic structure of the printer (Cartesian, CoreXY, CoreXZ, Delta, Hybrid CoreXY, etc.).",
-      "tip": "Ender 3: cartesian | Voron: corexy | Delta: delta"
+      "desc": "Defines the mechanical kinematic structure of the printer (Cartesian, CoreXY, CoreXZ, Delta, Hybrid CoreXY, etc.). Determines the math converting G-Code coordinates into individual motor steps.",
+      "tip": "Ender 3/Prusa: cartesian | Voron 2.4/Trident/Bambu: corexy | Delta: delta"
     },
     "printer-max-velocity": {
       "param": "max_velocity",
       "title": "Maximum Velocity",
       "desc": "Maximum toolhead travel speed allowed on the horizontal XY plane.",
-      "tip": "Typical: 150 - 300 mm/s (bedslinger), 300 - 600+ mm/s (CoreXY)",
-      "unit": "mm/s"
+      "unit": "mm/s",
+      "tip": "Typical: 150 - 300 mm/s (standard bedslinger), 300 - 600+ mm/s (high-performance CoreXY)"
     },
     "printer-max-accel": {
       "param": "max_accel",
       "title": "Maximum Acceleration",
-      "desc": "Maximum acceleration permitted for the toolhead.",
-      "tip": "Typical: 3000 - 5000 mm/s² (Cartesian), 5000 - 20000+ mm/s² (CoreXY with input shaper)",
-      "unit": "mm/s²"
+      "desc": "Maximum acceleration permitted for the toolhead. Reduces print times without causing lost steps or excessive vibrations.",
+      "unit": "mm/s²",
+      "tip": "Typical: 3000 - 5000 mm/s² (Cartesian), 5000 - 20000+ mm/s² (CoreXY with input shaper)"
     },
     "printer-cruise-ratio": {
       "param": "minimum_cruise_ratio",
       "title": "Minimum Cruise Ratio",
-      "desc": "Minimum fraction of travel distance spent at constant cruise velocity before decelerating. Replaces max_accel_to_decel.",
-      "tip": "Default: 0.5 (50%)"
+      "desc": "Minimum fraction of travel distance spent at constant cruise velocity before decelerating. Replaces legacy max_accel_to_decel in modern Klipper.",
+      "tip": "Default: 0.5 (50% cruise)"
     },
     "printer-square-corner": {
       "param": "square_corner_velocity",
       "title": "Square Corner Velocity",
-      "desc": "Maximum velocity at which the toolhead may negotiate a 90° turn without decelerating to zero.",
-      "tip": "Typical: 5.0 - 10.0 mm/s",
-      "unit": "mm/s"
+      "desc": "Maximum velocity at which the toolhead may negotiate a 90° corner without decelerating to zero. Higher values increase speed but can cause ringing on sharp corners.",
+      "unit": "mm/s",
+      "tip": "Typical: 5.0 mm/s (conservative/detailed) up to 8.0 - 10.0 mm/s (fast)"
     },
     "printer-max-z-velocity": {
       "param": "max_z_velocity",
       "title": "Maximum Z Velocity",
-      "desc": "Maximum vertical travel speed allowed for the Z axis.",
-      "tip": "Lead screws: 10 - 25 mm/s | Belts: 30 - 60 mm/s",
-      "unit": "mm/s"
+      "desc": "Maximum vertical travel speed allowed for the Z axis. Limits rotation speed of Z leadscrews or belts.",
+      "unit": "mm/s",
+      "tip": "T8 leadscrews: 10 - 25 mm/s | Belted Z: 30 - 60 mm/s"
     },
     "printer-max-z-accel": {
       "param": "max_z_accel",
       "title": "Maximum Z Acceleration",
-      "desc": "Maximum acceleration applied during Z axis vertical motions and hops.",
-      "tip": "Typical: 100 - 350 mm/s²",
-      "unit": "mm/s²"
+      "desc": "Maximum acceleration applied during Z axis vertical motions (including z-hops during retractions).",
+      "unit": "mm/s²",
+      "tip": "Typical: 100 - 350 mm/s²"
     },
     "printer-max-accel-to-decel": {
       "param": "max_accel_to_decel",
       "title": "Max Accel to Decel (Legacy)",
-      "desc": "Parametro deprecato di Klipper per limitare l'accelerazione di transizione. Nei sistemi moderni è consigliato lasciare vuoto e utilizzare minimum_cruise_ratio.",
+      "desc": "Deprecated Klipper parameter limiting transitional acceleration. In modern systems, it is recommended to leave empty and use minimum_cruise_ratio.",
       "unit": "mm/s²"
     },
     "check-enable-idex": {
       "param": "[dual_carriage]",
-      "title": "Abilitazione Cinematica IDEX",
-      "desc": "Attiva il supporto per stampanti a doppio carrello indipendente (IDEX), consentendo la gestione separata di due estrusori autonomi che condividono la stessa barra X.",
-      "tip": "Genera automaticamente la sezione [dual_carriage] nel config"
+      "title": "Enable IDEX Kinematics",
+      "desc": "Enables support for dual independent carriage (IDEX) printers, allowing independent control of two extruders sharing the same X axis gantry.",
+      "tip": "Automatically generates the [dual_carriage] section in config"
     },
     "select-z-motor-count": {
       "param": "[stepper_z*]",
-      "title": "Numero di Motori Asse Z",
-      "desc": "Specifica quanti motori indipendenti comandano l'asse Z (1, 2, 3 o 4). Permette il livellamento automatico del piatto o gantry tramite Z_TILT_ADJUST (2-3 motori) o QUAD_GANTRY_LEVEL (4 motori).",
-      "tip": "Configura schede stepper_z, stepper_z1, stepper_z2, stepper_z3"
+      "title": "Number of Z Axis Motors",
+      "desc": "Specifies how many independent motors drive the Z axis (1, 2, 3, or 4). Enables automatic bed or gantry leveling via Z_TILT_ADJUST (2-3 motors) or QUAD_GANTRY_LEVEL (4 motors).",
+      "tip": "Configures stepper_z, stepper_z1, stepper_z2, stepper_z3 tabs"
     },
     "delta-arm-length": {
       "param": "arm_length",
-      "title": "Lunghezza Bracci Delta",
-      "desc": "Lunghezza da snodo a snodo dei bracci diagonali su stampanti cinematiche Delta.",
+      "title": "Delta Push Rod Length",
+      "desc": "Joint-to-joint length of diagonal push rods on Delta kinematic printers.",
       "unit": "mm"
     },
     "delta-radius": {
       "param": "delta_radius",
-      "title": "Raggio Orizzontale Delta",
-      "desc": "Raggio del cerchio orizzontale formato dalle torri delta rispetto al centro dell'effettore.",
+      "title": "Delta Horizontal Radius",
+      "desc": "Radius of the horizontal circle formed by the delta towers relative to the effector center.",
       "unit": "mm"
     },
     "delta-print-radius": {
       "param": "print_radius",
-      "title": "Raggio di Stampa Delta",
-      "desc": "Raggio dell'area circolare massima stampabile sul piano di lavoro di una cinematica Delta.",
+      "title": "Delta Printable Radius",
+      "desc": "Radius of the maximum circular printable area on a Delta kinematic build plate.",
       "unit": "mm"
     },
     "x-pos-min": {
@@ -418,20 +418,20 @@
       "param": "homing_speed",
       "title": "Homing Travel Speed",
       "desc": "Speed at which the axis moves towards endstop during homing.",
-      "tip": "Tipicamente 40 - 80 mm/s",
-      "unit": "mm/s"
+      "unit": "mm/s",
+      "tip": "Typically 40 - 80 mm/s"
     },
     "x-homing-retract-dist": {
       "param": "homing_retract_dist",
-      "title": "Distanza di Arretramento Homing",
-      "desc": "Distanza di cui l'asse indietreggia dopo il primo contatto col finecorsa, prima di eseguire il secondo tocco di precisione.",
-      "tip": "Tipicamente 3 - 5 mm. Imposta 0 per sensorless homing",
-      "unit": "mm"
+      "title": "Homing Retract Distance",
+      "desc": "Distance the axis backs off after the first endstop contact before making the second precision touch.",
+      "unit": "mm",
+      "tip": "Typically 3 - 5 mm. Set to 0 for sensorless homing."
     },
     "x-homing-retract-speed": {
       "param": "homing_retract_speed",
-      "title": "Velocità di Arretramento Homing",
-      "desc": "Velocità con cui l'asse si allontana dal finecorsa prima del secondo tocco.",
+      "title": "Homing Retract Speed",
+      "desc": "Speed at which the axis moves away from the endstop before the second touch.",
       "unit": "mm/s"
     },
     "dc-pos-min": {
@@ -460,14 +460,14 @@
     },
     "dc-homing-retract-dist": {
       "param": "homing_retract_dist",
-      "title": "Arretramento Homing Carrello X2",
-      "desc": "Distanza di arretramento dopo il tocco dell'endstop per il carrello X2.",
+      "title": "Dual Carriage X2 Homing Retract",
+      "desc": "Retract distance after endstop contact for the secondary X2 carriage.",
       "unit": "mm"
     },
     "dc-homing-retract-speed": {
       "param": "homing_retract_speed",
-      "title": "Velocità Arretramento X2",
-      "desc": "Velocità di disimpegno dal finecorsa del carrello secondario X2.",
+      "title": "Dual Carriage X2 Retract Speed",
+      "desc": "Disengagement speed from the endstop for the secondary X2 carriage.",
       "unit": "mm/s"
     },
     "y-pos-min": {
@@ -496,22 +496,22 @@
     },
     "y-homing-retract-dist": {
       "param": "homing_retract_dist",
-      "title": "Arretramento Homing Asse Y",
-      "desc": "Distanza di arretramento dopo il primo tocco del finecorsa su Y.",
+      "title": "Y Axis Homing Retract Distance",
+      "desc": "Distance the Y axis backs off after the first endstop contact.",
       "unit": "mm"
     },
     "y-homing-retract-speed": {
       "param": "homing_retract_speed",
-      "title": "Velocità Arretramento Asse Y",
-      "desc": "Velocità di arretramento per l'asse Y.",
+      "title": "Y Axis Homing Retract Speed",
+      "desc": "Speed at which the Y axis moves away from the endstop before the second touch.",
       "unit": "mm/s"
     },
     "z-pos-min": {
       "param": "position_min",
       "title": "Minimum Travel Position",
       "desc": "Minimum coordinate reachable on this axis.",
-      "tip": "Consigliato: -2.0 o -5.0 mm per calibrare Z-Offset",
-      "unit": "mm"
+      "unit": "mm",
+      "tip": "Recommended: -2.0 to -5.0 mm to calibrate Z-Offset"
     },
     "z-pos-max": {
       "param": "position_max",
@@ -529,94 +529,94 @@
       "param": "homing_speed",
       "title": "Homing Travel Speed",
       "desc": "Speed at which the axis moves towards endstop during homing.",
-      "tip": "Tipicamente 5 - 15 mm/s per evitare impatti violenti",
-      "unit": "mm/s"
+      "unit": "mm/s",
+      "tip": "Typically 5 - 15 mm/s to prevent hard collisions"
     },
     "z-homing-retract-dist": {
       "param": "homing_retract_dist",
-      "title": "Arretramento Homing Asse Z",
-      "desc": "Distanza di risalita della testina dopo il primo tocco prima del secondo tocco di homing.",
-      "tip": "Consigliato: 3 - 5 mm",
-      "unit": "mm"
+      "title": "Z Axis Homing Retract Distance",
+      "desc": "Lift distance of the toolhead after first contact before the second probing move.",
+      "unit": "mm",
+      "tip": "Recommended: 3 - 5 mm"
     },
     "z-homing-retract-speed": {
       "param": "homing_retract_speed",
-      "title": "Velocità Arretramento Asse Z",
-      "desc": "Velocità di risalita tra il primo e il secondo tocco di homing.",
+      "title": "Z Axis Homing Retract Speed",
+      "desc": "Lift speed between the first and second homing touch.",
       "unit": "mm/s"
     },
     "mcu-conn-type": {
       "param": "connection_type",
-      "title": "Metodo di Collegamento Scheda MCU",
-      "desc": "Indica se la scheda principale comunica con l'host tramite porta seriale USB (/dev/serial/by-id/...) o tramite bus di rete CAN Bus a 2 fili.",
-      "tip": "USB Seriale per schede madri convenzionali, CAN Bus per toolhead/EBB"
+      "title": "MCU Board Connection Method",
+      "desc": "Indicates whether the mainboard communicates with the host via USB serial (/dev/serial/by-id/...) or 2-wire CAN Bus network.",
+      "tip": "USB Serial for conventional mainboards, CAN Bus for toolhead boards (e.g., EBB)"
     },
     "mcu-serial": {
       "param": "serial",
       "title": "MCU Serial Path",
       "desc": "Linux USB serial device path (/dev/serial/by-id/...).",
-      "tip": "Identificabile via terminale con: ls /dev/serial/by-id/*"
+      "tip": "Find via terminal using: ls /dev/serial/by-id/*"
     },
     "mcu-canbus-uuid": {
       "param": "canbus_uuid",
       "title": "CAN Bus UUID",
       "desc": "12-digit hexadecimal unique identifier for CAN board.",
-      "tip": "Rilevabile con il comando: python3 ~/klipper/scripts/canbus_query.py can0"
+      "tip": "Query via terminal using: python3 ~/klipper/scripts/canbus_query.py can0"
     },
     "mcu-baud": {
       "param": "baud",
       "title": "Baud Rate",
       "desc": "Serial baud rate speed (default 250000).",
-      "tip": "Valore standard Klipper: 250000",
-      "unit": "baud"
+      "unit": "baud",
+      "tip": "Klipper standard value: 250000"
     },
     "mcu-restart-method": {
       "param": "restart_method",
-      "title": "Metodo di Reset Hardware MCU",
-      "desc": "Algoritmo usato da Klipper per riavviare la scheda microcontrollore quando si invia il comando FIRMWARE_RESTART.",
-      "tip": "arduino (DTR), cheetah, command (software), rpi_usb (disalimentazione USB)"
+      "title": "MCU Hardware Reset Method",
+      "desc": "Algorithm used by Klipper to reboot the microcontroller board when executing FIRMWARE_RESTART.",
+      "tip": "arduino (DTR), cheetah, command (software), rpi_usb (USB power toggle)"
     },
     "check-enable-host-temp": {
       "param": "[temperature_sensor host]",
-      "title": "Sensore Temperatura Host / Raspberry Pi",
-      "desc": "Abilita il monitoraggio continuo della temperatura della CPU del Raspberry Pi o computer host nella dashboard Mainsail.",
-      "tip": "Crea [temperature_sensor raspberry_pi]"
+      "title": "Host / Raspberry Pi CPU Temperature Sensor",
+      "desc": "Enables continuous CPU temperature monitoring of the Raspberry Pi or host computer in Mainsail dashboard.",
+      "tip": "Creates [temperature_sensor raspberry_pi]"
     },
     "check-enable-mcu-temp": {
       "param": "[temperature_sensor mcu]",
-      "title": "Sensore Temperatura Chip MCU",
-      "desc": "Abilita la lettura del sensore di temperatura interno integrato nel microcontrollore della scheda madre.",
-      "tip": "Crea [temperature_sensor mcu]"
+      "title": "Mainboard MCU Temperature Sensor",
+      "desc": "Enables internal thermal sensor monitoring integrated into the mainboard microcontroller chip.",
+      "tip": "Creates [temperature_sensor mcu]"
     },
     "stepper-step-pin": {
       "param": "step_pin",
       "title": "Step Signal Pin",
       "desc": "Microcontroller pin that pulses step clock cycles to the stepper driver.",
-      "tip": "Es. PA0, PE3, PC1"
+      "tip": "E.g., PA0, PE3, PC1"
     },
     "stepper-dir-pin": {
       "param": "dir_pin",
       "title": "Direction Pin",
       "desc": "Pin setting the motor rotation direction. Prepend ! to invert direction.",
-      "tip": "Es. PA1 oppure !PA1"
+      "tip": "E.g., PA1 or !PA1"
     },
     "check-invert-dir": {
       "param": "! (dir_pin)",
-      "title": "Inverti Direzione Motore",
-      "desc": "Aggiunge il prefisso punto esclamativo ! al dir_pin per invertire istantaneamente il verso di marcia dell'asse.",
-      "tip": "Seleziona se l'asse si allontana dal finecorsa invece di avvicinarsi"
+      "title": "Invert Motor Direction",
+      "desc": "Prepends exclamation mark ! to dir_pin to invert the axis travel direction.",
+      "tip": "Select if the axis moves away from the endstop instead of towards it"
     },
     "stepper-enable-pin": {
       "param": "enable_pin",
       "title": "Enable Pin",
       "desc": "Pin enabling driver power (usually active-low, requiring !).",
-      "tip": "Es. !PA2"
+      "tip": "E.g., !PA2"
     },
     "check-invert-enable": {
       "param": "! (enable_pin)",
-      "title": "Inverti Logica Enable",
-      "desc": "Abilita o disabilita il prefisso ! sul pin di abilitazione (logica invertita).",
-      "tip": "Generalmente attivo (!) per quasi tutti i driver moderni"
+      "title": "Invert Enable Logic",
+      "desc": "Toggles the exclamation mark ! on the driver enable pin (active-low inverted logic).",
+      "tip": "Generally enabled (!) for almost all modern stepper drivers"
     },
     "stepper-microsteps": {
       "param": "microsteps",
@@ -626,196 +626,196 @@
     },
     "stepper-steps-rotation": {
       "param": "full_steps_per_rotation",
-      "title": "Passi Nativi del Motore per Giro Completo",
-      "desc": "Numero di passi fisici completi per una rotazione di 360° dell'albero motore: 200 per motori convenzionali con angolo di 1.8°, 400 per motori ad alta precisione con angolo di 0.9°.",
-      "tip": "1.8° = 200 passi | 0.9° = 400 passi"
+      "title": "Motor Full Steps per Full Rotation",
+      "desc": "Number of physical full steps per 360° motor revolution: 200 for conventional 1.8° step motors, 400 for high-precision 0.9° step motors.",
+      "tip": "1.8° = 200 steps | 0.9° = 400 steps"
     },
     "stepper-rotation-distance": {
       "param": "rotation_distance",
       "title": "Rotation Distance",
       "desc": "Linear distance (in mm) traveled by the axis for one full 360° turn of the stepper motor.",
-      "tip": "GT2 20T: 40.0 | Lead screw T8x8: 8.0",
-      "unit": "mm"
+      "unit": "mm",
+      "tip": "GT2 20T: 40.0 | Lead screw T8x8: 8.0"
     },
     "stepper-endstop-pin": {
       "param": "endstop_pin",
-      "title": "Pin del Finecorsa (Endstop Pin)",
-      "desc": "Pin digitale a cui è collegato lo switch di finecorsa per questo asse. Anteporre ^ se lo switch richiede pull-up interno, oppure tmc2209_stepper_x:virtual_endstop per sensorless.",
-      "tip": "Es. ^PA3 oppure tmc2209_stepper_x:virtual_endstop"
+      "title": "Endstop Pin",
+      "desc": "Digital microcontroller pin connected to the physical endstop switch for this axis. Prepend ^ if internal pull-up is required, or tmc2209_stepper_x:virtual_endstop for sensorless homing.",
+      "tip": "E.g., ^PA3 or tmc2209_stepper_x:virtual_endstop"
     },
     "driver-model-select": {
       "param": "Driver IC",
-      "title": "Modello Chip Driver",
-      "desc": "Seleziona il circuito integrato del driver installato: TMC2209, TMC2208, TMC2240, TMC5160, TMC2130 o Standalone (A4988, DRV8825). Definisce la sezione nel config.",
-      "tip": "TMC2209 è il più comune per rapporto silenziosità/affidabilità"
+      "title": "Driver Chip Model",
+      "desc": "Selects the integrated driver chip: TMC2209, TMC2208, TMC2240, TMC5160, TMC2130, or Standalone (A4988, DRV8825). Defines the configuration section.",
+      "tip": "TMC2209 is the most popular for quiet operation and reliability"
     },
     "driver-conn-type-select": {
       "param": "Bus Protocol",
-      "title": "Tipo di Connessione Driver",
-      "desc": "Metodo con cui il microcontrollore comunica con il chip TMC: UART (filo singolo bidirezionale), SPI (bus seriale ad alta velocità a 4 fili) o Standalone (nessuna configurazione digitale).",
-      "tip": "UART per TMC2209/TMC2208 | SPI per TMC5160/TMC2130"
+      "title": "Driver Connection Type",
+      "desc": "Protocol used by the microcontroller to configure the TMC chip: UART (single-wire bidirectional), SPI (high-speed 4-wire serial bus), or Standalone (hardware pins only).",
+      "tip": "UART for TMC2209/TMC2208 | SPI for TMC5160/TMC2130"
     },
     "driver-uart-pin": {
       "param": "uart_pin",
       "title": "UART Pin",
       "desc": "MCU digital serial pin configuring TMC driver registers.",
-      "tip": "Es. PC11, PD5, etc."
+      "tip": "E.g., PC11, PD5, etc."
     },
     "driver-tx-pin": {
       "param": "tx_pin",
-      "title": "Pin TX UART (Opzionale)",
-      "desc": "Pin di trasmissione dedicato se la scheda madre usa linee separate per invio e ricezione UART verso i driver.",
-      "tip": "Lasciare vuoto se la scheda usa filo singolo UART con resistenza"
+      "title": "UART TX Pin (Optional)",
+      "desc": "Dedicated transmission pin if the motherboard uses separate RX and TX lines for UART communication.",
+      "tip": "Leave empty if the board uses single-wire UART with a resistor"
     },
     "driver-uart-address": {
       "param": "uart_address",
-      "title": "Indirizzo Hardware UART",
-      "desc": "Indirizzo univoco (da 0 a 3) assegnato al driver TMC quando più driver condividono lo stesso identico pin UART (es. schede MKS Robin o BTT E3).",
-      "tip": "Tipicamente 0 per X, 1 per Y, 2 per Z, 3 per E0 su schede a bus condiviso"
+      "title": "Hardware UART Address",
+      "desc": "Unique hardware address (0 to 3) assigned to the TMC driver when multiple drivers share the same physical UART pin.",
+      "tip": "Typically 0 for X, 1 for Y, 2 for Z, 3 for E0 on shared bus boards"
     },
     "driver-cs-pin": {
       "param": "cs_pin",
-      "title": "Pin Chip Select (CS) SPI",
-      "desc": "Pin digitale che attiva la comunicazione con questo specifico driver durante le transazioni sul bus dati SPI.",
-      "tip": "Es. PD11, PB12"
+      "title": "SPI Chip Select (CS) Pin",
+      "desc": "Digital pin that enables communication with this specific driver during SPI transactions.",
+      "tip": "E.g., PD11, PB12"
     },
     "driver-spi-mode": {
       "param": "spi_mode",
-      "title": "Modalità Bus SPI",
-      "desc": "Sceglie se appoggiarsi a un controller SPI hardware integrato nel chip MCU oppure emulare il bus SPI via bit-banging software su pin generici.",
-      "tip": "Hardware SPI per massima velocità e minor carico CPU"
+      "title": "SPI Bus Mode",
+      "desc": "Selects whether to use the microcontroller hardware SPI bus controller or emulate SPI via software bit-banging on arbitrary pins.",
+      "tip": "Hardware SPI offers highest speed and lowest CPU load"
     },
     "driver-spi-bus": {
       "param": "spi_bus",
-      "title": "Nome Bus SPI Hardware",
-      "desc": "Identificativo del controller SPI hardware della scheda madre (es. spi1, spi2, spi3a, spi4).",
-      "tip": "Consultare il pinout ufficiale della propria scheda madre"
+      "title": "Hardware SPI Bus Name",
+      "desc": "Motherboard hardware SPI controller identifier (e.g., spi1, spi2, spi3a, spi4).",
+      "tip": "Refer to your motherboard official pinout documentation"
     },
     "driver-spi-sclk": {
       "param": "spi_software_sclk_pin",
-      "title": "Pin Clock SPI Software",
-      "desc": "Pin digitale adibito al segnale di sincronizzazione di clock (SCK/SCLK) per SPI software.",
-      "tip": "Es. PA5, PB13"
+      "title": "Software SPI Clock Pin",
+      "desc": "Digital microcontroller pin providing clock synchronization (SCK/SCLK) for software SPI.",
+      "tip": "E.g., PA5, PB13"
     },
     "driver-spi-mosi": {
       "param": "spi_software_mosi_pin",
-      "title": "Pin MOSI SPI Software",
-      "desc": "Pin Master Out Slave In per l'invio dei comandi di configurazione al driver.",
-      "tip": "Es. PA7, PB15"
+      "title": "Software SPI MOSI Pin",
+      "desc": "Master Out Slave In pin sending configuration commands from MCU to driver.",
+      "tip": "E.g., PA7, PB15"
     },
     "driver-spi-miso": {
       "param": "spi_software_miso_pin",
-      "title": "Pin MISO SPI Software",
-      "desc": "Pin Master In Slave Out per la lettura dei registri di stato e diagnostica dal driver.",
-      "tip": "Es. PA6, PB14"
+      "title": "Software SPI MISO Pin",
+      "desc": "Master In Slave Out pin reading status and diagnostic registers from driver.",
+      "tip": "E.g., PA6, PB14"
     },
     "driver-run-current": {
       "param": "run_current",
       "title": "Operating Run Current",
       "desc": "RMS current supplied to the stepper motor windings during movement.",
-      "tip": "NEMA17 standard: 0.65 - 0.85A | High-torque: 1.0 - 1.4A",
-      "unit": "A"
+      "unit": "A",
+      "tip": "NEMA17 standard: 0.65 - 0.85A | High-torque: 1.0 - 1.4A"
     },
     "driver-stealthchop": {
       "param": "stealthchop_threshold",
       "title": "StealthChop Mode",
       "desc": "Enables ultra-quiet StealthChop mode. Disable (0) for high-speed SpreadCycle power.",
-      "tip": "Abilitato (999999) per silenzio | Disabilitato (0) per massima coppia e velocità"
+      "tip": "Enabled (999999) for silence | Disabled (0) for maximum torque and speed"
     },
     "check-enable-hold-current": {
       "param": "hold_current (checkbox)",
-      "title": "Abilita Corrente di Mantenimento",
-      "desc": "Permette di ridurre la corrente quando il motore è fermo. Sconsigliato con TMC2209 e sensorless homing poiché la commutazione improvvisa può causare salti di microstep.",
-      "tip": "Spesso lasciata disabilitata per massima stabilità"
+      "title": "Enable Hold Current",
+      "desc": "Allows reducing current when the motor is standstill. Not recommended with TMC2209 and sensorless homing as sudden current switching can cause lost microsteps.",
+      "tip": "Often left disabled for maximum stability"
     },
     "driver-hold-current": {
       "param": "hold_current",
       "title": "Hold Current",
       "desc": "Current supplied when motor is standing still in stationary position.",
-      "tip": "Tipicamente 60-70% della run_current se abilitata",
-      "unit": "A"
+      "unit": "A",
+      "tip": "Typically 60-70% of run_current if enabled"
     },
     "check-enable-sense-resistor": {
       "param": "sense_resistor (checkbox)",
-      "title": "Specifica Resistenza di Sense",
-      "desc": "Permette di impostare manualmente il valore esatto della resistenza shunt di campionamento corrente saldata sul modulo driver.",
-      "tip": "Necessario se diverso dal valore di fabbrica (0.110 ohm)"
+      "title": "Specify Sense Resistor",
+      "desc": "Allows manually setting the exact current sampling shunt resistor value soldered on the driver module.",
+      "tip": "Required if different from factory default (0.110 ohm)"
     },
     "driver-sense-resistor": {
       "param": "sense_resistor",
       "title": "Current Sense Resistor",
       "desc": "Value of the shunt resistor on the driver module to measure current.",
-      "tip": "TMC2209: 0.110 ohm",
-      "unit": "Ω"
+      "unit": "Ω",
+      "tip": "TMC2209: 0.110 ohm"
     },
     "driver-interpolate": {
       "param": "interpolate",
       "title": "256 Microstep Interpolation",
       "desc": "Driver automatically interpolates microsteps to 256 internal microsteps.",
-      "tip": "Consigliato: True per TMC2209/TMC2208"
+      "tip": "Recommended: True for TMC2209/TMC2208"
     },
     "driver-sensorless-enable": {
       "param": "virtual_endstop (Sensorless)",
-      "title": "Homing Senza Finecorsa Fisico (Sensorless)",
-      "desc": "Utilizza la tecnologia StallGuard del chip TMC per rilevare l'impatto meccanico a fine corsa attraverso il monitoraggio della contro-forza elettromotrice (back-EMF).",
-      "tip": "Elimina i cavi e gli interruttori fisici di finecorsa su X e Y"
+      "title": "Sensorless Homing (StallGuard)",
+      "desc": "Uses TMC StallGuard back-EMF monitoring to detect mechanical stall without physical limit switches.",
+      "tip": "Eliminates physical endstop switches and wiring on X and Y"
     },
     "driver-diag-pin": {
       "param": "diag_pin",
       "title": "StallGuard Diag Pin",
       "desc": "Pin signaling mechanical stall for sensorless homing.",
-      "tip": "Richiede spesso il pull-up interno (^)"
+      "tip": "Often requires internal pull-up (^)"
     },
     "driver-sgthrs": {
       "param": "driver_SGTHRS / driver_SGT",
       "title": "StallGuard Sensitivity",
       "desc": "Collision sensitivity for sensorless homing. TMC2209: 0 to 255 (typical 60 - 120).",
-      "tip": "TMC2209: iniziare da 100 e regolare a passi di 5 (tipico: 60 - 120)"
+      "tip": "TMC2209: start at 100 and tune in steps of 5 (typical: 60 - 120)"
     },
     "extruder-step-pin": {
       "param": "step_pin",
       "title": "Step Signal Pin",
       "desc": "Microcontroller pin that pulses step clock cycles to the stepper driver.",
-      "tip": "Es. PB4, PD6"
+      "tip": "E.g., PB4, PD6"
     },
     "extruder-dir-pin": {
       "param": "dir_pin",
       "title": "Direction Pin",
       "desc": "Pin setting the motor rotation direction. Prepend ! to invert direction.",
-      "tip": "Es. PB3 o !PB3"
+      "tip": "E.g., PB3 or !PB3"
     },
     "extruder-enable-pin": {
       "param": "enable_pin",
       "title": "Enable Pin",
       "desc": "Pin enabling driver power (usually active-low, requiring !).",
-      "tip": "Es. !PB5"
+      "tip": "E.g., !PB5"
     },
     "extruder-rot-dist": {
       "param": "rotation_distance",
       "title": "Rotation Distance",
-      "desc": "Linear distance (in mm) traveled by the axis for one full 360° turn of the stepper motor.",
-      "tip": "GT2 20T: 40.0 | Lead screw T8x8: 8.0",
-      "unit": "mm"
+      "desc": "Linear distance (in mm) traveled by the filament for one full 360° turn of the extruder motor.",
+      "unit": "mm",
+      "tip": "Calibrate with 100mm extrusion test"
     },
     "extruder-gear-ratio": {
       "param": "gear_ratio",
-      "title": "Rapporto di Riduzione Ingranaggi",
-      "desc": "Rapporto di trasmissione meccanico tra pignone motore e ingranaggi di trascinamento dell'estrusore.",
-      "tip": "BMG: 50:17 | Clockwork 1/2: 50:10 | Orbiter 2.0: 7.5:1 | Azionamento diretto: lascia vuoto"
+      "title": "Gear Reduction Ratio",
+      "desc": "Mechanical transmission ratio between motor pinion and extruder drive gears.",
+      "tip": "BMG: 50:17 | Clockwork 1/2: 50:10 | Orbiter 2.0: 7.5:1 | Direct drive: leave empty"
     },
     "extruder-nozzle-dia": {
       "param": "nozzle_diameter",
       "title": "Nozzle Orifice Diameter",
       "desc": "Hole diameter of the installed nozzle on the hotend.",
-      "tip": "Standard: 0.40 mm",
-      "unit": "mm"
+      "unit": "mm",
+      "tip": "Standard: 0.40 mm"
     },
     "extruder-filament-dia": {
       "param": "filament_diameter",
       "title": "Filament Diameter",
       "desc": "Nominal diameter of the thermoplastic filament (1.75 mm or 2.85 mm).",
-      "tip": "Standard: 1.75 mm (o 2.85 mm per sistemi speciali)",
-      "unit": "mm"
+      "unit": "mm",
+      "tip": "Standard: 1.75 mm (or 2.85 mm for special systems)"
     },
     "extruder-pressure-advance": {
       "param": "pressure_advance",
@@ -827,121 +827,121 @@
       "param": "sensor_type",
       "title": "Temperature Sensor Model",
       "desc": "Exact model of thermistor, thermocouple or RTD probe.",
-      "tip": "Impostare il modello corretto per evitare scarti di temperatura pericolosi"
+      "tip": "Set the exact model to prevent dangerous temperature measurement errors"
     },
     "extruder-heater-pin": {
       "param": "heater_pin",
       "title": "Heater Cartridge Pin",
       "desc": "MCU MOSFET pin driving heater PWM power.",
-      "tip": "Es. PA2, PB10"
+      "tip": "E.g., PA2, PB10"
     },
     "extruder-sensor-pin": {
       "param": "sensor_pin",
       "title": "Sensor ADC Pin",
       "desc": "Microcontroller analog ADC pin reading temperature.",
-      "tip": "Es. PC4, PA1"
+      "tip": "E.g., PC4, PA1"
     },
     "extruder-min-temp": {
       "param": "min_temp",
       "title": "Thermal Safety Minimum",
       "desc": "Minimum allowed temperature (°C). Triggers shutdown if disconnected.",
-      "tip": "Tipicamente 0°C o -10°C",
-      "unit": "°C"
+      "unit": "°C",
+      "tip": "Typically 0°C or -10°C"
     },
     "extruder-max-temp": {
       "param": "max_temp",
       "title": "Thermal Safety Maximum",
       "desc": "Maximum allowed temperature before emergency thermal shutdown.",
-      "tip": "Gola in PTFE: max 250°C | All-Metal: 280 - 300°C | Hotend per tecnopolimeri: 350 - 500°C",
-      "unit": "°C"
+      "unit": "°C",
+      "tip": "PTFE lined: max 250°C | All-Metal: 280 - 300°C | High-temp hotend: 350 - 500°C"
     },
     "extruder-min-extrude": {
       "param": "min_extrude_temp",
       "title": "Minimum Extrude Temperature",
       "desc": "Safety threshold preventing cold extrusion commands.",
-      "tip": "Standard: 170°C",
-      "unit": "°C"
+      "unit": "°C",
+      "tip": "Standard: 170°C"
     },
     "extruder-control-type": {
       "param": "control",
       "title": "Thermal Control Algorithm",
       "desc": "PID (Proportional Integral Derivative) or Watermark hysteresis.",
-      "tip": "Usa sempre PID per l'hotend per stabilità termica millimetrica"
+      "tip": "Always use PID for the hotend for millimeter-precise thermal stability"
     },
     "extruder-pid-kp": {
       "param": "pid_Kp",
       "title": "PID Proportional Gain",
       "desc": "Calibrated using PID_CALIBRATE command.",
-      "tip": "Calcolato tramite autotune PID"
+      "tip": "Calculated via PID autotune"
     },
     "extruder-pid-ki": {
       "param": "pid_Ki",
       "title": "PID Integral Gain",
       "desc": "Corrects accumulated thermal drift.",
-      "tip": "Calcolato tramite autotune PID"
+      "tip": "Calculated via PID autotune"
     },
     "extruder-pid-kd": {
       "param": "pid_Kd",
       "title": "PID Derivative Gain",
       "desc": "Damps rapid temperature fluctuations.",
-      "tip": "Calcolato tramite autotune PID"
+      "tip": "Calculated via PID autotune"
     },
     "extruder-max-delta": {
       "param": "max_delta",
-      "title": "Tolleranza Isteresi Watermark",
-      "desc": "Finestra di isteresi termica ammessa attorno al target quando si impiega l'algoritmo watermark.",
+      "title": "Watermark Hysteresis Tolerance",
+      "desc": "Allowed thermal temperature window around the target setpoint when using the watermark algorithm.",
       "unit": "°C"
     },
     "extruder-rtd-nominal-r": {
       "param": "rtd_nominal_r",
-      "title": "Resistenza Nominale Sonda RTD a 0°C",
-      "desc": "Resistenza elettrica della sonda termoresistiva al platino a zero gradi Celsius: 100 per sonde PT100, 1000 per sonde PT1000.",
-      "tip": "PT100: 100 | PT1000: 1000",
-      "unit": "Ω"
+      "title": "Nominal RTD Probe Resistance at 0°C",
+      "desc": "Electrical resistance of platinum resistance temperature detector at 0°C: 100 for PT100 sensors, 1000 for PT1000 sensors.",
+      "unit": "Ω",
+      "tip": "PT100: 100 | PT1000: 1000"
     },
     "extruder-rtd-reference-r": {
       "param": "rtd_reference_r",
-      "title": "Resistenza di Riferimento Modulo RTD",
-      "desc": "Valore della resistenza campione saldata sul circuito integrato MAX31865 (solitamente 430 ohm per PT100, 4300 ohm per PT1000).",
-      "tip": "Modulo per PT100: 430 | Modulo per PT1000: 4300",
-      "unit": "Ω"
+      "title": "RTD Module Reference Resistance",
+      "desc": "Reference resistor value soldered on the MAX31865 board (typically 430 ohm for PT100, 4300 ohm for PT1000).",
+      "unit": "Ω",
+      "tip": "PT100 module: 430 | PT1000 module: 4300"
     },
     "extruder-rtd-num-wires": {
       "param": "rtd_num_of_wires",
-      "title": "Numero di Conduttori Sonda RTD",
-      "desc": "Configurazione fisica del cablaggio della termoresistenza (2, 3 o 4 fili). Le configurazioni a 3 o 4 fili compensano la resistenza interna dei cavi per massima accuratezza.",
-      "tip": "2 fili (economico), 4 fili (massima precisione industriale)"
+      "title": "RTD Probe Wire Count",
+      "desc": "Physical wiring connection of the RTD probe (2, 3, or 4 wires). 3 and 4 wire configurations cancel cable lead resistance for maximum precision.",
+      "tip": "2 wires (economical), 4 wires (maximum industrial accuracy)"
     },
     "extruder-rtd-filter": {
       "param": "rtd_use_50Hz_filter",
-      "title": "Filtro Antidisturbo Rete Elettrica",
-      "desc": "Seleziona il filtro notch a 50Hz (standard europeo/italiano a 230V) o 60Hz per abbattere i disturbi indotti dalla rete elettrica sulle letture della sonda.",
-      "tip": "Usa 50Hz in Italia ed Europa"
+      "title": "Mains AC Noise Filter",
+      "desc": "Selects 50Hz (Europe/230V standard) or 60Hz (USA/120V) notch filter to suppress electrical noise on sensor readings.",
+      "tip": "50Hz for Europe, 60Hz for Americas"
     },
     "bed-sensor-type": {
       "param": "sensor_type",
       "title": "Temperature Sensor Model",
       "desc": "Exact model of thermistor, thermocouple or RTD probe.",
-      "tip": "Tipicamente Generic 3950 o EPCOS 100K B57560G104F"
+      "tip": "Typically Generic 3950 or EPCOS 100K B57560G104F"
     },
     "bed-heater-pin": {
       "param": "heater_pin",
       "title": "Heater Cartridge Pin",
       "desc": "MCU MOSFET pin driving heater PWM power.",
-      "tip": "Es. PA1, PC9"
+      "tip": "E.g., PA1, PC9"
     },
     "bed-sensor-pin": {
       "param": "sensor_pin",
       "title": "Sensor ADC Pin",
       "desc": "Microcontroller analog ADC pin reading temperature.",
-      "tip": "Es. PC3, PA0"
+      "tip": "E.g., PC3, PA0"
     },
     "bed-min-temp": {
       "param": "min_temp",
       "title": "Thermal Safety Minimum",
       "desc": "Minimum allowed temperature (°C). Triggers shutdown if disconnected.",
-      "tip": "Tipicamente 0°C",
-      "unit": "°C"
+      "unit": "°C",
+      "tip": "Typically 0°C"
     },
     "bed-max-temp": {
       "param": "max_temp",
@@ -953,320 +953,354 @@
       "param": "control",
       "title": "Thermal Control Algorithm",
       "desc": "PID (Proportional Integral Derivative) or Watermark hysteresis.",
-      "tip": "Piatto 24V DC: pid | Piatto 230V AC con SSR: watermark o pid"
+      "tip": "24V DC bed: pid | 230V AC bed with SSR: watermark or pid"
     },
     "bed-pid-kp": {
       "param": "pid_Kp",
       "title": "PID Proportional Gain",
-      "desc": "Calibrated using PID_CALIBRATE command."
+      "desc": "Calibrated using PID_CALIBRATE command.",
+      "tip": "Calculated via PID autotune"
     },
     "bed-pid-ki": {
       "param": "pid_Ki",
       "title": "PID Integral Gain",
-      "desc": "Corrects accumulated thermal drift."
+      "desc": "Corrects accumulated thermal drift.",
+      "tip": "Calculated via PID autotune"
     },
     "bed-pid-kd": {
       "param": "pid_Kd",
       "title": "PID Derivative Gain",
-      "desc": "Damps rapid temperature fluctuations."
+      "desc": "Damps rapid temperature fluctuations.",
+      "tip": "Calculated via PID autotune"
     },
     "bed-max-delta": {
       "param": "max_delta",
-      "title": "Tolleranza Isteresi Watermark Piatto",
-      "desc": "Scarto ammesso attorno alla temperatura impostata con algoritmo watermark (es. 1.0 - 2.0°C).",
+      "title": "Bed Watermark Hysteresis Tolerance",
+      "desc": "Allowed temperature variation around target setpoint with watermark control (e.g. 1.0 - 2.0°C).",
       "unit": "°C"
     },
     "probe-type-select": {
       "param": "Probe Type",
-      "title": "Tipologia Sonda di Livellamento",
-      "desc": "Tipo di sensore impiegato per mappare la planarità del piatto: BLTouch / 3DTouch, microswitch meccanico (Klicky/Voron Tap), sensore induttivo (Omron/SuperPinda), Beacon o sonda a correnti parassite BTT Eddy.",
-      "tip": "Imposta la sezione corretta ([probe], [bltouch], ecc.)"
+      "title": "Bed Leveling Probe Type",
+      "desc": "Type of bed sensor installed: BLTouch / 3DTouch, mechanical microswitch (Klicky / Voron Tap), inductive probe (Omron / SuperPinda), Beacon, or BTT Eddy eddy-current probe.",
+      "tip": "Configures the appropriate section ([probe], [bltouch], etc.)"
     },
     "probe-sensor-pin": {
       "param": "sensor_pin",
-      "title": "Sensor ADC Pin",
-      "desc": "Microcontroller analog ADC pin reading temperature.",
-      "tip": "Es. ^PC14, ^PA0"
+      "title": "Probe Sensor Pin",
+      "desc": "Microcontroller digital input pin connected to the probe trigger signal.",
+      "tip": "E.g., ^PC14, ^PA0"
     },
     "probe-control-pin": {
       "param": "control_pin",
-      "title": "Pin di Controllo Servocomando (BLTouch)",
-      "desc": "Pin PWM che comanda l'estrazione e la ritrazione dello spillo per sensori BLTouch e cloni.",
-      "tip": "Es. PA8, PB0"
+      "title": "Servo Control Pin (BLTouch)",
+      "desc": "PWM pin controlling pin deployment and retraction for BLTouch and clone sensors.",
+      "tip": "E.g., PA8, PB0"
     },
     "probe-x-offset": {
       "param": "x_offset",
-      "title": "Distanza X Sonda-Ugello",
-      "desc": "Distanza orizzontale in millimetri tra l'ugello e il punto di contatto della sonda lungo l'asse X. Positiva se la sonda è a destra dell'ugello, negativa se è a sinistra.",
-      "tip": "0.0 se la sonda è coassiale all'ugello (es. Voron Tap o Eddy su ugello)",
-      "unit": "mm"
+      "title": "Probe-to-Nozzle X Offset",
+      "desc": "Horizontal distance in millimeters from nozzle to probe trigger point along X axis. Positive if probe is to the right of nozzle, negative if to the left.",
+      "unit": "mm",
+      "tip": "0.0 if probe is coaxial with nozzle (e.g. Voron Tap)"
     },
     "probe-y-offset": {
       "param": "y_offset",
-      "title": "Distanza Y Sonda-Ugello",
-      "desc": "Distanza orizzontale in millimetri tra l'ugello e la sonda lungo l'asse Y. Positiva se la sonda è dietro l'ugello, negativa se è davanti.",
+      "title": "Probe-to-Nozzle Y Offset",
+      "desc": "Horizontal distance in millimeters from nozzle to probe along Y axis. Positive if probe is behind the nozzle, negative if in front.",
       "unit": "mm"
     },
     "probe-z-offset": {
       "param": "z_offset",
       "title": "Probe Z-Offset",
       "desc": "Vertical distance between nozzle tip and probe trigger point.",
-      "tip": "Maggiore è il valore, più l'ugello scende vicino al piatto",
-      "unit": "mm"
+      "unit": "mm",
+      "tip": "A larger positive value brings the nozzle closer to the print bed"
     },
     "probe-samples": {
       "param": "samples",
-      "title": "Campionamenti per Singolo Punto",
-      "desc": "Numero di letture consecutive effettuate per ogni punto della griglia per eliminare rumore e letture anomale.",
-      "tip": "Consigliato: 2 o 3 letture per punto"
+      "title": "Samples per Point",
+      "desc": "Number of consecutive probe readings taken at each grid point to eliminate noise and spurious readings.",
+      "tip": "Recommended: 2 or 3 samples per point"
     },
     "probe-samples-result": {
       "param": "samples_result",
-      "title": "Metodo di Aggregazione Campioni",
-      "desc": "Come combinare i campioni rilevati sullo stesso punto: median (valore mediano, più robusto contro anomalie) o average (media aritmetica).",
-      "tip": "Consigliato: median"
+      "title": "Sample Aggregation Method",
+      "desc": "How multiple readings on the same point are combined: median (median value, most robust against outliers) or average (arithmetic mean).",
+      "tip": "Recommended: median"
     },
     "check-enable-safe-z": {
       "param": "[safe_z_home]",
-      "title": "Abilita Safe Z Home",
-      "desc": "Esegue l'azzeramento dell'asse Z al centro del piatto anziché agli angoli, prevenendo impatti se si usa una sonda montata sulla testina.",
-      "tip": "Obbligatorio quando si usa una sonda (BLTouch/Tap) come endstop Z"
+      "title": "Enable Safe Z Home",
+      "desc": "Homes Z axis at bed center instead of corner limit switches, preventing nozzle crashes when using toolhead-mounted probes.",
+      "tip": "Mandatory when using a probe (BLTouch/Tap) as Z endstop"
     },
     "safe-z-pos": {
       "param": "home_xy_position",
-      "title": "Coordinate Centro Homing Z",
-      "desc": "Coordinate X, Y a cui spostare la testina prima di far scendere la sonda per l'homing Z (tipicamente il centro del piatto).",
-      "tip": "Es. 150, 150 per piatto 300x300"
+      "title": "Safe Z Homing Coordinates",
+      "desc": "X, Y coordinates where the toolhead moves before probing for Z homing (typically bed center).",
+      "tip": "E.g., 150, 150 for a 300x300 bed"
     },
     "safe-z-hop": {
       "param": "z_hop",
-      "title": "Altezza di Sicurezza Z-Hop",
-      "desc": "Distanza di sollevamento preventivo dell'asse Z prima e dopo l'homing per evitare di strisciare l'ugello o la sonda sul piatto.",
-      "tip": "Consigliato: 5 - 10 mm",
-      "unit": "mm"
+      "title": "Safe Z-Hop Lift Clearance",
+      "desc": "Vertical clearance distance to lift Z before and after homing to prevent scratching bed surface.",
+      "unit": "mm",
+      "tip": "Recommended: 5 - 10 mm"
     },
     "safe-z-speed": {
       "param": "speed",
-      "title": "Velocità di Spostamento Safe Z",
-      "desc": "Velocità di traslazione della testina verso le coordinate di homing Z sicuro.",
-      "tip": "Consigliato: 50 - 100 mm/s",
-      "unit": "mm/s"
+      "title": "Safe Z Travel Speed",
+      "desc": "Toolhead travel speed when moving to safe Z homing coordinates.",
+      "unit": "mm/s",
+      "tip": "Recommended: 50 - 100 mm/s"
     },
     "mesh-min": {
       "param": "mesh_min",
       "title": "Bed Mesh Minimum",
       "desc": "Minimum X,Y probe coordinates for heightmap leveling.",
-      "tip": "Es. 25, 25"
+      "tip": "E.g., 25, 25"
     },
     "mesh-max": {
       "param": "mesh_max",
       "title": "Bed Mesh Maximum",
       "desc": "Maximum X,Y probe coordinates for heightmap leveling.",
-      "tip": "Es. 275, 275"
+      "tip": "E.g., 275, 275"
     },
     "mesh-probe-count": {
       "param": "probe_count",
       "title": "Mesh Grid Resolution",
       "desc": "Number of sample points along X and Y (e.g. 5,5 or 7,7).",
-      "tip": "Es. 5,5 (25 punti) o 7,7 (49 punti per piatti ampi)"
+      "tip": "E.g., 5,5 (25 points) or 7,7 (49 points for large beds)"
     },
     "mesh-algorithm": {
       "param": "algorithm",
-      "title": "Algoritmo di Interpolazione Mesh",
-      "desc": "Algoritmo matematico per calcolare le quote tra i punti tastati: bicubic (consigliato per griglie dense 5x5 o superiori) o lagrange (solo per griglie piccole 3x3).",
-      "tip": "Consigliato: bicubic"
+      "title": "Mesh Interpolation Algorithm",
+      "desc": "Mathematical algorithm used to calculate height between sampled points: bicubic (recommended for dense 5x5+ grids) or lagrange (only for small 3x3 grids).",
+      "tip": "Recommended: bicubic"
     },
     "z-tilt-positions": {
       "param": "z_positions",
-      "title": "Punti Pivot Motori Z (z_positions)",
-      "desc": "Coordinate fisiche (X, Y) dei fulcri o viti dei motori Z indipendenti per allineare il piatto con Z_TILT_ADJUST.",
-      "tip": "Una coppia X, Y per ogni motore Z"
+      "title": "Z Motor Pivot Locations (z_positions)",
+      "desc": "Physical (X, Y) pivot or leadscrew coordinates of independent Z motors used by Z_TILT_ADJUST.",
+      "tip": "One pair of X, Y coordinates per Z motor"
     },
     "z-tilt-points": {
       "param": "points",
-      "title": "Punti di Tastatura Z-Tilt",
-      "desc": "Coordinate sul piatto dove la sonda misurerà l'inclinazione per calcolare i passi correttivi di ciascun motore Z."
+      "title": "Z-Tilt Probe Points",
+      "desc": "Coordinates on the bed where the probe measures tilt to compute corrective leveling steps.",
+      "tip": "Sample points on bed corresponding to Z motor positions"
     },
     "z-tilt-retries": {
       "param": "retries",
-      "title": "Tentativi Massimi Z-Tilt",
-      "desc": "Numero massimo di cicli di misurazione consentiti per raggiungere la planarità desiderata.",
-      "tip": "Tipicamente 5 - 10 tentativi"
+      "title": "Maximum Z-Tilt Retries",
+      "desc": "Maximum number of measurement and adjustment cycles permitted to achieve target leveling tolerance.",
+      "tip": "Typically 5 - 10 retries"
     },
     "z-tilt-tolerance": {
       "param": "retry_tolerance",
-      "title": "Tolleranza Livellamento Z-Tilt",
-      "desc": "Scarto massimo tollerato tra i punti Z (in mm) per considerare il piatto perfettamente livellato.",
-      "tip": "Consigliato: 0.0075 - 0.02 mm",
-      "unit": "mm"
+      "title": "Z-Tilt Leveling Tolerance",
+      "desc": "Maximum allowable height difference across probe points before considering bed leveled.",
+      "unit": "mm",
+      "tip": "Recommended: 0.0075 - 0.02 mm"
     },
     "qgl-corners": {
       "param": "gantry_corners",
-      "title": "Coordinate Angoli Gantry (Voron QGL)",
-      "desc": "Coordinate fisiche dei 4 angoli del carrello sospeso su stampanti tipo Voron 2.4 con Quad Gantry Level."
+      "title": "Gantry Outer Corners (Voron QGL)",
+      "desc": "Physical X, Y coordinates of the 4 outer gantry corners on Voron 2.4 style Quad Gantry Level printers.",
+      "tip": "Consult printer mechanical cad or documentation"
     },
     "qgl-points": {
       "param": "points",
-      "title": "4 Punti di Tastatura QGL",
-      "desc": "Coordinate dei 4 punti da sondare sul piatto per calcolare la correzione indipendente dei 4 motori Z."
+      "title": "4 QGL Probe Points",
+      "desc": "Bed probe coordinates sampled to compute independent 4-motor gantry leveling.",
+      "tip": "4 corners of bed accessible by probe"
     },
     "qgl-retries": {
       "param": "retries",
-      "title": "Tentativi Massimi QGL",
-      "desc": "Numero massimo di cicli prima di considerare fallito il livellamento a 4 motori.",
-      "tip": "Tipicamente 5 - 10"
+      "title": "Maximum QGL Retries",
+      "desc": "Maximum probe cycles before failing Quad Gantry Level.",
+      "tip": "Typically 5 - 10"
     },
     "qgl-tolerance": {
       "param": "retry_tolerance",
-      "title": "Tolleranza Quad Gantry Level",
-      "desc": "Differenza massima accettabile tra i 4 angoli per completare la procedura.",
-      "tip": "Consigliato: 0.0075 - 0.01 mm",
-      "unit": "mm"
+      "title": "Quad Gantry Level Tolerance",
+      "desc": "Maximum allowable height variance among the 4 gantry corners.",
+      "unit": "mm",
+      "tip": "Recommended: 0.0075 - 0.01 mm"
     },
     "fan-part-pin": {
       "param": "pin ([fan])",
-      "title": "Pin Ventola Raffreddamento Pezzo",
-      "desc": "Pin PWM collegato alla ventola del layer che raffredda il filamento estruso sul pezzo, comandabile via G-Code M106.",
-      "tip": "Es. PA8, PC6"
+      "title": "Part Cooling Fan Pin",
+      "desc": "PWM pin connected to the print cooling fan directed at the extruded layer, controllable via G-Code M106.",
+      "tip": "E.g., PA8, PC6"
     },
     "fan-part-kick": {
       "param": "kick_start_time",
-      "title": "Tempo Spunto Iniziale Ventola",
-      "desc": "Durata dell'impulso al 100% di potenza (in secondi) erogato all'avvio per vincere l'inerzia iniziale delle ventole.",
-      "tip": "Consigliato: 0.100 - 0.500 s",
-      "unit": "s"
+      "title": "Fan Kick Start Time",
+      "desc": "Duration of initial 100% duty-cycle pulse (in seconds) to overcome fan rotor inertia upon start.",
+      "unit": "s",
+      "tip": "Recommended: 0.100 - 0.500 s"
     },
     "fan-part-off-below": {
       "param": "off_below",
-      "title": "Soglia Minima Spegnimento Ventola",
-      "desc": "Velocità minima al di sotto della quale la ventola non riceve alimentazione per evitare ronzii senza rotazione.",
-      "tip": "Tipicamente 0.10 (10%)"
+      "title": "Fan Minimum Off Below Threshold",
+      "desc": "Minimum duty cycle below which power is cut to avoid fan motor humming without spinning.",
+      "tip": "Typically 0.10 (10%)"
     },
     "check-enable-shaper": {
       "param": "[input_shaper]",
-      "title": "Abilitazione Filtro Input Shaper",
-      "desc": "Attiva la compensazione attiva delle vibrazioni e risonanze meccaniche, eliminando l'effetto eco (ghosting/ringing) sulle superfici verticali ad alte velocità.",
-      "tip": "Migliora drasticamente la finitura superficiale"
+      "title": "Enable Input Shaper Filter",
+      "desc": "Activates resonance frequency damping to eliminate ghosting and ringing artifacts on printed perimeters at high speeds.",
+      "tip": "Dramatically improves surface finish"
     },
     "shaper-freq-x": {
       "param": "shaper_freq_x",
       "title": "X Resonance Frequency",
       "desc": "Natural vibration resonance frequency of X axis in Hz.",
-      "tip": "Tipicamente tra 35 e 85 Hz",
-      "unit": "Hz"
+      "unit": "Hz",
+      "tip": "Typically between 35 and 85 Hz"
     },
     "shaper-type-x": {
       "param": "shaper_type_x",
       "title": "X Shaper Filter Type",
       "desc": "Vibration damping algorithm (e.g. MZV, EI, ZV).",
-      "tip": "MZV ed EI sono tra i più diffusi ed equilibrati"
+      "tip": "MZV and EI are among the most balanced shaper types"
     },
     "shaper-freq-y": {
       "param": "shaper_freq_y",
       "title": "Y Resonance Frequency",
       "desc": "Natural vibration resonance frequency of Y axis in Hz.",
-      "unit": "Hz"
+      "unit": "Hz",
+      "tip": "Typically between 35 and 85 Hz"
     },
     "shaper-type-y": {
       "param": "shaper_type_y",
       "title": "Y Shaper Filter Type",
       "desc": "Vibration damping algorithm for Y axis.",
-      "tip": "MZV o EI consigliati"
+      "tip": "MZV or EI recommended"
     },
     "check-enable-adxl": {
       "param": "[adxl345]",
-      "title": "Abilitazione Accelerometro ADXL345",
-      "desc": "Configura il chip accelerometro digitale SPI per la misurazione automatica in tempo reale delle risonanze meccaniche con il comando TEST_RESONANCES.",
-      "tip": "Collegabile a scheda host, toolhead board o Raspberry Pi"
+      "title": "Enable ADXL345 Accelerometer",
+      "desc": "Configures digital SPI accelerometer for automated real-time mechanical resonance calibration with TEST_RESONANCES command.",
+      "tip": "Connects to host board, toolhead CAN board, or Raspberry Pi GPIO"
     },
     "adxl-cs-pin": {
       "param": "cs_pin",
-      "title": "Pin Chip Select ADXL345",
-      "desc": "Pin digitale per selezionare l'accelerometro sul bus SPI.",
-      "tip": "Es. rpi:None o gpio pin su toolhead"
+      "title": "ADXL345 Chip Select (CS) Pin",
+      "desc": "Digital pin selecting the accelerometer chip on SPI bus.",
+      "tip": "E.g., rpi:None or gpio pin on toolhead board"
     },
     "adxl-spi-bus": {
       "param": "spi_bus",
-      "title": "Bus SPI Accelerometro",
-      "desc": "Nome del bus SPI hardware utilizzato per leggere i dati dall'accelerometro (es. spidev0.0, spi1)."
+      "title": "Accelerometer SPI Bus",
+      "desc": "Hardware SPI bus identifier used to communicate with the accelerometer (e.g. spidev0.0, spi1).",
+      "tip": "E.g., spidev0.0"
     },
     "adxl-axes-map": {
       "param": "axes_map",
-      "title": "Orientamento Assi Accelerometro",
-      "desc": "Mappatura degli assi fisici del chip rispetto agli assi di movimento della stampante.",
-      "tip": "Default: x,y,z (invertibile es. -x,z,y se montato verticalmente)"
+      "title": "Accelerometer Axes Orientation",
+      "desc": "Mapping of accelerometer physical chip axes relative to printer movement axes.",
+      "tip": "Default: x,y,z (invertible e.g. -x,z,y when mounted vertically)"
     },
     "adxl-rate": {
       "param": "rate",
-      "title": "Campionamento ADXL345",
-      "desc": "Frequenza di acquisizione dati dell'accelerometro (da 1600 Hz a 3200 Hz).",
-      "tip": "Valore standard Klipper: 3200",
-      "unit": "Hz"
+      "title": "ADXL345 Sampling Rate",
+      "desc": "Data acquisition sampling rate of the accelerometer (from 1600 Hz to 3200 Hz).",
+      "unit": "Hz",
+      "tip": "Klipper standard value: 3200"
     },
     "res-accel-chip": {
       "param": "accel_chip",
-      "title": "Chip Accelerometro di Riferimento",
-      "desc": "Nome della sezione accelerometro usata dal resonance tester (es. adxl345)."
+      "title": "Reference Accelerometer Chip Name",
+      "desc": "Name of the accelerometer section utilized by the resonance tester (e.g., adxl345).",
+      "tip": "Matches the name defined in [adxl345]"
     },
     "res-probe-points": {
       "param": "probe_points",
-      "title": "Coordinate Test di Risonanza",
-      "desc": "Coordinate X, Y, Z dove posizionare la testina durante la vibrazione di test.",
-      "tip": "Es. 150, 150, 20 (centro del piatto)"
+      "title": "Resonance Test Coordinates",
+      "desc": "X, Y, Z coordinates where the toolhead remains positioned during the resonance frequency sweep.",
+      "tip": "E.g., 150, 150, 20 (bed center)"
     },
     "res-accel-per-hz": {
       "param": "accel_per_hz",
-      "title": "Accelerazione per Hertz",
-      "desc": "Fattore di accelerazione applicato per ciascun Hz durante lo sweep delle frequenze.",
-      "tip": "Default standard Klipper: 75"
+      "title": "Acceleration per Hertz",
+      "desc": "Acceleration factor applied for each Hz during resonance frequency sweep.",
+      "tip": "Klipper standard default: 75"
     },
     "res-max-smoothing": {
       "param": "max_smoothing",
-      "title": "Livellamento Massimo Tollerato",
-      "desc": "Massimo fattore di smoothing accettabile durante il calcolo automatico dello shaper ottimale."
+      "title": "Maximum Allowable Smoothing",
+      "desc": "Maximum permissible smoothing score when automatically calculating the optimal input shaper.",
+      "tip": "Typically left unset or 0.10"
     },
     "input-moonraker-url": {
       "param": "Moonraker Base URL",
-      "title": "Indirizzo Istanza Moonraker",
-      "desc": "Indirizzo IP o hostname con porta del server Moonraker che controlla Klipper (es. http://192.168.1.50:7125). Lasciare vuoto per autorilevamento sulla stessa macchina.",
-      "tip": "Default: origine corrente (stesso host di Mainsail)"
+      "title": "Moonraker Instance Address",
+      "desc": "IP address or hostname with port of the Moonraker server controlling Klipper (e.g. http://192.168.1.50:7125). Leave empty for automatic origin detection.",
+      "tip": "Default: current browser origin (same host as Mainsail)"
     },
     "check-force-light-mode": {
       "param": "UI Theme Mode",
-      "title": "Forza Modalità Chiara",
-      "desc": "Forza l'interfaccia grafica in tema chiaro invece di sincronizzare il tema scuro da Mainsail.",
-      "tip": "Consigliato non attivo per abbinamento perfetto a Mainsail"
+      "title": "Force Light Theme Mode",
+      "desc": "Forces light theme mode instead of synchronizing dark theme from Mainsail.",
+      "tip": "Recommended off for seamless Mainsail theme match"
     },
     "check-virtual-sd": {
       "param": "[virtual_sdcard]",
-      "title": "Abilitazione Virtual SD Card",
-      "desc": "Permette a Klipper di eseguire direttamente i file G-Code caricati su Moonraker o Mainsail nel disco locale.",
-      "tip": "Indispensabile per il funzionamento di Mainsail e Moonraker"
+      "title": "Enable Virtual SD Card",
+      "desc": "Enables Klipper to print G-Code files stored in local Moonraker/Mainsail storage directly.",
+      "tip": "Essential for Mainsail and Moonraker operation"
     },
     "check-pause-resume": {
       "param": "[pause_resume]",
-      "title": "Abilitazione Pausa e Ripresa",
-      "desc": "Abilita il supporto ai comandi PAUSE e RESUME nativi di Klipper, necessari per cambi filamento e pause di emergenza.",
-      "tip": "Raccomandato attivo in ogni stampante"
+      "title": "Enable Pause and Resume",
+      "desc": "Enables native Klipper PAUSE and RESUME commands, required for filament changes and emergency pauses.",
+      "tip": "Recommended active on every 3D printer"
     },
     "check-display-status": {
       "param": "[display_status]",
-      "title": "Stato di Avanzamento Stampa",
-      "desc": "Fornisce lo stato di avanzamento percentuale e messaggi di stato alla web interface e agli schermi.",
-      "tip": "Raccomandato attivo"
+      "title": "Print Progress & Status Display",
+      "desc": "Provides print progress percentage and status messages to web interfaces and LCD screens.",
+      "tip": "Recommended active"
     },
     "check-respond": {
       "param": "[respond]",
-      "title": "Comando Risposta Console (M118)",
-      "desc": "Permette ai comandi M118 e RESPOND di scrivere messaggi informativi nella console interattiva di Mainsail.",
-      "tip": "Utile per script e macro avanzate"
+      "title": "Console Response Commands (M118 / RESPOND)",
+      "desc": "Enables M118 and RESPOND G-Code commands to output feedback messages to Mainsail console.",
+      "tip": "Useful for custom scripts and print macros"
     },
     "idle-timeout": {
       "param": "timeout ([idle_timeout])",
-      "title": "Tempo di Timeout Inattività",
-      "desc": "Secondi di inattività trascorsi i quali Klipper disattiva automaticamente motori e riscaldatori per sicurezza energetica e termica.",
-      "tip": "Default: 600 secondi (10 minuti)",
-      "unit": "s"
+      "title": "Idle Timeout Duration",
+      "desc": "Idle duration after which Klipper turns off stepper motors and heaters for safety and power efficiency.",
+      "unit": "s",
+      "tip": "Default: 600 seconds (10 minutes)"
+    },
+    "adxl-spi-mode": {
+      "param": "spi_mode",
+      "title": "ADXL345 SPI Bus Mode",
+      "desc": "Hardware SPI bus or software bit-banged SPI.",
+      "tip": "Hardware SPI recommended"
+    },
+    "adxl-spi-sclk": {
+      "param": "spi_software_sclk_pin",
+      "title": "ADXL345 Software SCLK Pin",
+      "desc": "Digital pin providing software clock signal for accelerometer.",
+      "tip": "E.g., gpio11"
+    },
+    "adxl-spi-mosi": {
+      "param": "spi_software_mosi_pin",
+      "title": "ADXL345 Software MOSI Pin",
+      "desc": "Master Out Slave In pin sending configuration commands to accelerometer.",
+      "tip": "E.g., gpio10"
+    },
+    "adxl-spi-miso": {
+      "param": "spi_software_miso_pin",
+      "title": "ADXL345 Software MISO Pin",
+      "desc": "Master In Slave Out pin reading acceleration data from accelerometer.",
+      "tip": "E.g., gpio9"
     }
   }
 }
