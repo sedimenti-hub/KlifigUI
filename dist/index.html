@@ -7,21 +7,118 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.2">
+    <link rel="stylesheet" href="css/style.css?v=0.7.3">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
 
-    <!-- ==================== TOP NAVIGATION BAR ==================== -->
-    <header class="navbar">
-        <div class="nav-brand">
-            <div class="nav-logo">K</div>
-            <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
-                <span class="nav-title">Klipper Configurator</span>
-                <span class="nav-badge">Mainsail WebUI</span>
-                <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.2</span>
+    <div class="app-layout">
+
+        <!-- ==================== MAINSAIL SIDEBAR ==================== -->
+        <aside class="mainsail-sidebar" id="mainsail-sidebar">
+            <!-- Logo / Intestazione -->
+            <div class="sidebar-header">
+                <a href="/#/" class="sidebar-logo-link" id="sidebar-logo-link" title="Torna a Mainsail Dashboard">
+                    <div class="sidebar-logo-icon">
+                        <img id="sidebar-custom-logo-img" style="display: none; width: 28px; height: 28px; object-fit: contain;" alt="Logo">
+                        <svg id="sidebar-default-logo-svg" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <span class="sidebar-brand-text" id="sidebar-brand-title">Mainsail</span>
+                </a>
             </div>
-        </div>
+
+            <!-- Voci di Navigazione Principali Mainsail -->
+            <nav class="sidebar-nav">
+                <!-- 1. Dashboard -->
+                <a href="/#/" class="sidebar-nav-item" id="nav-mainsail-dashboard" data-tooltip="Dashboard" title="Dashboard">
+                    <span class="sidebar-nav-icon">
+                        <svg viewBox="0 0 24 24"><path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label">Dashboard</span>
+                </a>
+
+                <!-- 2. Console -->
+                <a href="/#/console" class="sidebar-nav-item" id="nav-mainsail-console" data-tooltip="Console G-Code" title="Console">
+                    <span class="sidebar-nav-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5A2,2 0 0,1 4,3H20M13,17V15H18V17H13M9.58,13L5.5,8.91L6.91,7.5L12.41,13L6.91,18.5L5.5,17.09L9.58,13Z"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label">Console</span>
+                </a>
+
+                <!-- 3. Heightmap -->
+                <a href="/#/heightmap" class="sidebar-nav-item" id="nav-mainsail-heightmap" data-tooltip="Heightmap Piatto" title="Heightmap">
+                    <span class="sidebar-nav-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3,3V21H21V19H5V3H3M7,17H9V10H7V17M11,17H13V7H11V17M15,17H17V13H15V17M19,17H21V4H19V17Z"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label">Heightmap</span>
+                </a>
+
+                <!-- 4. G-Code Files -->
+                <a href="/#/files" class="sidebar-nav-item" id="nav-mainsail-files" data-tooltip="File G-Code" title="File">
+                    <span class="sidebar-nav-icon">
+                        <svg viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5V9M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m0 18h12v-8h-4a2 2 0 0 1-2-2V4H6v16z"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label">File G-Code</span>
+                </a>
+
+                <!-- 5. History -->
+                <a href="/#/history" class="sidebar-nav-item" id="nav-mainsail-history" data-tooltip="Cronologia Stampe" title="Cronologia">
+                    <span class="sidebar-nav-icon">
+                        <svg viewBox="0 0 24 24"><path d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label">Cronologia</span>
+                </a>
+
+                <!-- 6. Klipper Config (Attiva!) -->
+                <a href="/configurator/" class="sidebar-nav-item active" id="nav-mainsail-configurator" data-tooltip="Klipper Config" title="Klipper Config">
+                    <span class="sidebar-nav-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04,-0.3 0.06,-0.61 0.06,-0.94c0,-0.32 -0.02,-0.64 -0.07,-0.94l2.03,-1.58c0.18,-0.14 0.23,-0.41 0.12,-0.61l-1.92,-3.32c-0.12,-0.22 -0.37,-0.29 -0.59,-0.22l-2.39,0.96c-0.5,-0.38 -1.03,-0.7 -1.62,-0.94l-0.36,-2.54c-0.04,-0.24 -0.24,-0.41 -0.48,-0.41h-3.84c-0.24,0 -0.43,0.17 -0.47,0.41l-0.36,2.54c-0.59,0.24 -1.13,0.57 -1.62,0.94l-2.39,-0.96c-0.22,-0.08 -0.47,0 -0.59,0.22l-1.91,3.32c-0.12,0.21 -0.08,0.47 0.12,0.61l2.03,1.58c-0.05,0.3 -0.09,0.63 -0.09,0.94s0.02,0.64 0.07,0.94l-2.03,1.58c-0.18,0.14 -0.23,0.41 -0.12,0.61l1.92,3.32c0.12,0.22 0.37,0.29 0.59,0.22l2.39,-0.96c0.5,0.38 1.03,0.7 1.62,0.94l0.36,2.54c0.05,0.24 0.24,0.41 0.48,0.41h3.84c0.24,0 0.44,-0.17 0.47,-0.41l0.36,-2.54c0.59,-0.24 1.13,-0.56 1.62,-0.94l2.39,0.96c0.22,0.08 0.47,0 0.59,-0.22l1.92,-3.32c0.12,-0.22 0.07,-0.47 -0.12,-0.61l-2.01,-1.58zM12,15.6c-1.98,0 -3.6,-1.62 -3.6,-3.6s1.62,-3.6 3.6,-3.6s3.6,1.62 3.6,3.6s-1.62,3.6 -3.6,3.6z"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label">Klipper Config</span>
+                </a>
+
+                <!-- 7. Machine -->
+                <a href="/#/machine" class="sidebar-nav-item" id="nav-mainsail-machine" data-tooltip="Macchina" title="Macchina">
+                    <span class="sidebar-nav-icon">
+                        <svg viewBox="0 0 24 24"><path d="M4,1H20A1,1 0 0,1 21,2V6A1,1 0 0,1 20,7H4A1,1 0 0,1 3,6V2A1,1 0 0,1 4,1M4,9H20A1,1 0 0,1 21,10V14A1,1 0 0,1 20,15H4A1,1 0 0,1 3,14V10A1,1 0 0,1 4,9M4,17H20A1,1 0 0,1 21,18V22A1,1 0 0,1 20,23H4A1,1 0 0,1 3,22V18A1,1 0 0,1 4,17M9,5H10V3H9V5M9,13H10V11H9V13M9,21H10V19H9V21M5,3V5H7V3H5M5,11V13H7V11H5M5,19V21H7V19H5Z"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label">Macchina</span>
+                </a>
+            </nav>
+
+            <!-- Footer Sidebar con Impostazioni ed Espandi/Comprimi -->
+            <div class="sidebar-footer">
+                <a href="/#/settings" class="sidebar-nav-item" id="nav-mainsail-settings" data-tooltip="Impostazioni Mainsail" title="Impostazioni Mainsail">
+                    <span class="sidebar-nav-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label">Impostazioni</span>
+                </a>
+
+                <button type="button" class="sidebar-toggle-btn" id="btn-toggle-sidebar" title="Espandi / Riduci menu laterale">
+                    <span class="sidebar-toggle-icon">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    </span>
+                    <span class="sidebar-nav-label" id="sidebar-toggle-label">Comprimi</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ==================== AREA CONTENUTI PRINCIPALI ==================== -->
+        <div class="app-main-area">
+
+            <!-- ==================== TOP NAVIGATION BAR ==================== -->
+            <header class="navbar">
+                <div class="nav-brand">
+                    <div class="nav-logo">K</div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+                        <span class="nav-title">Klipper Configurator</span>
+                        <span class="nav-badge">Mainsail WebUI</span>
+                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.3</span>
+                    </div>
+                </div>
 
         <div class="nav-actions">
             <!-- Pill Modifiche Non Salvate -->
@@ -1997,6 +2094,9 @@
 
     </main>
 
+        </div> <!-- /.app-main-area -->
+    </div> <!-- /.app-layout -->
+
     <!-- ==================== MODAL ANTEPRIMA CFG / DIFF ==================== -->
     <div class="modal-backdrop" id="modal-preview">
         <div class="modal-dialog">
@@ -2014,11 +2114,11 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL CONNESSIONE MOONRAKER ==================== -->
+    <!-- ==================== MODAL CONNESSIONE MOONRAKER & TEMA ==================== -->
     <div class="modal-backdrop" id="modal-conn">
-        <div class="modal-dialog" style="max-width: 500px;">
+        <div class="modal-dialog" style="max-width: 520px;">
             <div class="modal-header">
-                <span class="modal-title">Impostazioni Connessione Moonraker</span>
+                <span class="modal-title">Connessione & Tema Mainsail</span>
                 <button class="modal-close" id="btn-close-conn">&times;</button>
             </div>
             <div class="modal-body">
@@ -2027,10 +2127,51 @@
                     <input type="text" class="form-control" id="input-moonraker-url" placeholder="http://192.168.1.50:7125 o lascia vuoto per auto-rilevamento">
                     <div class="form-helper">Se Klipper Configurator è installato sulla stessa macchina di Mainsail, lascia l'origine automatica.</div>
                 </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
+
+                <div class="card-title" style="margin-bottom: 0.75rem; font-size: 0.95rem;">Integrazione Tema & Colori Mainsail</div>
+                
+                <div style="padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Stato Sincronizzazione:</span>
+                        <span id="theme-sync-status" class="nav-badge" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">Sincronizzato</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Colore Primario Attivo:</span>
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span id="active-theme-color-dot" style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background-color: var(--primary);"></span>
+                            <span id="active-theme-color-hex" style="font-size: 0.8rem; font-family: monospace; font-weight: 600;">#0284c7</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.85rem; color: var(--text-secondary);">Modalità Tema:</span>
+                        <span id="active-theme-mode-text" style="font-size: 0.85rem; font-weight: 600;">Scuro (Dark)</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Preset Colori Comuni Mainsail / Vendor:</label>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="theme-preset-buttons">
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#0284c7" title="Mainsail Blue" style="border-left: 4px solid #0284c7;">Mainsail</button>
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#d32f2f" title="Voron Design Red" style="border-left: 4px solid #d32f2f;">Voron</button>
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#00ff41" title="RatRig Green" style="border-left: 4px solid #00ff41;">RatRig</button>
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#00e5ff" title="VzBot Cyan" style="border-left: 4px solid #00e5ff;">VzBot</button>
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#f97316" title="Klipper Orange" style="border-left: 4px solid #f97316;">Klipper</button>
+                        <button type="button" class="btn btn-secondary btn-sm preset-color-btn" data-color="#9333ea" title="StealthBurner Purple" style="border-left: 4px solid #9333ea;">Purple</button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="check-force-light-mode">
+                        <strong>Forza Modalità Chiara (Light Theme)</strong>
+                    </label>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="btn-cancel-conn">Annulla</button>
-                <button class="btn btn-primary" id="btn-save-conn">Verifica & Salva</button>
+                <button class="btn btn-primary" id="btn-save-conn">Salva & Sincronizza</button>
             </div>
         </div>
     </div>
@@ -2078,9 +2219,9 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.7.2"></script>
-    <script src="js/default-config.js?v=0.7.2"></script>
-    <script src="js/moonraker-client.js?v=0.7.2"></script>
-    <script src="js/app.js?v=0.7.2"></script>
+    <script src="js/klipper-parser.js?v=0.7.3"></script>
+    <script src="js/default-config.js?v=0.7.3"></script>
+    <script src="js/moonraker-client.js?v=0.7.3"></script>
+    <script src="js/app.js?v=0.7.3"></script>
 </body>
 </html>

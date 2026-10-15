@@ -74,6 +74,44 @@ class MoonrakerClient {
     }
 
     /**
+     * Recupera le impostazioni salvate da Mainsail nel database di Moonraker (tema, colori, preferenze UI)
+     * Endpoint: GET /server/database/item?namespace=mainsail
+     */
+    async getMainsailSettings() {
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+            const res = await fetch(`${this.baseUrl}/server/database/item?namespace=mainsail`, {
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (res.ok) {
+                const data = await res.json();
+                return { success: true, settings: data.result ? data.result.value : null };
+            }
+            return { success: false, error: `HTTP ${res.status}` };
+        } catch (err) {
+            return { success: false, error: err.message };
+        }
+    }
+
+    /**
+     * Verifica la presenza di un file custom.css all'interno della cartella .theme
+     */
+    async checkCustomCss() {
+        try {
+            const res = await fetch(`${this.baseUrl}/server/files/config/.theme/custom.css?t=${Date.now()}`, {
+                method: 'HEAD'
+            });
+            return res.ok;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    /**
      * Elenca i file disponibili nella directory di configurazione di Klipper
      */
     async listConfigFiles() {

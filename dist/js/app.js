@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.2';
+    const APP_VERSION = 'v0.7.3';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -231,7 +231,23 @@ document.addEventListener('DOMContentLoaded', () => {
         calcResultVal: document.getElementById('calc-result-val'),
 
         // Toast
-        toastContainer: document.getElementById('toast-container')
+        toastContainer: document.getElementById('toast-container'),
+
+        // Sidebar Mainsail & Sincronizzazione Tema
+        sidebar: document.getElementById('mainsail-sidebar'),
+        btnToggleSidebar: document.getElementById('btn-toggle-sidebar'),
+        sidebarToggleLabel: document.getElementById('sidebar-toggle-label'),
+        sidebarLogoLink: document.getElementById('sidebar-logo-link'),
+        sidebarCustomLogoImg: document.getElementById('sidebar-custom-logo-img'),
+        sidebarDefaultLogoSvg: document.getElementById('sidebar-default-logo-svg'),
+        sidebarBrandTitle: document.getElementById('sidebar-brand-title'),
+        themeSyncStatus: document.getElementById('theme-sync-status'),
+        activeThemeColorDot: document.getElementById('active-theme-color-dot'),
+        activeThemeColorHex: document.getElementById('active-theme-color-hex'),
+        activeThemeModeText: document.getElementById('active-theme-mode-text'),
+        checkForceLightMode: document.getElementById('check-force-light-mode'),
+        presetColorBtns: document.querySelectorAll('.preset-color-btn'),
+        sidebarNavLinks: document.querySelectorAll('.sidebar-nav-item')
     };
 
     if (dom.appVersionBadge) {
@@ -3253,6 +3269,262 @@ document.addEventListener('DOMContentLoaded', () => {
     dom.btnSaveRestart.addEventListener('click', () => saveConfiguration(true));
 
     // -------------------------------------------------------------------------
+    // Integrazione Mainsail Sidebar & Sincronizzazione Tema Dinamico
+    // -------------------------------------------------------------------------
+
+    /**
+     * Converte un codice esadecimale in componenti RGB
+     */
+    function hexToRgb(hex) {
+        if (!hex) return null;
+        let c = hex.replace('#', '').trim();
+        if (c.length === 3) {
+            c = c.split('').map(x => x + x).join('');
+        }
+        if (c.length !== 6) return null;
+        const num = parseInt(c, 16);
+        return {
+            r: (num >> 16) & 255,
+            g: (num >> 8) & 255,
+            b: num & 255
+        };
+    }
+
+    /**
+     * Regola la luminosità di un colore HEX (+percentuale per schiarire, - per scurire)
+     */
+    function adjustBrightness(hex, percent) {
+        const rgb = hexToRgb(hex);
+        if (!rgb) return hex;
+        const amt = Math.round(2.55 * percent);
+        const clamp = (val) => Math.min(255, Math.max(0, val));
+        const r = clamp(rgb.r + amt).toString(16).padStart(2, '0');
+        const g = clamp(rgb.g + amt).toString(16).padStart(2, '0');
+        const b = clamp(rgb.b + amt).toString(16).padStart(2, '0');
+        return `#${r}${g}${b}`;
+    }
+
+    /**
+     * Restituisce l'URL di base per navigare su Mainsail WebUI
+     */
+    function getMainsailBaseUrl() {
+        if (window.location.protocol.startsWith('http')) {
+            const port = window.location.port;
+            if (port !== '7125' && port !== '5173' && port !== '3000') {
+                return window.location.origin;
+            }
+        }
+        if (state.moonraker && state.moonraker.baseUrl) {
+            try {
+                const parsed = new URL(state.moonraker.baseUrl);
+                return `${parsed.protocol}//${parsed.hostname}`;
+            } catch (_) {}
+        }
+        return '';
+    }
+
+    /**
+     * Aggiorna gli attributi href delle voci di menu della sidebar Mainsail
+     */
+    function updateSidebarLinks() {
+        const baseUrl = getMainsailBaseUrl();
+        if (!baseUrl) return;
+
+        const linkMapping = {
+            'nav-mainsail-dashboard': `${baseUrl}/#/`,
+            'nav-mainsail-console': `${baseUrl}/#/console`,
+            'nav-mainsail-heightmap': `${baseUrl}/#/heightmap`,
+            'nav-mainsail-files': `${baseUrl}/#/files`,
+            'nav-mainsail-history': `${baseUrl}/#/history`,
+            'nav-mainsail-machine': `${baseUrl}/#/machine`,
+            'nav-mainsail-settings': `${baseUrl}/#/settings`,
+            'sidebar-logo-link': `${baseUrl}/#/`
+        };
+
+        for (const [id, url] of Object.entries(linkMapping)) {
+            const el = document.getElementById(id);
+            if (el) el.setAttribute('href', url);
+        }
+    }
+
+    /**
+     * Applica il colore primario, il contrasto e la modalità tema (Dark / Light)
+     */
+    function applyMainsailTheme(options = {}) {
+        const primary = options.primaryColor || localStorage.getItem('mainsail_cached_primary_color') || '#0284c7';
+        const forceLight = localStorage.getItem('mainsail_force_light_mode') === 'true';
+        const mode = forceLight ? 'light' : (options.themeMode || localStorage.getItem('mainsail_cached_theme_mode') || 'dark');
+
+        // Imposta variabili colore
+        const rgb = hexToRgb(primary);
+        if (rgb) {
+            const root = document.documentElement;
+            root.style.setProperty('--primary', primary);
+            root.style.setProperty('--primary-hover', adjustBrightness(primary, -12));
+            root.style.setProperty('--primary-light', adjustBrightness(primary, 22));
+            root.style.setProperty('--border-focus', primary);
+            root.style.setProperty('--primary-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+
+            if (dom.activeThemeColorDot) dom.activeThemeColorDot.style.backgroundColor = primary;
+            if (dom.activeThemeColorHex) dom.activeThemeColorHex.textContent = primary;
+        }
+
+        // Imposta modalità tema
+        if (mode === 'light') {
+            document.documentElement.classList.add('theme-light');
+            document.body.classList.add('theme-light');
+            if (dom.activeThemeModeText) dom.activeThemeModeText.textContent = 'Chiaro (Light)';
+            if (dom.checkForceLightMode) dom.checkForceLightMode.checked = true;
+        } else {
+            document.documentElement.classList.remove('theme-light');
+            document.body.classList.remove('theme-light');
+            if (dom.activeThemeModeText) dom.activeThemeModeText.textContent = 'Scuro (Dark)';
+            if (dom.checkForceLightMode) dom.checkForceLightMode.checked = false;
+        }
+
+        // Se disponibile custom.css da .theme/custom.css
+        if (options.hasCustomCss && state.moonraker && state.moonraker.baseUrl) {
+            let link = document.getElementById('mainsail-custom-theme-css');
+            if (!link) {
+                link = document.createElement('link');
+                link.id = 'mainsail-custom-theme-css';
+                link.rel = 'stylesheet';
+                document.head.appendChild(link);
+            }
+            link.href = `${state.moonraker.baseUrl}/server/files/config/.theme/custom.css?t=${Date.now()}`;
+        }
+    }
+
+    /**
+     * Interroga Moonraker per scaricare il tema e le impostazioni dell'interfaccia Mainsail
+     */
+    async function syncMainsailTheme() {
+        updateSidebarLinks();
+
+        if (!state.moonraker || !state.moonraker.baseUrl) {
+            applyMainsailTheme();
+            return;
+        }
+
+        try {
+            const res = await state.moonraker.getMainsailSettings();
+            let primaryColor = null;
+            let themeMode = 'dark';
+            let printerName = null;
+
+            if (res.success && res.settings) {
+                const s = res.settings;
+
+                // Estrazione Colore Primario
+                if (s.uiSettings && s.uiSettings.primaryColor) {
+                    primaryColor = s.uiSettings.primaryColor;
+                } else if (s.theme && s.theme.primaryColor) {
+                    primaryColor = s.theme.primaryColor;
+                } else if (typeof s.primaryColor === 'string') {
+                    primaryColor = s.primaryColor;
+                }
+
+                // Estrazione Modalità Tema (dark / light)
+                if (s.uiSettings && s.uiSettings.theme) {
+                    themeMode = typeof s.uiSettings.theme === 'string' ? s.uiSettings.theme : (s.uiSettings.theme.dark ? 'dark' : 'light');
+                } else if (s.general && s.general.theme) {
+                    themeMode = s.general.theme;
+                }
+
+                // Estrazione Nome Stampante
+                if (s.general && s.general.printername) {
+                    printerName = s.general.printername;
+                }
+
+                // Memorizza in cache locale
+                if (primaryColor) localStorage.setItem('mainsail_cached_primary_color', primaryColor);
+                if (themeMode) localStorage.setItem('mainsail_cached_theme_mode', themeMode);
+
+                if (dom.themeSyncStatus) {
+                    dom.themeSyncStatus.textContent = 'Sincronizzato da Mainsail';
+                    dom.themeSyncStatus.style.background = 'rgba(16, 185, 129, 0.2)';
+                    dom.themeSyncStatus.style.color = '#10b981';
+                }
+            } else {
+                if (dom.themeSyncStatus) {
+                    dom.themeSyncStatus.textContent = 'Cache Locale';
+                    dom.themeSyncStatus.style.background = 'rgba(234, 179, 8, 0.2)';
+                    dom.themeSyncStatus.style.color = '#eab308';
+                }
+            }
+
+            if (printerName && dom.sidebarBrandTitle) {
+                dom.sidebarBrandTitle.textContent = printerName;
+            }
+
+            // Verifica se esiste custom.css
+            const hasCustomCss = await state.moonraker.checkCustomCss();
+
+            applyMainsailTheme({
+                primaryColor: primaryColor || localStorage.getItem('mainsail_cached_primary_color') || '#0284c7',
+                themeMode: themeMode,
+                hasCustomCss: hasCustomCss
+            });
+
+        } catch (err) {
+            console.warn('Sincronizzazione tema Mainsail non riuscita:', err);
+            applyMainsailTheme();
+        }
+    }
+
+    /**
+     * Inizializzazione della Sidebar Mainsail (espansione / compressione e memoria stato)
+     */
+    function initSidebar() {
+        if (!dom.sidebar || !dom.btnToggleSidebar) return;
+
+        // Recupera stato memorizzato
+        const savedExpanded = localStorage.getItem('mainsail_sidebar_expanded') === 'true';
+        if (savedExpanded) {
+            dom.sidebar.classList.add('expanded');
+            if (dom.sidebarToggleLabel) dom.sidebarToggleLabel.textContent = 'Comprimi';
+        } else {
+            dom.sidebar.classList.remove('expanded');
+            if (dom.sidebarToggleLabel) dom.sidebarToggleLabel.textContent = 'Espandi';
+        }
+
+        dom.btnToggleSidebar.addEventListener('click', () => {
+            dom.sidebar.classList.toggle('expanded');
+            const isNowExpanded = dom.sidebar.classList.contains('expanded');
+            localStorage.setItem('mainsail_sidebar_expanded', isNowExpanded);
+            if (dom.sidebarToggleLabel) {
+                dom.sidebarToggleLabel.textContent = isNowExpanded ? 'Comprimi' : 'Espandi';
+            }
+        });
+
+        // Preset colori nel modal di connessione
+        if (dom.presetColorBtns) {
+            dom.presetColorBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const color = btn.dataset.color;
+                    if (color) {
+                        localStorage.setItem('mainsail_cached_primary_color', color);
+                        applyMainsailTheme({ primaryColor: color });
+                        showToast(`Colore tema impostato su ${btn.textContent}`, 'info', 1500);
+                    }
+                });
+            });
+        }
+
+        // Checkbox Forza Modalità Chiara
+        if (dom.checkForceLightMode) {
+            dom.checkForceLightMode.addEventListener('change', () => {
+                const forceLight = dom.checkForceLightMode.checked;
+                localStorage.setItem('mainsail_force_light_mode', forceLight);
+                applyMainsailTheme({ themeMode: forceLight ? 'light' : 'dark' });
+                showToast(`Modalità tema: ${forceLight ? 'Chiaro' : 'Scuro'}`, 'info', 1500);
+            });
+        }
+
+        updateSidebarLinks();
+    }
+
+    // -------------------------------------------------------------------------
     // Connessione Moonraker & Caricamento Iniziale
     // -------------------------------------------------------------------------
     async function checkMoonrakerConnection() {
@@ -3262,6 +3534,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (res.success) {
             dom.statusDot.classList.add('connected');
             dom.statusText.textContent = 'Moonraker Connesso';
+
+            // Sincronizza tema e impostazioni da Mainsail
+            await syncMainsailTheme();
 
             const filesRes = await state.moonraker.listConfigFiles();
             if (filesRes.success && filesRes.files.length > 0) {
@@ -3280,6 +3555,8 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.statusDot.classList.remove('connected');
             dom.statusText.textContent = 'Moonraker Offline (Usa Locale)';
             showToast('Moonraker offline. Caricata configurazione template.', 'warning', 4500);
+
+            await syncMainsailTheme();
 
             state.parser.parse(KLIPPER_CONSTANTS.SAMPLE_CONFIG);
             populateUiFromParser();
@@ -3330,6 +3607,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (state.baselineSnapshot) checkDirtyState();
     });
 
-    // Avvio
+    // Avvio: Inizializza Sidebar e Tema Mainsail prima della connessione
+    initSidebar();
+    applyMainsailTheme();
     checkMoonrakerConnection();
 });
