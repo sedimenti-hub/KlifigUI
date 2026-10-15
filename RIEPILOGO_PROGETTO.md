@@ -183,7 +183,12 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.13`.
+- ✅ **Versione corrente**: `v0.7.14`.
+- ✅ **Top Bar Ancorata & Fissa con Scorrimento del Contenuto al di Sotto**:
+  - Convertita la barra superiore (`.navbar`) in posizionamento fisso continuo (`position: fixed; top: 0; left: var(--sidebar-width-collapsed); right: 0; height: var(--topbar-height); z-index: 100;`).
+  - Sincronizzata la transizione laterale con l'espansione/compressione della sidebar (`.mainsail-sidebar.expanded ~ .app-main-area .navbar { left: var(--sidebar-width-expanded); }`).
+  - Aggiunto `padding-top: var(--topbar-height);` all'area dei contenuti (`.app-main-area`): durante lo scorrimento verticale, tutti i moduli, schede e campi di configurazione scorrono in modo fluido e naturale scomparendo al di sotto della top bar, mentre l'intera testata (logo + pulsanti topbar) rimane saldamente ancorata e immobile.
+  - Su dispositivi mobili (`@media (max-width: 768px)`), la topbar copre l'intera larghezza da bordo a bordo (`left: 0 !important`).
 - ✅ **Eliminazione Linea Verticale a Destra del Logo nella Topbar**:
   - Rimossa la linea divisoria verticale tra l'icona/box del logo (`.sidebar-header`) e la barra superiore (`.navbar`), convertendo `border-right: none` sul contenitore del logo e sulla sidebar principale a livello testata.
   - Applicato `border-right: 1px solid var(--sidebar-border)` esclusivamente al di sotto della barra superiore (su `.sidebar-nav` e `.sidebar-append`).
@@ -220,7 +225,7 @@ KlipperUI / KlifigUI/
   - Eliminato il pulsante pill "Moonraker connesso" dalla barra superiore.
   - Eliminato il tag/badge della versione dalla testata della barra superiore.
   - Rinominato il tasto "Tema" in **"Impostazioni"** con icona ingranaggio e dot cromatico attivo.
-  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.13`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
+  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.14`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
 - ✅ **Sidebar Mainsail Fedele al 100%**:
   - Colore di sfondo grigio `#4f4f4f` (`--sidebar-bg-color`) estratto direttamente dal tema attivo di Mainsail.
   - Voci e icone Material Design ufficiali (@mdi/js) allineate all'architettura Vue/Vuetify di Mainsail (`TheSidebar.vue`, `SidebarItem.vue`, `src/routes/index.ts`).
@@ -239,4 +244,4 @@ KlipperUI / KlifigUI/
   cd d:\Antigravity\KlifigUI
   git push origin main
   ```
-  Tutti i commit fino a `v0.7.13` sono già stati generati e validati localmente.
+  Tutti i commit fino a `v0.7.14` sono già stati generati e validati localmente.

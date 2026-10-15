@@ -91,6 +91,7 @@ body {
     flex: 1;
     min-width: 0;
     margin-left: var(--sidebar-width-collapsed);
+    padding-top: var(--topbar-height);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -100,6 +101,10 @@ body {
 
 .mainsail-sidebar.expanded ~ .app-main-area {
     margin-left: var(--sidebar-width-expanded);
+}
+
+.mainsail-sidebar.expanded ~ .app-main-area .navbar {
+    left: var(--sidebar-width-expanded);
 }
 
 /* --------------------------------------------------------------------------
@@ -380,10 +385,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: var(--sidebar-width-collapsed);
+    right: 0;
     z-index: 100;
     box-shadow: var(--shadow-sm);
+    transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-brand,
@@ -1304,6 +1312,10 @@ textarea.form-control {
         display: none !important;
     }
     
+    .navbar {
+        left: 0 !important;
+    }
+
     .app-main-area {
         margin-left: 0 !important;
         padding-bottom: 60px; /* Spazio per la barra di navigazione inferiore su smartphone */
