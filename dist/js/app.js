@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.5';
+    const APP_VERSION = 'v0.7.6';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -3326,30 +3326,280 @@ document.addEventListener('DOMContentLoaded', () => {
         return '';
     }
 
+    // -------------------------------------------------------------------------
+    // Sidebar Mainsail: replica di src/routes/index.ts + mixins/navigation.ts
+    // -------------------------------------------------------------------------
+
+    /** Icone Material Design ufficiali (@mdi/js) usate da Mainsail */
+    const MDI = {
+        monitorDashboard: 'M21,16V4H3V16H21M21,2A2,2 0 0,1 23,4V16A2,2 0 0,1 21,18H14V20H16V22H8V20H10V18H3C1.89,18 1,17.1 1,16V4C1,2.89 1.89,2 3,2H21M5,6H14V11H5V6M15,6H19V8H15V6M19,9V14H15V9H19M5,12H9V14H5V12M10,12H14V14H10V12Z',
+        webcam: 'M12,2A7,7 0 0,1 19,9A7,7 0 0,1 12,16A7,7 0 0,1 5,9A7,7 0 0,1 12,2M12,4A5,5 0 0,0 7,9A5,5 0 0,0 12,14A5,5 0 0,0 17,9A5,5 0 0,0 12,4M12,6A3,3 0 0,1 15,9A3,3 0 0,1 12,12A3,3 0 0,1 9,9A3,3 0 0,1 12,6M6,22A2,2 0 0,1 4,20C4,19.62 4.1,19.27 4.29,18.97L6.11,15.81C7.69,17.17 9.75,18 12,18C14.25,18 16.31,17.17 17.89,15.81L19.71,18.97C19.9,19.27 20,19.62 20,20A2,2 0 0,1 18,22H6Z',
+        consoleLine: 'M13,19V16H21V19H13M8.5,13L2.47,7H6.71L11.67,11.95C12.25,12.54 12.25,13.5 11.67,14.07L6.74,19H2.5L8.5,13Z',
+        grid: 'M10,4V8H14V4H10M16,4V8H20V4H16M16,10V14H20V10H16M16,16V20H20V16H16M14,20V16H10V20H14M8,20V16H4V20H8M8,14V10H4V14H8M8,8V4H4V8H8M10,14H14V10H10V14M4,2H20A2,2 0 0,1 22,4V20A2,2 0 0,1 20,22H4C2.92,22 2,21.1 2,20V4A2,2 0 0,1 4,2Z',
+        fileDocumentMultipleOutline: 'M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z',
+        video3d: 'M5,7H9A2,2 0 0,1 11,9V15A2,2 0 0,1 9,17H5V15H9V13H6V11H9V9H5V7M13,7H16A3,3 0 0,1 19,10V14A3,3 0 0,1 16,17H13V7M16,15A1,1 0 0,0 17,14V10A1,1 0 0,0 16,9H15V15H16Z',
+        history: 'M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3',
+        timelapse: 'M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.24,7.76C15.07,6.58 13.53,6 12,6V12L7.76,16.24C10.1,18.58 13.9,18.58 16.24,16.24C18.59,13.9 18.59,10.1 16.24,7.76Z',
+        wrench: 'M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z',
+        linkVariant: 'M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z'
+    };
+
     /**
-     * Aggiorna gli attributi href delle voci di menu della sidebar Mainsail
+     * Voci native di Mainsail (stesso ordine, posizione e condizioni di src/routes/index.ts).
+     * offlineDefault: visibilità usata quando Moonraker non è raggiungibile e non c'è cache.
+     */
+    const MAINSAIL_ROUTES = [
+        { title: 'Dashboard', path: '/', icon: MDI.monitorDashboard, position: 10, alwaysShow: true },
+        { title: 'Webcam', path: '/cam', icon: MDI.webcam, position: 20, alwaysShow: true, requiresWebcam: true },
+        { title: 'Console', path: '/console', icon: MDI.consoleLine, position: 30, alwaysShow: true, klipperIsConnected: true, offlineDefault: false },
+        { title: 'Heightmap', path: '/heightmap', icon: MDI.grid, position: 40, alwaysShow: false, klipperComponent: 'bed_mesh' },
+        { title: 'G-Code Files', path: '/files', icon: MDI.fileDocumentMultipleOutline, position: 50, alwaysShow: true, registeredDirectory: 'gcodes' },
+        { title: 'G-Code Viewer', path: '/viewer', icon: MDI.video3d, position: 60, alwaysShow: true },
+        { title: 'History', path: '/history', icon: MDI.history, position: 70, alwaysShow: true, moonrakerComponent: 'history' },
+        { title: 'Timelapse', path: '/timelapse', icon: MDI.timelapse, position: 80, alwaysShow: true, moonrakerComponent: 'timelapse', offlineDefault: false },
+        { title: 'Machine', path: '/config', icon: MDI.wrench, position: 90, alwaysShow: true }
+    ];
+
+    /** Traduzioni "Router.*" dei file locales di Mainsail */
+    const MAINSAIL_ROUTE_TITLES = {
+        it: {
+            'Dashboard': 'Cruscotto',
+            'Webcam': 'Webcam',
+            'Console': 'Console',
+            'Heightmap': "Mappa dell'altezza",
+            'G-Code Files': 'File G-Code',
+            'G-Code Viewer': 'Visualizzatore G-Code',
+            'History': 'Cronologia',
+            'Timelapse': 'Timelapse',
+            'Machine': 'Macchina'
+        }
+    };
+
+    /** Voce di Klipper Configurator (identica a navi.json installato in .theme/) */
+    const CONFIGURATOR_NAVI_DEFAULT = {
+        title: 'Klipper Config',
+        href: '/configurator/',
+        target: '_self',
+        position: 35,
+        icon: 'M19.14,12.94c0.04,-0.3 0.06,-0.61 0.06,-0.94c0,-0.32 -0.02,-0.64 -0.07,-0.94l2.03,-1.58c0.18,-0.14 0.23,-0.41 0.12,-0.61l-1.92,-3.32c-0.12,-0.22 -0.37,-0.29 -0.59,-0.22l-2.39,0.96c-0.5,-0.38 -1.03,-0.7 -1.62,-0.94l-0.36,-2.54c-0.04,-0.24 -0.24,-0.41 -0.48,-0.41h-3.84c-0.24,0 -0.43,0.17 -0.47,0.41l-0.36,2.54c-0.59,0.24 -1.13,0.57 -1.62,0.94l-2.39,-0.96c-0.22,-0.08 -0.47,0 -0.59,0.22l-1.91,3.32c-0.12,0.21 -0.08,0.47 0.12,0.61l2.03,1.58c-0.05,0.3 -0.09,0.63 -0.09,0.94s0.02,0.64 0.07,0.94l-2.03,1.58c-0.18,0.14 -0.23,0.41 -0.12,0.61l1.92,3.32c0.12,0.22 0.37,0.29 0.59,0.22l2.39,-0.96c0.5,0.38 1.03,0.7 1.62,0.94l0.36,2.54c0.05,0.24 0.24,0.41 0.48,0.41h3.84c0.24,0 0.44,-0.17 0.47,-0.41l0.36,-2.54c0.59,-0.24 1.13,-0.56 1.62,-0.94l2.39,0.96c0.22,0.08 0.47,0 0.59,-0.22l1.92,-3.32c0.12,-0.22 0.07,-0.47 -0.12,-0.61l-2.01,-1.58zM12,15.6c-1.98,0 -3.6,-1.62 -3.6,-3.6s1.62,-3.6 3.6,-3.6s3.6,1.62 3.6,3.6s-1.62,3.6 -3.6,3.6z'
+    };
+
+    const SIDEBAR_CACHE_KEY = 'mainsail_cached_sidebar_items';
+
+    /** Stato raccolto da Moonraker per decidere quali voci mostrare */
+    const sidebarState = {
+        serverInfo: null,        // /server/info
+        webcamCount: null,       // /server/webcams/list
+        configSections: null,    // configfile.settings
+        customNaviLinks: null,   // .theme/navi.json
+        navEntries: [],          // gui.navigation.entries (ordine/visibilità personalizzati)
+        language: null           // gui.general.language
+    };
+
+    function isSvgPath(icon) {
+        return typeof icon === 'string' && /^\s*[Mm]\s*-?[\d.]/.test(icon);
+    }
+
+    /** True se il link punta a questa stessa interfaccia (Klipper Configurator) */
+    function isConfiguratorHref(href) {
+        if (!href) return false;
+        try {
+            const target = new URL(href, window.location.href);
+            const norm = (p) => p.replace(/index\.html$/, '').replace(/\/+$/, '');
+            if (/\/configurator$/.test(norm(target.pathname))) return true;
+            return target.origin === window.location.origin && norm(target.pathname) !== '' &&
+                norm(target.pathname) === norm(window.location.pathname);
+        } catch (_) {
+            return /configurator/i.test(href);
+        }
+    }
+
+    function translateRouteTitle(title) {
+        const lang = (sidebarState.language || localStorage.getItem('mainsail_cached_language') || 'en').toLowerCase().slice(0, 2);
+        const dict = MAINSAIL_ROUTE_TITLES[lang];
+        return (dict && dict[title]) || title;
+    }
+
+    /** Equivalente di NavigationMixin.showInNavi() */
+    function showRouteInNavi(route) {
+        const info = sidebarState.serverInfo;
+        if (!info) return route.offlineDefault !== false;
+
+        if (['shutdown', 'error', 'disconnected'].includes(info.klippy_state) && !route.alwaysShow) return false;
+        if (route.requiresWebcam && sidebarState.webcamCount === 0) return false;
+        if (route.moonrakerComponent && Array.isArray(info.components) && !info.components.includes(route.moonrakerComponent)) return false;
+        if (route.registeredDirectory && Array.isArray(info.registered_directories) && !info.registered_directories.includes(route.registeredDirectory)) return false;
+        if (route.klipperComponent && !(sidebarState.configSections || []).includes(route.klipperComponent)) return false;
+        if (route.klipperIsConnected && !info.klippy_connected) return false;
+        return true;
+    }
+
+    /** Equivalente di NavigationMixin.getUiSettings() */
+    function getNavUiSettings(type, title, position, visible) {
+        const entry = (sidebarState.navEntries || []).find(p => p && p.title === title && p.type === type);
+        if (!entry) return [position, visible];
+        return [entry.position ?? position, entry.visible ?? visible];
+    }
+
+    /** Costruisce le voci visibili, ordinate per posizione (visibleNaviPoints) */
+    function buildSidebarPoints() {
+        const base = getMainsailBaseUrl();
+        const points = [];
+
+        MAINSAIL_ROUTES.filter(showRouteInNavi).forEach(route => {
+            const [position, visible] = getNavUiSettings('route', route.title, route.position, true);
+            points.push({
+                title: translateRouteTitle(route.title),
+                icon: route.icon,
+                href: `${base}${route.path}`,
+                target: null,
+                position,
+                visible,
+                active: false
+            });
+        });
+
+        let links = Array.isArray(sidebarState.customNaviLinks) ? sidebarState.customNaviLinks.slice() : [];
+        if (!links.some(l => isConfiguratorHref(l.href))) links.push(CONFIGURATOR_NAVI_DEFAULT);
+
+        links.forEach(link => {
+            const title = link.title ?? 'Unknown';
+            const [position, visible] = getNavUiSettings('link', title, link.position ?? 999, link.visible ?? true);
+            const active = isConfiguratorHref(link.href);
+            points.push({
+                title,
+                icon: isSvgPath(link.icon) ? link.icon : MDI.linkVariant,
+                href: active ? window.location.href.split('#')[0] : (link.href ?? '#'),
+                target: active ? '_self' : (link.target ?? null),
+                position,
+                visible,
+                active
+            });
+        });
+
+        return points
+            .sort((a, b) => a.position - b.position)
+            .filter(p => p.visible);
+    }
+
+    function createSidebarItem(point) {
+        const a = document.createElement('a');
+        a.className = 'sidebar-nav-item' + (point.active ? ' active' : '');
+        a.href = point.href;
+        if (point.target) a.target = point.target;
+        if (point.target === '_blank') a.rel = 'noopener';
+        a.dataset.tooltip = point.title;
+        a.setAttribute('aria-label', point.title);
+        if (point.active) a.setAttribute('aria-current', 'page');
+
+        const iconWrap = document.createElement('span');
+        iconWrap.className = 'sidebar-nav-icon';
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', point.icon);
+        svg.appendChild(path);
+        iconWrap.appendChild(svg);
+
+        const label = document.createElement('span');
+        label.className = 'sidebar-nav-label';
+        label.textContent = point.title;
+
+        a.appendChild(iconWrap);
+        a.appendChild(label);
+        return a;
+    }
+
+    /** Applica navigationStyle di Mainsail: 'iconsOnly' (56px) o 'iconsAndText' (220px) */
+    function applyNavigationStyle(style) {
+        if (!dom.sidebar) return;
+        const value = style || localStorage.getItem('mainsail_cached_navigation_style') || 'iconsOnly';
+        dom.sidebar.classList.toggle('expanded', value === 'iconsAndText');
+    }
+
+    /**
+     * Disegna la sidebar. Se Moonraker non è (ancora) raggiungibile usa l'ultima
+     * sidebar calcolata (cache locale), così il primo rendering è già identico a Mainsail.
      */
     function updateSidebarLinks() {
-        const baseUrl = getMainsailBaseUrl();
-        if (!baseUrl) return;
+        const nav = document.getElementById('sidebar-nav');
+        if (!nav) return;
 
-        const linkMapping = {
-            'nav-mainsail-dashboard': `${baseUrl}/#/`,
-            'nav-mainsail-webcam': `${baseUrl}/#/cam`,
-            'nav-mainsail-control': `${baseUrl}/#/control`,
-            'nav-mainsail-heightmap': `${baseUrl}/#/heightmap`,
-            'nav-mainsail-files': `${baseUrl}/#/files`,
-            'nav-mainsail-viewer': `${baseUrl}/#/viewer`,
-            'nav-mainsail-history': `${baseUrl}/#/history`,
-            'nav-mainsail-machine': `${baseUrl}/#/machine`,
-            'nav-mainsail-settings': `${baseUrl}/#/settings`,
-            'sidebar-logo-link': `${baseUrl}/#/`
-        };
-
-        for (const [id, url] of Object.entries(linkMapping)) {
-            const el = document.getElementById(id);
-            if (el) el.setAttribute('href', url);
+        let points = null;
+        if (!sidebarState.serverInfo) {
+            try {
+                const cached = JSON.parse(localStorage.getItem(SIDEBAR_CACHE_KEY) || 'null');
+                if (Array.isArray(cached) && cached.length) {
+                    points = cached.map(p => {
+                        const active = isConfiguratorHref(p.href) || p.active;
+                        return { ...p, active, href: active ? window.location.href.split('#')[0] : p.href };
+                    });
+                }
+            } catch (_) {}
         }
+        if (!points) {
+            points = buildSidebarPoints();
+            if (sidebarState.serverInfo) {
+                localStorage.setItem(SIDEBAR_CACHE_KEY, JSON.stringify(points));
+            }
+        }
+
+        nav.textContent = '';
+        points.forEach(p => nav.appendChild(createSidebarItem(p)));
+
+        const base = getMainsailBaseUrl();
+        if (dom.sidebarLogoLink) dom.sidebarLogoLink.setAttribute('href', `${base}/`);
+    }
+
+    /**
+     * Legge da Moonraker tutto ciò che serve alla sidebar (come fa Mainsail)
+     * e la ridisegna. `settings` = namespace "mainsail" del database Moonraker.
+     */
+    async function syncSidebarFromMoonraker(settings, themeFiles) {
+        const mr = state.moonraker;
+        if (!mr || !mr.baseUrl) return;
+
+        const [serverInfo, webcamCount, configSections] = await Promise.all([
+            mr.getServerInfo(),
+            mr.getWebcamCount(),
+            mr.getKlipperConfigSections()
+        ]);
+        sidebarState.serverInfo = serverInfo;
+        sidebarState.webcamCount = webcamCount;
+        sidebarState.configSections = configSections;
+
+        // Ordine / visibilità personalizzati (Impostazioni → Navigazione di Mainsail)
+        const navigation = settings && settings.navigation;
+        sidebarState.navEntries = navigation && Array.isArray(navigation.entries) ? navigation.entries : [];
+
+        // Lingua dell'interfaccia Mainsail
+        const lang = settings && settings.general && settings.general.language;
+        if (lang) {
+            sidebarState.language = lang;
+            localStorage.setItem('mainsail_cached_language', lang);
+        }
+
+        // Voci personalizzate da .theme/navi.json
+        sidebarState.customNaviLinks = null;
+        const naviFile = themeFiles && themeFiles['navi'] && themeFiles['navi'].find(f => f.ext === 'json');
+        if (naviFile) {
+            const content = await mr.fetchJsonUrl(naviFile.url);
+            if (Array.isArray(content)) sidebarState.customNaviLinks = content;
+        }
+
+        // Sfondo personalizzato .theme/sidebar-background.*
+        const bgFile = themeFiles && themeFiles['sidebar-background'] &&
+            themeFiles['sidebar-background'].find(f => ['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(f.ext));
+        document.documentElement.style.setProperty('--sidebar-bg-image', bgFile ? `url("${bgFile.url}")` : 'none');
+
+        // Stile di navigazione (default Mainsail: iconsAndText)
+        if (settings && settings.uiSettings) {
+            const style = settings.uiSettings.navigationStyle || 'iconsAndText';
+            localStorage.setItem('mainsail_cached_navigation_style', style);
+            applyNavigationStyle(style);
+        }
+
+        updateSidebarLinks();
     }
 
     const THEME_PRESETS = {
@@ -3499,6 +3749,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Verifica se esiste custom.css
             const hasCustomCss = await state.moonraker.checkCustomCss();
 
+            // Recupera file tema (.theme/navi.json, .theme/sidebar-background, ecc.)
+            const themeFiles = await state.moonraker.getThemeFiles();
+
+            // Sincronizza dinamicamente le voci, ordine, visibilità e sfondo della Sidebar come Mainsail
+            await syncSidebarFromMoonraker(res.success ? res.settings : null, themeFiles);
+
             applyMainsailTheme({
                 primaryColor: primaryColor || localStorage.getItem('mainsail_cached_primary_color') || '#00c0f3',
                 themeMode: themeMode,
@@ -3508,6 +3764,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.warn('Sincronizzazione tema Mainsail non riuscita:', err);
             applyMainsailTheme();
+            updateSidebarLinks();
         }
     }
 

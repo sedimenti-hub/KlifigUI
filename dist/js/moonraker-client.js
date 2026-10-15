@@ -146,6 +146,88 @@ class MoonrakerClient {
     }
 
     /**
+     * Fetch JSON con timeout (helper interno)
+     */
+    async _fetchJson(path, timeoutMs = 3500) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            const res = await fetch(`${this.baseUrl}${path}`, { signal: controller.signal });
+            if (!res.ok) return null;
+            return await res.json();
+        } catch (_) {
+            return null;
+        } finally {
+            clearTimeout(timeoutId);
+        }
+    }
+
+    /**
+     * Stato del server Moonraker (klippy_state, klippy_connected, components, registered_directories)
+     */
+    async getServerInfo() {
+        const data = await this._fetchJson('/server/info');
+        return data && data.result ? data.result : null;
+    }
+
+    /**
+     * Elenca i file della cartella .theme (come fa Mainsail con getThemeFileUrl)
+     * Restituisce un oggetto { basename: { filename, url } } oppure null se la cartella non esiste.
+     */
+    async getThemeFiles() {
+        const data = await this._fetchJson(`/server/files/directory?path=config/.theme&extended=false&t=${Date.now()}`);
+        if (!data || !data.result || !Array.isArray(data.result.files)) return null;
+        const files = {};
+        data.result.files.forEach(f => {
+            const name = f.filename || '';
+            const dot = name.lastIndexOf('.');
+            if (dot <= 0) return;
+            const base = name.slice(0, dot);
+            const ext = name.slice(dot + 1).toLowerCase();
+            const ts = f.modified ? Math.round(f.modified * 1000) : Date.now();
+            (files[base] = files[base] || []).push({
+                filename: name,
+                ext,
+                url: `${this.baseUrl}/server/files/config/.theme/${encodeURIComponent(name)}?timestamp=${ts}`
+            });
+        });
+        return files;
+    }
+
+    /**
+     * Numero di webcam configurate (Mainsail nasconde la voce Webcam se è 0)
+     */
+    async getWebcamCount() {
+        const data = await this._fetchJson('/server/webcams/list');
+        if (!data || !data.result || !Array.isArray(data.result.webcams)) return null;
+        return data.result.webcams.length;
+    }
+
+    /**
+     * Sezioni presenti nella configurazione Klipper caricata (configfile.settings)
+     */
+    async getKlipperConfigSections() {
+        const data = await this._fetchJson('/printer/objects/query?configfile=settings', 5000);
+        const settings = data && data.result && data.result.status && data.result.status.configfile
+            ? data.result.status.configfile.settings
+            : null;
+        return settings ? Object.keys(settings) : null;
+    }
+
+    /**
+     * Scarica un JSON da un URL assoluto (es. .theme/navi.json)
+     */
+    async fetchJsonUrl(url) {
+        try {
+            const res = await fetch(url);
+            if (!res.ok) return null;
+            return await res.json();
+        } catch (_) {
+            return null;
+        }
+    }
+
+    /**
      * Elenca i file disponibili nella directory di configurazione di Klipper
      */
     async listConfigFiles() {

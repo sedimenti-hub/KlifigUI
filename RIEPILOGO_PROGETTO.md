@@ -47,9 +47,10 @@ gitGraph
    commit id: "SPI & RTD MAX31865" tag: "v0.7.0"
    commit id: "Controllo PID/Watermark" tag: "v0.7.1"
    commit id: "Misceleus, Ventole, ADXL, Include" tag: "v0.7.2"
-   commit id: "Sidebar Mainsail & Sync Tema" tag: "v0.7.3"
-   commit id: "Fix Sidebar & Tema Neutrale" tag: "v0.7.4"
-   commit id: "Icone Esatte Mainsail v2" tag: "v0.7.5"
+    commit id: "Sidebar Mainsail & Sync Tema" tag: "v0.7.3"
+    commit id: "Fix Sidebar & Tema Neutrale" tag: "v0.7.4"
+    commit id: "Icone Esatte Mainsail v2" tag: "v0.7.5"
+    commit id: "Sidebar Fedele Mainsail Reale" tag: "v0.7.6"
 ```
 
 ### Tabella Sintetica delle Versioni e Richieste
@@ -66,6 +67,7 @@ gitGraph
 | **v0.7.3** | *"Rendi la sezione klipper config sensibile al tema e colori di Mainsail; aggiungi la sidebar di Mainsail"* | Inserimento della barra laterale a scomparsa con link alle sezioni di Mainsail; query a Moonraker per leggere `uiSettings` e applicare colore primario e tema dark/light. |
 | **v0.7.4** | *"Il tema non è uguale a Mainsail; la barra laterale è rotta e elementi non allineati"* | Riconversione colori al Dark Charcoal originale Mainsail (`#121212`, `#1e1e1e`, `#00c0f3`); correzione flexbox sidebar (icone non più tagliate quando compressa); griglie bilanciate per Cinematica e Assi XYZ; aggiunta color picker nativo e preset vendor. |
 | **v0.7.5** | *"Allineamento perfetto icone e navigazione"* | Adozione delle icone SVG Material Design ufficiali di Mainsail v2 (Webcam, Controllo Movimento, Heightmap, File, Visualizzatore 3D, Cronologia, Macchina, Impostazioni, Configurator); chevron collassa/espandi. |
+| **v0.7.6** | *"Rendi la sidebar di klipper config uguale a quella di mainsails recuperando stile, icone e posizionamento"* | Sidebar clonata da `TheSidebar.vue`/`SidebarItem.vue`: colore sfondo grigio `#4f4f4f` identico a Mainsail; icone MDI ufficiali (Dashboard, Webcam, Console `mdiConsoleLine`, Heightmap, File G-Code, 3D Viewer, History, Timelapse, Machine); posizionamento e visibilità dinamici recuperati da Moonraker (`/server/info`, webcams, configfile settings, `.theme/navi.json` e `gui.navigation.entries`); indicatore attivo bordo destro 4px color primario; logo Mainsail ufficiale topbar. |
 
 ---
 
@@ -177,11 +179,18 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.5`.
-- ✅ **Layout grafico**: identico a Mainsail (Charcoal dark mode, sidebar allineata al pixel, icone SVG Material Design centrate).
+- ✅ **Versione corrente**: `v0.7.6`.
+- ✅ **Sidebar Mainsail Fedele al 100%**:
+  - Colore di sfondo grigio `#4f4f4f` (`--sidebar-bg-color`) estratto direttamente dal tema attivo di Mainsail.
+  - Voci e icone Material Design ufficiali (@mdi/js) allineate all'architettura Vue/Vuetify di Mainsail (`TheSidebar.vue`, `SidebarItem.vue`, `src/routes/index.ts`).
+  - Posizioni e ordine esatti (Dashboard 10, Webcam 20, Console 30, Heightmap 40, G-Code Files 50, G-Code Viewer 60, History 70, Timelapse 80, Machine 90, più link personalizzati da `.theme/navi.json`).
+  - Dinamicità Moonraker: interroga `/server/info` per stato Klippy e componenti, `/server/webcams/list` per webcam registrate, `/printer/objects/query?configfile=settings` per verificare la presenza di `bed_mesh`, e `navigation.entries` dal database Moonraker per rispettare l'ordine e la visibilità scelti dall'utente nelle impostazioni di Mainsail.
+  - Indicatore pagina attiva fedele: `border-right: 4px solid var(--primary)` e sfondo overlay semitrasparente.
+  - Tooltip laterale a destra (`v-tooltip right`) con ritardo di 500ms e icona info (`AboutDialog`) in fondo alla sidebar.
+  - Logo Mainsail ufficiale in SVG (`MainsailLogo.vue`) nella testata della barra.
 - ✅ **Cinematica e Assi**: schede riorganizzate con griglie simmetriche per asse X, Y e Z.
 - ✅ **Connessioni Driver & Sensori**: supporto completo per UART, SPI hardware/software, RTD MAX31865, ventole multiple, LED e ADXL345.
-- ✅ **Feedback visivo**: evidenziazione modifiche non salvate in tempo reale senza testo superfluo.
+- ✅ **Feedback visivo**: evidenziazione modifiche non salvate in tempo reale con dot discreto.
 
 ### Note di Sviluppo & Utilizzo:
 - Nel caso in cui il push automatico da console verso GitHub incontri il blocco credenziali non interattivo di Windows, è sufficiente eseguire dal terminale locale dell'utente:

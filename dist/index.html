@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.5">
+    <link rel="stylesheet" href="css/style.css?v=0.7.6">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300c0f3'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -15,110 +15,40 @@
     <div class="app-layout">
 
         <!-- ==================== MAINSAIL SIDEBAR ==================== -->
+        <!--
+            Replica fedele di TheSidebar.vue / SidebarItem.vue di Mainsail:
+            - larghezza 56px (navigationStyle "iconsOnly") o 220px ("iconsAndText")
+            - voci alte 48px, icone MDI 24px con opacità 0.85, tooltip a destra (ritardo 500ms)
+            - voce attiva con bordo destro di 4px nel colore primario
+            Le voci vengono generate da app.js con le stesse regole di Mainsail
+            (routes + .theme/navi.json + ordine/visibilità salvati nel database di Moonraker).
+        -->
         <aside class="mainsail-sidebar" id="mainsail-sidebar">
-            <!-- Logo / Intestazione -->
+            <!-- Logo (equivalente al logo della topbar di Mainsail) -->
             <div class="sidebar-header">
-                <a href="/#/" class="sidebar-logo-link" id="sidebar-logo-link" title="Torna a Mainsail Dashboard">
+                <a href="/" class="sidebar-logo-link" id="sidebar-logo-link" title="Torna a Mainsail Dashboard">
                     <div class="sidebar-logo-icon">
-                        <img id="sidebar-custom-logo-img" style="display: none; width: 28px; height: 28px; object-fit: contain;" alt="Logo">
-                        <svg id="sidebar-default-logo-svg" viewBox="0 0 24 24" width="28" height="28">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        <img id="sidebar-custom-logo-img" style="display: none;" alt="Logo">
+                        <svg id="sidebar-default-logo-svg" viewBox="0 0 599.38 523.11" aria-hidden="true">
+                            <path d="M382.29,142.98L132.98,522.82L0,522.68L344.3,0l0,0C352.18,49.06,365.2,97.68,382.29,142.98"/>
+                            <path d="M413.28,213.54L208.5,522.92l132.94,0.19l135.03-206.33l0,0C452.69,284.29,431.53,249.77,413.28,213.54 L413.28,213.54"/>
+                            <path d="M599.38,447.69l-49.25,75.42L417,522.82l101.6-153.67l0,0C543.48,397.35,570.49,423.61,599.38,447.69 L599.38,447.69z"/>
                         </svg>
                     </div>
                     <span class="sidebar-brand-text" id="sidebar-brand-title">Mainsail</span>
                 </a>
             </div>
 
-            <!-- Voci di Navigazione Principali Mainsail (Icone, Ordine e Posizione Identici a Mainsail) -->
-            <nav class="sidebar-nav">
-                <!-- 1. Dashboard (Monitor con layout dashboard mdiMonitorDashboard) -->
-                <a href="/#/" class="sidebar-nav-item" id="nav-mainsail-dashboard" data-tooltip="Dashboard" title="Dashboard">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M21,16V4H3V16H21M21,2A2,2 0 0,1 23,4V16A2,2 0 0,1 21,18H14V20H16V22H8V20H10V18H3C1.89,18 1,17.1 1,16V4C1,2.89 1.89,2 3,2H21M5,6H14V11H5V6M15,6H19V8H15V6M19,9V14H15V9H19M5,12H9V14H5V12M10,12H14V14H10V12Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">Dashboard</span>
-                </a>
+            <!-- Voci di navigazione (generate dinamicamente da app.js → renderMainsailSidebar) -->
+            <nav class="sidebar-nav" id="sidebar-nav" aria-label="Navigazione Mainsail"></nav>
 
-                <!-- 2. Webcam (mdiWebcam) -->
-                <a href="/#/cam" class="sidebar-nav-item" id="nav-mainsail-webcam" data-tooltip="Webcam" title="Webcam">
+            <!-- Append: icona informazioni (come AboutDialog di Mainsail) -->
+            <div class="sidebar-append">
+                <div class="sidebar-nav-item sidebar-about-item" id="sidebar-about-item" data-tooltip="Klipper Configurator">
                     <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12,2A7,7 0 0,1 19,9A7,7 0 0,1 12,16A7,7 0 0,1 5,9A7,7 0 0,1 12,2M12,4A5,5 0 0,0 7,9A5,5 0 0,0 12,14A5,5 0 0,0 17,9A5,5 0 0,0 12,4M12,6A3,3 0 0,1 15,9A3,3 0 0,1 12,12A3,3 0 0,1 9,9A3,3 0 0,1 12,6M6,22A2,2 0 0,1 4,20C4,19.62 4.1,19.27 4.29,18.97L6.11,15.81C7.69,17.17 9.75,18 12,18C14.25,18 16.31,17.17 17.89,15.81L19.71,18.97C19.9,19.27 20,19.62 20,20A2,2 0 0,1 18,22H6Z"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M11,18H13V16H11V18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6A4,4 0 0,0 8,10H10A2,2 0 0,1 12,8A2,2 0 0,1 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10A4,4 0 0,0 12,6Z"/></svg>
                     </span>
-                    <span class="sidebar-nav-label">Webcam</span>
-                </a>
-
-                <!-- 3. Controllo (Ingranaggio mdiCog) -->
-                <a href="/#/control" class="sidebar-nav-item" id="nav-mainsail-control" data-tooltip="Controllo" title="Controllo">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">Controllo</span>
-                </a>
-
-                <!-- 4. Heightmap (Griglia 3x3 mdiGrid) -->
-                <a href="/#/heightmap" class="sidebar-nav-item" id="nav-mainsail-heightmap" data-tooltip="Heightmap" title="Heightmap">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M10,4V8H14V4H10M16,4V8H20V4H16M16,10V14H20V10H16M16,16V20H20V16H16M14,20V16H10V20H14M8,20V16H4V20H8M8,14V10H4V14H8M8,8V4H4V8H8M10,14H14V10H10V14M4,2H20A2,2 0 0,1 22,4V20A2,2 0 0,1 20,22H4C2.92,22 2,21.1 2,20V4A2,2 0 0,1 4,2Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">Heightmap</span>
-                </a>
-
-                <!-- 5. File G-Code (Documenti sovrapposti mdiFileDocumentMultipleOutline) -->
-                <a href="/#/files" class="sidebar-nav-item" id="nav-mainsail-files" data-tooltip="File G-Code" title="File G-Code">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M16 0H8C6.9 0 6 .9 6 2V18C6 19.1 6.9 20 8 20H20C21.1 20 22 19.1 22 18V6L16 0M20 18H8V2H15V7H20V18M4 4V22H20V24H4C2.9 24 2 23.1 2 22V4H4M10 10V12H18V10H10M10 14V16H15V14H10Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">File G-Code</span>
-                </a>
-
-                <!-- 6. G-Code Viewer 3D (mdiVideo3d) -->
-                <a href="/#/viewer" class="sidebar-nav-item" id="nav-mainsail-viewer" data-tooltip="G-Code Viewer" title="Visualizzatore 3D">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M5,7H9A2,2 0 0,1 11,9V15A2,2 0 0,1 9,17H5V15H9V13H6V11H9V9H5V7M13,7H16A3,3 0 0,1 19,10V14A3,3 0 0,1 16,17H13V7M16,15A1,1 0 0,0 17,14V10A1,1 0 0,0 16,9H15V15H16Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">Visualizzatore 3D</span>
-                </a>
-
-                <!-- 7. Cronologia (Orologio con freccia mdiHistory) -->
-                <a href="/#/history" class="sidebar-nav-item" id="nav-mainsail-history" data-tooltip="Cronologia" title="Cronologia">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">Cronologia</span>
-                </a>
-
-                <!-- 8. Klipper Configurator (Attivo in questa interfaccia mdiTune) -->
-                <a href="#" class="sidebar-nav-item active" id="nav-mainsail-configurator" data-tooltip="Klipper Configurator" title="Klipper Config">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M3,17V19H9V17H3M3,5V7H13V5H3M13,21V19H21V17H13V15H11V21H13M7,9V11H3V13H7V15H9V9H7M21,13V11H11V13H21M15,9H17V7H21V5H17V3H15V9Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">Klipper Config</span>
-                </a>
-
-                <!-- 9. Macchina (Chiave inglese mdiWrench) -->
-                <a href="/#/machine" class="sidebar-nav-item" id="nav-mainsail-machine" data-tooltip="Macchina" title="Macchina">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">Macchina</span>
-                </a>
-            </nav>
-
-            <!-- Footer Sidebar con Impostazioni ed Espandi/Comprimi -->
-            <div class="sidebar-footer">
-                <a href="/#/settings" class="sidebar-nav-item" id="nav-mainsail-settings" data-tooltip="Impostazioni Mainsail" title="Impostazioni Mainsail">
-                    <span class="sidebar-nav-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label">Impostazioni</span>
-                </a>
-
-                <button type="button" class="sidebar-toggle-btn" id="btn-toggle-sidebar" title="Espandi / Riduci menu laterale">
-                    <span class="sidebar-toggle-icon">
-                        <svg viewBox="0 0 24 24"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"/></svg>
-                    </span>
-                    <span class="sidebar-nav-label" id="sidebar-toggle-label">Comprimi</span>
-                </button>
+                </div>
             </div>
         </aside>
 
@@ -131,7 +61,7 @@
                     <div class="nav-logo">K</div>
                     <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
                         <span class="nav-title">Klipper Configurator</span>
-                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.5</span>
+                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.6</span>
                     </div>
                 </div>
 
@@ -2245,9 +2175,9 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.7.5"></script>
-    <script src="js/default-config.js?v=0.7.5"></script>
-    <script src="js/moonraker-client.js?v=0.7.5"></script>
-    <script src="js/app.js?v=0.7.5"></script>
+    <script src="js/klipper-parser.js?v=0.7.6"></script>
+    <script src="js/default-config.js?v=0.7.6"></script>
+    <script src="js/moonraker-client.js?v=0.7.6"></script>
+    <script src="js/app.js?v=0.7.6"></script>
 </body>
 </html>
