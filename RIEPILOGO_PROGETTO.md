@@ -1,6 +1,6 @@
 # 📋 Riepilogo Completo Progetto: Klipper Configurator (KlifigUI)
 
-Questo documento raccoglie in maniera dettagliata l'intera cronologia delle richieste, l'evoluzione del codice, l'architettura dei moduli e tutte le versioni implementate dall'inizio della sessione fino alla versione corrente (**v0.7.5**).
+Questo documento raccoglie in maniera dettagliata l'intera cronologia delle richieste, l'evoluzione del codice, l'architettura dei moduli e tutte le versioni implementate dall'inizio della sessione fino alla versione corrente (**v0.7.15**).
 
 ---
 
@@ -52,6 +52,12 @@ gitGraph
     commit id: "Icone Esatte Mainsail v2" tag: "v0.7.5"
     commit id: "Sidebar Fedele Mainsail Reale" tag: "v0.7.6"
     commit id: "Sync Tema Realtime & Topbar Impostazioni" tag: "v0.7.7"
+    commit id: "Tooltip Informativi 'i' su Ogni Valore" tag: "v0.7.8"
+    commit id: "Traduzione Automatica Locale Mainsail" tag: "v0.7.9"
+    commit id: "Barra Sezioni Responsive Senza Scrollbar" tag: "v0.7.10"
+    commit id: "Eliminazione Linea Separazione Logo" tag: "v0.7.11"
+    commit id: "Topbar Ancorata Fissa con Scroll Contenuto" tag: "v0.7.14"
+    commit id: "Modalità Mobile Icon-Only Topbar & Schede" tag: "v0.7.15"
 ```
 
 ### Tabella Sintetica delle Versioni e Richieste
@@ -70,6 +76,12 @@ gitGraph
 | **v0.7.5** | *"Allineamento perfetto icone e navigazione"* | Adozione delle icone SVG Material Design ufficiali di Mainsail v2 (Webcam, Controllo Movimento, Heightmap, File, Visualizzatore 3D, Cronologia, Macchina, Impostazioni, Configurator); chevron collassa/espandi. |
 | **v0.7.6** | *"Rendi la sidebar di klipper config uguale a quella di mainsails recuperando stile, icone e posizionamento"* | Sidebar clonata da `TheSidebar.vue`/`SidebarItem.vue`: colore sfondo grigio `#4f4f4f` identico a Mainsail; icone MDI ufficiali (Dashboard, Webcam, Console `mdiConsoleLine`, Heightmap, File G-Code, 3D Viewer, History, Timelapse, Machine); posizionamento e visibilità dinamici recuperati da Moonraker (`/server/info`, webcams, configfile settings, `.theme/navi.json` e `gui.navigation.entries`); indicatore attivo bordo destro 4px color primario; logo Mainsail ufficiale topbar. |
 | **v0.7.7** | *"Tema applicato in automatico come Mainsail in tempo reale; elimina Moonraker connesso e versione dalla navbar e spostali in Impostazioni"* | Sincronizzazione automatica tema Mainsail in tempo reale via WebSocket, polling continuo e focus window; riorganizzazione completa topbar (eliminato bottone "Moonraker Connesso" e badge versione); nuovo tasto "Impostazioni" (ex "Tema"); lo stato di connessione con led e il badge versione sono integrati direttamente nel modale Impostazioni. |
+| **v0.7.8** | *"ad ogni valore inserisci un piccolo cerchietto con una i e durante l'hovering del mouse spiega cosè quel valore"* | Creato `dist/js/tooltips.js` con oltre 100 definizioni di parametri Klipper ufficiali, indicatore `i` su ogni campo/label, tooltip fluttuante anti-collisione con unità di misura e raccomandazioni. |
+| **v0.7.9** | *"Fai in modo che venga rilevata la lingua usata in mainsails e traduci klipper config usando quella lingua"* | Creato `dist/js/i18n.js` con rilevamento lingua da Moonraker/Mainsail (`general.locale`), supporto completo IT, EN, DE, FR, ES con sincronizzazione real-time e selettore in Impostazioni. |
+| **v0.7.10** | *"il box contenente i titoli delle sezioni dovrà avere la larghezza responsive in base ai titoli delle sezioni"* | Riprogettata la barra titoli sezioni (`.tabs-navigation`) con wrap fluido, flex dinamico proporzionale e rimozione completa di ogni barra di scorrimento orizzontale. |
+| **v0.7.11** | *"elimina questa sottile linea a destra il logo"* | Rimossa la linea verticale divisoria tra il box del logo e la navbar; l'header si presenta come un blocco unificato identico a Mainsail. |
+| **v0.7.14** | *"la top bar deve restare ancorata mentre il contenuto della pagina durante lo scroll deve scorrere sotto"* | Topbar convertita in `position: fixed` a tutta larghezza con coordinate dinamiche su espansione sidebar; contenuto con `padding-top` per scorrimento fluido sotto di essa. |
+| **v0.7.15** | *"nella modalita mobile trasforma i tasti in icone in modo da non rendere la UI inutilizzabile e fai lo stesso con la barra dei titoli delle sezioni"* | Modalità mobile ottimizzata per smartphone (`<= 768px`): testi pulsanti topbar e titoli schede sezioni nascosti mantenendo solo le icone SVG. La navbar si riduce a un'unica riga da 48px e le 9 schede si dispongono ordinatamente su una riga da 40px senza avvolgimenti ingombranti. |
 
 ---
 
@@ -183,7 +195,14 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.14`.
+- ✅ **Versione corrente**: `v0.7.15`.
+- ✅ **Modalità Mobile con Tasti Topbar e Titoli Sezioni Trasformati in Sole Icone**:
+  - Riprogettata l'esperienza per dispositivi mobili e smartphone (`@media (max-width: 768px)`):
+    - I pulsanti della topbar (`#btn-settings`, `#btn-reload`, `#btn-preview`, `#btn-download`, `#btn-save`, `#btn-save-restart`) nascondono i testi (`.btn-text { display: none !important; }`), mostrando unicamente le rispettive icone SVG in una riga singola da 48px ad altezza fissa senza wrapping forzato.
+    - I 9 pulsanti delle macro-schede (`.tabs-navigation .tab-btn`) nascondono le etichette testuali (`.tab-text { display: none !important; }`) e si comprimono armonicamente su un'unica riga orizzontale (`flex: 1 1 0; min-width: 30px; height: 36px; padding: 0.45rem 0.15rem;`).
+    - L'ingombro verticale totale della testata su mobile passa da oltre 330px (con sovrapposizione e oscuramento delle schede sottostanti) a soli 88px totali (48px topbar + 40px sezioni), lasciando l'intero schermo disponibile per la visualizzazione e modifica dei parametri di stampa.
+    - Integrati attributi `title` e tooltip contestuali per ciascun pulsante e scheda per garantire la massima accessibilità e chiarezza anche in assenza di testo visivo.
+    - Il modulo `i18n.js` è stato sincronizzato per preservare la struttura a span dei testi e aggiornare contestualmente i tooltip `title` multilingua in tempo reale.
 - ✅ **Top Bar Ancorata & Fissa con Scorrimento del Contenuto al di Sotto**:
   - Convertita la barra superiore (`.navbar`) in posizionamento fisso continuo (`position: fixed; top: 0; left: var(--sidebar-width-collapsed); right: 0; height: var(--topbar-height); z-index: 100;`).
   - Sincronizzata la transizione laterale con l'espansione/compressione della sidebar (`.mainsail-sidebar.expanded ~ .app-main-area .navbar { left: var(--sidebar-width-expanded); }`).

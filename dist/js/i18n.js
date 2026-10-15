@@ -577,10 +577,17 @@
                 const key = `tab.${tabTarget.replace(/^tab-/, '').replace(/-/g, '_')}`;
                 const text = t(key);
                 if (text && text !== key) {
-                    // Preserva eventuale icona/svg
-                    const svg = btn.querySelector('svg');
-                    btn.textContent = text;
-                    if (svg) btn.prepend(svg);
+                    let textSpan = btn.querySelector('.tab-text');
+                    if (!textSpan) {
+                        textSpan = document.createElement('span');
+                        textSpan.className = 'tab-text';
+                        const svg = btn.querySelector('svg');
+                        btn.innerHTML = '';
+                        if (svg) btn.appendChild(svg);
+                        btn.appendChild(textSpan);
+                    }
+                    textSpan.textContent = text;
+                    btn.setAttribute('title', text);
                 }
             }
         });
@@ -630,16 +637,23 @@
         const text = t(i18nKey);
         if (!text || text === i18nKey) return;
 
+        el.setAttribute('title', text);
+
         if (keepIcons) {
-            const svgs = Array.from(el.querySelectorAll('svg, span:not(.info-circle)'));
-            const textNode = Array.from(el.childNodes).find(n => n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0);
-            if (textNode) {
-                textNode.textContent = ' ' + text;
+            let span = el.querySelector('.btn-text');
+            if (!span) {
+                span = el.querySelector('span:not(#quick-theme-dot):not(.info-circle)');
+            }
+            if (span) {
+                span.classList.add('btn-text');
+                span.textContent = text;
             } else {
-                // Cerca uno span interno con testo
-                const span = el.querySelector('span:not(#quick-theme-dot):not(.info-circle)');
-                if (span) {
-                    span.textContent = text;
+                const textNode = Array.from(el.childNodes).find(n => n.nodeType === Node.TEXT_NODE && n.textContent.trim().length > 0);
+                if (textNode) {
+                    const newSpan = document.createElement('span');
+                    newSpan.className = 'btn-text';
+                    newSpan.textContent = text;
+                    el.replaceChild(newSpan, textNode);
                 }
             }
         } else {

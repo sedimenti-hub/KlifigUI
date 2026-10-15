@@ -1244,14 +1244,6 @@ textarea.form-control {
 }
 
 @media (max-width: 900px) {
-    .navbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.75rem;
-    }
-    .nav-actions {
-        justify-content: flex-start;
-    }
     .grid-container {
         grid-template-columns: 1fr;
     }
@@ -1260,6 +1252,137 @@ textarea.form-control {
 @media (max-width: 768px) {
     .app-layout {
         flex-direction: column;
+    }
+
+    /* 1. Navbar compatta a singola riga su mobile con SOLO ICONE */
+    .navbar {
+        left: 0 !important;
+        right: 0 !important;
+        top: 0 !important;
+        height: var(--topbar-height) !important;
+        padding: 0 0.45rem !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 0.25rem !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scrollbar-width: none !important;
+    }
+    .navbar::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .nav-left {
+        gap: 0.25rem !important;
+        flex-shrink: 0 !important;
+    }
+
+    .nav-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.2rem !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-end !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* Nascondi i testi dei pulsanti nella top bar, lasciando solo le icone */
+    .navbar .btn .btn-text,
+    .navbar #btn-settings span:not(#quick-theme-dot) {
+        display: none !important;
+    }
+
+    .navbar .btn {
+        padding: 0.35rem 0.45rem !important;
+        min-width: 32px !important;
+        height: 32px !important;
+        gap: 0 !important;
+        justify-content: center !important;
+    }
+
+    .navbar #btn-settings {
+        padding: 0.35rem 0.45rem !important;
+        min-width: 38px !important;
+        gap: 0.25rem !important;
+    }
+
+    .navbar .btn svg {
+        width: 16px !important;
+        height: 16px !important;
+        margin: 0 !important;
+    }
+
+    #select-config-file {
+        padding: 0.2rem 1.1rem 0.2rem 0.4rem !important;
+        font-size: 0.75rem !important;
+        height: 32px !important;
+        max-width: 86px !important;
+    }
+
+    .unsaved-changes-pill {
+        padding: 0.2rem 0.4rem !important;
+        font-size: 0.7rem !important;
+    }
+    #unsaved-changes-text {
+        display: none !important;
+    }
+
+    /* 2. Barra dei Titoli delle Sezioni: SOLO ICONE su Mobile */
+    .tabs-navigation {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0.25rem 0.3rem !important;
+        gap: 0.15rem !important;
+        margin-bottom: 0.85rem !important;
+        overflow-x: auto !important;
+        scrollbar-width: none !important;
+    }
+    .tabs-navigation::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    /* Nascondi il testo dei tab, lasciando solo le icone */
+    .tabs-navigation .tab-btn .tab-text {
+        display: none !important;
+    }
+
+    .tabs-navigation .tab-btn {
+        padding: 0.45rem 0.15rem !important;
+        min-width: 30px !important;
+        height: 36px !important;
+        flex: 1 1 0 !important;
+        justify-content: center !important;
+        gap: 0 !important;
+        border-radius: var(--radius-sm) !important;
+    }
+
+    .tabs-navigation .tab-btn svg {
+        width: 18px !important;
+        height: 18px !important;
+        margin: 0 !important;
+    }
+
+    /* Sotto-tab compatti su mobile */
+    .subtabs {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        scrollbar-width: none !important;
+        gap: 0.25rem !important;
+        padding-bottom: 0.35rem !important;
+        margin-bottom: 0.85rem !important;
+    }
+    .subtabs::-webkit-scrollbar {
+        display: none !important;
+    }
+    .subtab-btn {
+        padding: 0.3rem 0.55rem !important;
+        font-size: 0.775rem !important;
+        white-space: nowrap !important;
     }
 
     .mainsail-sidebar {
@@ -1311,17 +1434,18 @@ textarea.form-control {
     .sidebar-nav-item::after {
         display: none !important;
     }
-    
-    .navbar {
-        left: 0 !important;
-    }
 
     .app-main-area {
         margin-left: 0 !important;
-        padding-bottom: 60px; /* Spazio per la barra di navigazione inferiore su smartphone */
+        padding-top: var(--topbar-height) !important;
+        padding-bottom: 64px !important; /* Spazio per la barra di navigazione inferiore Mainsail */
     }
 
     .mainsail-sidebar.expanded ~ .app-main-area {
         margin-left: 0 !important;
+    }
+
+    .app-container {
+        padding: 0.65rem 0.45rem !important;
     }
 }
