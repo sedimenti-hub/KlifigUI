@@ -183,7 +183,17 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.10`.
+- ✅ **Versione corrente**: `v0.7.11`.
+- ✅ **Sidebar Ancorata & Fissa durante lo Scroll**:
+  - Convertita la sidebar da `position: sticky` a `position: fixed; top: 0; left: 0; bottom: 0; height: 100vh;` con z-index dedicato (200) e layout coordinato su `.app-main-area` (`margin-left: var(--sidebar-width-collapsed)` e `var(--sidebar-width-expanded)` con transizione fluida).
+  - Durante lo scorrimento verticale della pagina e dei lunghi moduli di configurazione, la sidebar Mainsail rimane perfettamente ancorata e ferma sul lato sinistro, esattamente come nell'interfaccia nativa di Mainsail.
+  - La lista delle voci di navigazione interne alla sidebar supporta lo scorrimento indipendente (`overflow-y: auto`) in caso di schermi a bassa risoluzione verticale, mantenendo intestazione/logo e pulsante about fissati ai vertici.
+  - Su dispositivi mobili (`@media (max-width: 768px)`), il layout si converte automaticamente in barra inferiore con azzeramento del margine.
+- ✅ **Box Titoli delle Sezioni Responsive**:
+  - Il box contenitore dei titoli delle sezioni (`.tabs-navigation`) è stato reso responsivo con `display: inline-flex; width: fit-content; max-width: 100%;`.
+  - La larghezza del box non si estende più forzatamente al 100% dell'area lasciando vuoti ingiustificati, ma abbraccia dinamicamente l'esatta ampiezza dei titoli delle sezioni (adattandosi automaticamente anche alle diverse lunghezze delle traduzioni in Italiano, Inglese, Tedesco, Francese e Spagnolo).
+  - I pulsanti delle sezioni (`.tab-btn` e `.subtab-btn`) sono protetti con `flex-shrink: 0;` e scorrimento orizzontale touch (`-webkit-overflow-scrolling: touch; scrollbar-width: thin;`) per evitare schiacciamenti di testo su schermi più compatti.
+  - Stesso comportamento coerente applicato anche alle sotto-sezioni (`.subtabs` per Stepper Motion X/Y/Z/Dual Carriage ed Estrusori IDEX).
 - ✅ **Rilevamento Lingua Mainsail & Traduzione Automatica dell'Interfaccia**:
   - Implementato il modulo dedicato [`dist/js/i18n.js`](file:///d:/Antigravity/KlifigUI/dist/js/i18n.js) che interroga Moonraker (`/server/database/item?namespace=mainsail`) e rileva automaticamente la lingua configurata dall'utente in Mainsail (`general.locale`, `general.language` o `uiSettings.locale`).
   - Traduzione istantanea e completa di tutti gli elementi grafici dell'applicazione: pulsanti topbar (Impostazioni, Ricarica, Anteprima, Scarica, Salva, Salva & Riavvia), etichette delle 9 schede principali, titoli e tag delle card, oltre 160 form-label e checkbox, opzioni dei menu a tendina, modali e messaggi toast.
@@ -207,7 +217,7 @@ KlipperUI / KlifigUI/
   - Eliminato il pulsante pill "Moonraker connesso" dalla barra superiore.
   - Eliminato il tag/badge della versione dalla testata della barra superiore.
   - Rinominato il tasto "Tema" in **"Impostazioni"** con icona ingranaggio e dot cromatico attivo.
-  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.10`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
+  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.11`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
 - ✅ **Sidebar Mainsail Fedele al 100%**:
   - Colore di sfondo grigio `#4f4f4f` (`--sidebar-bg-color`) estratto direttamente dal tema attivo di Mainsail.
   - Voci e icone Material Design ufficiali (@mdi/js) allineate all'architettura Vue/Vuetify di Mainsail (`TheSidebar.vue`, `SidebarItem.vue`, `src/routes/index.ts`).
@@ -226,4 +236,4 @@ KlipperUI / KlifigUI/
   cd d:\Antigravity\KlifigUI
   git push origin main
   ```
-  Tutti i commit fino a `v0.7.10` sono già stati generati e validati localmente.
+  Tutti i commit fino a `v0.7.11` sono già stati generati e validati localmente.

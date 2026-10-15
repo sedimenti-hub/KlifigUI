@@ -84,15 +84,22 @@ body {
     display: flex;
     min-height: 100vh;
     width: 100%;
+    position: relative;
 }
 
 .app-main-area {
     flex: 1;
     min-width: 0;
+    margin-left: var(--sidebar-width-collapsed);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     background-color: var(--bg-main);
+    transition: margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mainsail-sidebar.expanded ~ .app-main-area {
+    margin-left: var(--sidebar-width-expanded);
 }
 
 /* --------------------------------------------------------------------------
@@ -126,9 +133,9 @@ body {
 }
 
 .mainsail-sidebar {
-    width: var(--sidebar-width);
-    min-width: var(--sidebar-width);
-    max-width: var(--sidebar-width);
+    width: var(--sidebar-width-collapsed);
+    min-width: var(--sidebar-width-collapsed);
+    max-width: var(--sidebar-width-collapsed);
     flex-shrink: 0 !important;
     background-color: var(--sidebar-bg-color);
     background-image: var(--sidebar-bg-image);
@@ -138,8 +145,10 @@ body {
     border-right: 1px solid var(--sidebar-border);
     display: flex;
     flex-direction: column;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    bottom: 0;
     height: 100vh;
     z-index: 200;
     transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -148,7 +157,9 @@ body {
 }
 
 .mainsail-sidebar.expanded {
-    --sidebar-width: var(--sidebar-width-expanded);
+    width: var(--sidebar-width-expanded);
+    min-width: var(--sidebar-width-expanded);
+    max-width: var(--sidebar-width-expanded);
 }
 
 /* Logo (in Mainsail si trova nella topbar alta 48px, sopra la sidebar) */
@@ -313,7 +324,7 @@ body {
 .mainsail-sidebar:not(.expanded) .sidebar-nav-item::after {
     content: attr(data-tooltip);
     position: fixed;
-    left: calc(var(--sidebar-width) + 4px);
+    left: calc(var(--sidebar-width-collapsed) + 4px);
     margin-top: 0;
     transform: translateY(0);
     background: var(--sidebar-tooltip-bg);
@@ -574,7 +585,9 @@ body {
 }
 
 .tabs-navigation {
-    display: flex;
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
     gap: 0.4rem;
     background-color: var(--bg-surface);
     padding: 0.4rem;
@@ -584,6 +597,7 @@ body {
     scrollbar-width: thin;
     margin-bottom: 1.5rem;
     box-shadow: var(--shadow-sm);
+    -webkit-overflow-scrolling: touch;
 }
 
 .tabs-navigation::-webkit-scrollbar {
@@ -608,6 +622,7 @@ body {
     cursor: pointer;
     white-space: nowrap;
     transition: var(--transition);
+    flex-shrink: 0;
 }
 
 .tab-btn svg {
@@ -1023,11 +1038,16 @@ textarea.form-control {
 
 /* Sub-navigazione interna per Stepper (X, Y, Z, Extruder) */
 .subtabs {
-    display: flex;
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
     gap: 0.4rem;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 0.5rem;
     margin-bottom: 1.25rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
 }
 
 .subtab-btn {
@@ -1040,6 +1060,8 @@ textarea.form-control {
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .subtab-btn:hover {
@@ -1269,6 +1291,11 @@ textarea.form-control {
     }
     
     .app-main-area {
+        margin-left: 0 !important;
         padding-bottom: 60px; /* Spazio per la barra di navigazione inferiore su smartphone */
+    }
+
+    .mainsail-sidebar.expanded ~ .app-main-area {
+        margin-left: 0 !important;
     }
 }

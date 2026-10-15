@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.10';
+    const APP_VERSION = 'v0.7.11';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
