@@ -169,6 +169,7 @@ KlipperUI / KlifigUI/
 │       ├── klipper-parser.js   # Parser e generatore bidirezionale formato INI Klipper
 │       ├── default-config.js   # Valori di fallback e template di riferimento
 │       ├── moonraker-client.js # Client HTTP/WebSocket per API Moonraker e DB Mainsail
+│       ├── tooltips.js         # Modulo documentazione parametri, badge 'i' e tooltip fluttuante
 │       └── app.js              # Controller applicativo, reattività DOM e sincronizzazione
 ├── scripts/
 │   ├── install.sh              # Script di installazione automatica
@@ -181,7 +182,13 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.8`.
+- ✅ **Versione corrente**: `v0.7.9`.
+- ✅ **Badge Informativo "i" e Tooltip Contestuali su Ogni Valore**:
+  - Inserito un piccolo cerchietto con una "i" (`.info-circle`) accanto a ogni parametro, campo input, selettore e checkbox dell'applicazione.
+  - Al passaggio del mouse (hover) viene visualizzato un tooltip fluttuante ricco (`#klifig-tooltip`) con posizionamento automatico intelligente sopra o sotto l'elemento e rilevamento dei bordi dello schermo (anti-collisione).
+  - Ciascun tooltip mostra il nome esatto della direttiva Klipper (es. `[printer] max_velocity`, `rotation_distance`, `hold_current`, `sensor_type`), l'unità di misura (mm, mm/s, mm/s², Ampere, °C, Ω), la spiegazione chiara e completa del suo funzionamento e consigli sui valori tipici raccomandati.
+  - Creato il modulo dedicato [`dist/js/tooltips.js`](file:///d:/Antigravity/KlifigUI/dist/js/tooltips.js) con dizionario esteso di parametri Klipper e iniezione dinamica automatica tramite `MutationObserver` per coprire anche schede e controlli aggiunti a runtime (ventole dinamiche, macro, include, motori multi-asse Z).
+  - Pieno supporto touch per dispositivi mobili con apertura/chiusura al tocco.
 - ✅ **Fix Apertura Popup Impostazioni & Layout Topbar Sinistra**:
   - Risolta la mancata apertura del modal impostazioni causata da un'uscita prematura in `initSidebar()` (dovuta a un selettore obsoleto della vecchia sidebar) e unificati i gestori di eventi per `#btn-settings`.
   - Spostato il pulsante **"Impostazioni"** all'estrema sinistra della barra di navigazione (`.nav-left`), garantendo un accesso immediato a configurazione connessione e tema.
@@ -193,7 +200,7 @@ KlipperUI / KlifigUI/
   - Eliminato il pulsante pill "Moonraker connesso" dalla barra superiore.
   - Eliminato il tag/badge della versione dalla testata della barra superiore.
   - Rinominato il tasto "Tema" in **"Impostazioni"** con icona ingranaggio e dot cromatico attivo.
-  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.8`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
+  - Lo stato di connessione a Moonraker (con led verde/rosso) e il badge della versione (`v0.7.9`) sono ora comodamente consultabili all'interno del modale **Impostazioni**.
 - ✅ **Sidebar Mainsail Fedele al 100%**:
   - Colore di sfondo grigio `#4f4f4f` (`--sidebar-bg-color`) estratto direttamente dal tema attivo di Mainsail.
   - Voci e icone Material Design ufficiali (@mdi/js) allineate all'architettura Vue/Vuetify di Mainsail (`TheSidebar.vue`, `SidebarItem.vue`, `src/routes/index.ts`).
@@ -212,4 +219,4 @@ KlipperUI / KlifigUI/
   cd d:\Antigravity\KlifigUI
   git push origin main
   ```
-  Tutti i commit fino a `v0.7.8` sono già stati generati e validati localmente.
+  Tutti i commit fino a `v0.7.9` sono già stati generati e validati localmente.

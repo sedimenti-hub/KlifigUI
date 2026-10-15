@@ -762,6 +762,119 @@ body {
     margin-top: 0.3rem;
 }
 
+/* --------------------------------------------------------------------------
+   Badge 'i' (Info-Circle) e Tooltip Contestuale Parametri
+   -------------------------------------------------------------------------- */
+.info-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-style: normal;
+    cursor: help;
+    margin-left: 0.45rem;
+    line-height: 1;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.info-circle:hover,
+.info-circle:focus {
+    background: var(--primary);
+    color: #ffffff;
+    border-color: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+    transform: scale(1.15);
+    outline: none;
+}
+
+/* Tooltip Fluttuante Globale */
+.klifig-tooltip {
+    position: fixed;
+    z-index: 99999;
+    max-width: 320px;
+    width: max-content;
+    background: rgba(30, 30, 30, 0.96);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius-sm, 6px);
+    padding: 0.65rem 0.85rem;
+    color: #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.65), 0 0 1px 1px rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+}
+
+.klifig-tooltip.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.klifig-tooltip .tooltip-header {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.35rem;
+    flex-wrap: wrap;
+}
+
+.klifig-tooltip .tooltip-param {
+    display: inline-block;
+    font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(0, 192, 243, 0.12);
+    border: 1px solid rgba(0, 192, 243, 0.3);
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+.klifig-tooltip .tooltip-unit {
+    font-size: 0.72rem;
+    color: #a1a1aa;
+    font-weight: 600;
+}
+
+.klifig-tooltip .tooltip-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+}
+
+.klifig-tooltip .tooltip-desc {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: #d4d4d8;
+}
+
+.klifig-tooltip .tooltip-tip {
+    margin-top: 0.45rem;
+    padding-top: 0.4rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.14);
+    font-size: 0.74rem;
+    color: #38bdf8;
+    line-height: 1.35;
+}
+
 .input-with-unit {
     position: relative;
     display: flex;

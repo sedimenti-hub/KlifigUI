@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.8';
+    const APP_VERSION = 'v0.7.9';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -2812,6 +2812,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Salva snapshot iniziale della configurazione pulita
         clearAllModifiedIndicators();
         state.baselineSnapshot = takeFullUiSnapshot();
+        if (window.refreshTooltips) window.refreshTooltips();
     }
 
     // -------------------------------------------------------------------------
@@ -4027,5 +4028,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     applyMainsailTheme();
     initAutomaticThemeSync();
+    if (window.initTooltips) window.initTooltips();
     checkMoonrakerConnection();
 });
