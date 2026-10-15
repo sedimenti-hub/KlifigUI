@@ -1,6 +1,6 @@
 # 📋 Riepilogo Completo Progetto: Klipper Configurator (KlifigUI)
 
-Questo documento raccoglie in maniera dettagliata l'intera cronologia delle richieste, l'evoluzione del codice, l'architettura dei moduli e tutte le versioni implementate dall'inizio della sessione fino alla versione corrente (**v0.7.15**).
+Questo documento raccoglie in maniera dettagliata l'intera cronologia delle richieste, l'evoluzione del codice, l'architettura dei moduli e tutte le versioni implementate dall'inizio della sessione fino alla versione corrente (**v0.7.16**).
 
 ---
 
@@ -58,6 +58,7 @@ gitGraph
     commit id: "Eliminazione Linea Separazione Logo" tag: "v0.7.11"
     commit id: "Topbar Ancorata Fissa con Scroll Contenuto" tag: "v0.7.14"
     commit id: "Modalità Mobile Icon-Only Topbar & Schede" tag: "v0.7.15"
+    commit id: "Selettore File .cfg Dinamico & Responsive" tag: "v0.7.16"
 ```
 
 ### Tabella Sintetica delle Versioni e Richieste
@@ -82,6 +83,7 @@ gitGraph
 | **v0.7.11** | *"elimina questa sottile linea a destra il logo"* | Rimossa la linea verticale divisoria tra il box del logo e la navbar; l'header si presenta come un blocco unificato identico a Mainsail. |
 | **v0.7.14** | *"la top bar deve restare ancorata mentre il contenuto della pagina durante lo scroll deve scorrere sotto"* | Topbar convertita in `position: fixed` a tutta larghezza con coordinate dinamiche su espansione sidebar; contenuto con `padding-top` per scorrimento fluido sotto di essa. |
 | **v0.7.15** | *"nella modalita mobile trasforma i tasti in icone in modo da non rendere la UI inutilizzabile e fai lo stesso con la barra dei titoli delle sezioni"* | Modalità mobile ottimizzata per smartphone (`<= 768px`): testi pulsanti topbar e titoli schede sezioni nascosti mantenendo solo le icone SVG. La navbar si riduce a un'unica riga da 48px e le 9 schede si dispongono ordinatamente su una riga da 40px senza avvolgimenti ingombranti. |
+| **v0.7.16** | *"Il tasto di selezione file.cfg rendilo responsive rispetto al nome del file selezionato"* | Selettore `.cfg` con larghezza dinamica e responsive basata sul testo dell'opzione selezionata (canvas font measurement + `field-sizing: content`), limiti adattivi mobile e desktop per evitare sovrapposizioni e troncare intelligentemente con ellipsis solo quando necessario. |
 
 ---
 
@@ -195,7 +197,14 @@ KlipperUI / KlifigUI/
 ## 5. Stato Attuale e Prossimi Passi
 
 ### Risultati Conseguiti:
-- ✅ **Versione corrente**: `v0.7.15`.
+- ✅ **Versione corrente**: `v0.7.16`.
+- ✅ **Tasto / Menu di Selezione File .cfg Dinamico e Responsive rispetto al Nome del File**:
+  - Risolto il problema del dimensionamento del menu a tendina (`#select-config-file`): nei browser standard un elemento `<select>` si espande alla larghezza dell'opzione più lunga dell'intero elenco (lasciando ampi spazi vuoti quando è selezionato un file dal nome breve), oppure veniva forzato a valori rigidi su schermi piccoli (`max-width: 86px`).
+  - Implementato un calcolo dinamico della larghezza del testo tramite `CanvasRenderingContext2D.measureText()` combinato alla proprietà standard moderna CSS `field-sizing: content`:
+    - All'avvio, al caricamento dei file da Moonraker, ad ogni cambio opzione (`change`, `input`) o ridimensionamento della finestra (`resize`), la larghezza del tasto si adatta istantaneamente ai pixel effettivi del nome del file selezionato (es. `printer.cfg`, `ebb36.cfg`, `macros.cfg`, `stepper_drivers.cfg`) sommando il corretto padding e lo spazio per l'icona chevron SVG.
+    - Su desktop (`> 900px`): il selettore parte da un minimo di 85px ed è libero di espandersi fino a 320px in base al nome del file selezionato.
+    - Su smartphone e mobile (`<= 900px`): larghezza calibrata (`clamp(80px, 36vw, 160px)`) che asseconda il file selezionato senza mai comprimere né mandare a capo i pulsanti azione della topbar.
+    - Applicato `text-overflow: ellipsis` con tooltip contestuale dinamico (`title="File di configurazione attivo: ..."`) per preservare la leggibilità in caso di nomi di file particolarmente lunghi.
 - ✅ **Modalità Mobile con Tasti Topbar e Titoli Sezioni Trasformati in Sole Icone**:
   - Riprogettata l'esperienza per dispositivi mobili e smartphone (`@media (max-width: 768px)`):
     - I pulsanti della topbar (`#btn-settings`, `#btn-reload`, `#btn-preview`, `#btn-download`, `#btn-save`, `#btn-save-restart`) nascondono i testi (`.btn-text { display: none !important; }`), mostrando unicamente le rispettive icone SVG in una riga singola da 48px ad altezza fissa senza wrapping forzato.

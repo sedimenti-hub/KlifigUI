@@ -5,7 +5,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.15';
+    const APP_VERSION = 'v0.7.16';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -3908,6 +3908,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // -------------------------------------------------------------------------
+    // Larghezza Dinamica e Responsive per Selettore File .cfg
+    // -------------------------------------------------------------------------
+    function updateConfigFileSelectWidth() {
+        const sel = dom.selectConfigFile;
+        if (!sel) return;
+
+        const selectedOption = sel.options && sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex] : null;
+        const text = (selectedOption ? (selectedOption.textContent || selectedOption.value) : (sel.value || 'printer.cfg')).trim();
+
+        if (!updateConfigFileSelectWidth._ctx) {
+            const canvas = document.createElement('canvas');
+            updateConfigFileSelectWidth._ctx = canvas.getContext('2d');
+        }
+
+        const isMobile = window.innerWidth <= 900;
+        const fontSize = isMobile ? '12px' : '13.2px';
+        const fontFamily = window.getComputedStyle(sel).fontFamily || 'system-ui, -apple-system, sans-serif';
+        updateConfigFileSelectWidth._ctx.font = `500 ${fontSize} ${fontFamily}`;
+
+        const textMetrics = updateConfigFileSelectWidth._ctx.measureText(text);
+        const textWidth = Math.ceil(textMetrics.width);
+
+        // Padding sinistro (0.75rem su desktop / 0.45rem su mobile) + padding destro per freccia SVG (1.8rem su desktop / 1.35rem su mobile) + bordi
+        const extraSpace = isMobile ? 28 : 42;
+        const minW = isMobile ? 65 : 85;
+        // Limite superiore responsive: non rubare spazio ai pulsanti azione su schermi stretti
+        const maxW = isMobile ? Math.max(80, Math.floor(window.innerWidth * 0.36)) : 320;
+
+        const targetWidth = Math.min(Math.max(textWidth + extraSpace, minW), maxW);
+        sel.style.width = `${targetWidth}px`;
+        sel.title = `File di configurazione attivo: ${text}`;
+    }
+
+    // -------------------------------------------------------------------------
     // Connessione Moonraker & Caricamento Iniziale
     // -------------------------------------------------------------------------
     async function checkMoonrakerConnection() {
@@ -3931,6 +3965,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (f === state.currentConfigFile) opt.selected = true;
                     dom.selectConfigFile.appendChild(opt);
                 });
+                updateConfigFileSelectWidth();
             }
 
             await loadConfigFromMoonraker();
@@ -3943,10 +3978,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             state.parser.parse(KLIPPER_CONSTANTS.SAMPLE_CONFIG);
             populateUiFromParser();
+            updateConfigFileSelectWidth();
         }
     }
 
     async function loadConfigFromMoonraker() {
+        updateConfigFileSelectWidth();
         const filename = dom.selectConfigFile.value || 'printer.cfg';
         state.currentConfigFile = filename;
 
@@ -3965,7 +4002,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     dom.btnReload.addEventListener('click', loadConfigFromMoonraker);
-    dom.selectConfigFile.addEventListener('change', loadConfigFromMoonraker);
+    dom.selectConfigFile.addEventListener('change', () => {
+        updateConfigFileSelectWidth();
+        loadConfigFromMoonraker();
+    });
+    dom.selectConfigFile.addEventListener('input', updateConfigFileSelectWidth);
+    window.addEventListener('resize', updateConfigFileSelectWidth);
 
     // Modal Connessione & Impostazioni
     const openConnSettings = () => {
@@ -4057,6 +4099,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     applyMainsailTheme();
     initAutomaticThemeSync();
+    updateConfigFileSelectWidth();
     if (window.i18n) window.i18n.applyTranslations();
     if (window.initTooltips) window.initTooltips();
     checkMoonrakerConnection();

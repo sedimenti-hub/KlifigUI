@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Klipper Configurator - Mainsail WebUI</title>
-    <link rel="stylesheet" href="css/style.css?v=0.7.15">
+    <link rel="stylesheet" href="css/style.css?v=0.7.16">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300c0f3'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
 </head>
 <body>
@@ -72,8 +72,8 @@
                         <span id="unsaved-changes-text">0 modifiche</span>
                     </div>
 
-                    <!-- Selettore File Config -->
-                    <select class="form-control" id="select-config-file" style="width: auto; padding: 0.35rem 1.8rem 0.35rem 0.75rem; font-size: 0.825rem;">
+                    <!-- Selettore File Config (Larghezza Dinamica e Responsive) -->
+                    <select class="form-control" id="select-config-file" title="File di configurazione attivo (.cfg)">
                         <option value="printer.cfg">printer.cfg</option>
                         <option value="config.cfg">config.cfg</option>
                     </select>
@@ -2070,7 +2070,7 @@
                         <span id="status-text" style="font-size: 0.85rem; font-weight: 600;">Moonraker: Connessione...</span>
                     </div>
                     <div>
-                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.15</span>
+                        <span class="version-badge" id="app-version-badge" title="Versione KlifigUI">v0.7.16</span>
                     </div>
                 </div>
 
@@ -2197,11 +2197,11 @@
     <div id="toast-container"></div>
 
     <!-- Script JS (con Cache-Busting per garantire aggiornamenti istantanei) -->
-    <script src="js/klipper-parser.js?v=0.7.15"></script>
-    <script src="js/default-config.js?v=0.7.15"></script>
-    <script src="js/moonraker-client.js?v=0.7.15"></script>
-    <script src="js/i18n.js?v=0.7.15"></script>
-    <script src="js/tooltips.js?v=0.7.15"></script>
-    <script src="js/app.js?v=0.7.15"></script>
+    <script src="js/klipper-parser.js?v=0.7.16"></script>
+    <script src="js/default-config.js?v=0.7.16"></script>
+    <script src="js/moonraker-client.js?v=0.7.16"></script>
+    <script src="js/i18n.js?v=0.7.16"></script>
+    <script src="js/tooltips.js?v=0.7.16"></script>
+    <script src="js/app.js?v=0.7.16"></script>
 </body>
 </html>
