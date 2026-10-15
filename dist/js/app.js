@@ -5,7 +5,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const APP_VERSION = 'v0.7.17';
+    const APP_VERSION = 'v0.7.18';
+    window.APP_VERSION = '0.7.18';
 
     // -------------------------------------------------------------------------
     // Stato Applicazione
@@ -3223,7 +3224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dom.btnCopyPreview.addEventListener('click', () => {
         const text = dom.previewCodeBlock.textContent;
         navigator.clipboard.writeText(text).then(() => {
-            showToast('Configurazione copiata negli appunti!', 'success');
+            showToast(window.i18n ? window.i18n.t('toast.copied') : 'Configurazione copiata negli appunti!', 'success');
         });
     });
 
@@ -3244,7 +3245,7 @@ document.addEventListener('DOMContentLoaded', () => {
         a.download = state.currentConfigFile;
         a.click();
         URL.revokeObjectURL(a.href);
-        showToast(`File ${state.currentConfigFile} scaricato`, 'success');
+        showToast(window.i18n ? window.i18n.t('toast.downloaded', { file: state.currentConfigFile }) : `File ${state.currentConfigFile} scaricato`, 'success');
     });
 
     // -------------------------------------------------------------------------
@@ -3260,14 +3261,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (res.success) {
             clearAllModifiedIndicators();
             state.baselineSnapshot = takeFullUiSnapshot();
-            showToast(`File ${state.currentConfigFile} salvato con successo! (Backup creato)`, 'success', 3500);
+            showToast(window.i18n ? window.i18n.t('toast.saved_success', { file: state.currentConfigFile }) : `File ${state.currentConfigFile} salvato con successo! (Backup creato)`, 'success', 3500);
 
             if (andRestart) {
                 setTimeout(async () => {
-                    showToast('Invio comando FIRMWARE_RESTART a Klipper...', 'info');
+                    showToast(window.i18n ? window.i18n.t('toast.restarting') : 'Invio comando FIRMWARE_RESTART a Klipper...', 'info');
                     const restartRes = await state.moonraker.restartKlipper(true);
                     if (restartRes.success) {
-                        showToast('Klipper riavviato! Ricarica completata.', 'success');
+                        showToast(window.i18n ? window.i18n.t('toast.restart_success') : 'Klipper riavviato! Ricarica completata.', 'success');
                     } else {
                         showToast(`Errore riavvio: ${restartRes.error}`, 'error');
                     }
@@ -3978,7 +3979,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             dom.statusDot.classList.remove('connected');
             dom.statusText.textContent = 'Moonraker Offline (Usa Locale)';
-            showToast('Moonraker offline. Caricata configurazione template.', 'warning', 4500);
+            showToast(window.i18n ? window.i18n.t('toast.offline_template') : 'Moonraker offline. Caricata configurazione template.', 'warning', 4500);
 
             await syncMainsailTheme();
 
@@ -3999,7 +4000,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (res.success && res.content) {
             state.parser.parse(res.content);
             populateUiFromParser();
-            showToast(`${filename} caricato con successo`, 'success');
+            showToast(window.i18n ? window.i18n.t('toast.loaded_success', { file: filename }) : `${filename} caricato con successo`, 'success');
         } else {
             showToast(`Impossibile leggere ${filename}: ${res.error}. Caricato template.`, 'error');
             state.parser.parse(KLIPPER_CONSTANTS.SAMPLE_CONFIG);

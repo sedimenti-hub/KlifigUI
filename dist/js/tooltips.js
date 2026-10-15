@@ -1260,7 +1260,14 @@
         let displayDesc = data.desc || '';
         let displayTip = data.tip || '';
 
-        if (activeLang === 'en' && typeof TOOLTIPS_EN !== 'undefined') {
+        // Dizionario localizzato caricato dal file di lingua (dist/locales/<lang>.json)
+        const localeTooltips = window.LOCALE_TOOLTIPS && window.LOCALE_TOOLTIPS[activeLang];
+        const localized = localeTooltips && (localeTooltips[data.param] || (data.id && localeTooltips[data.id]));
+        if (localized) {
+            if (localized.title) displayTitle = localized.title;
+            if (localized.desc) displayDesc = localized.desc;
+            if (localized.tip) displayTip = localized.tip;
+        } else if (activeLang === 'en' && typeof TOOLTIPS_EN !== 'undefined') {
             const en = TOOLTIPS_EN[data.param] || (data.id && TOOLTIPS_EN[data.id]);
             if (en) {
                 if (en.title) displayTitle = en.title;

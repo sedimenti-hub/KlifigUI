@@ -1,6 +1,6 @@
 # 📋 Riepilogo Completo Progetto: Klipper Configurator (KlifigUI)
 
-Questo documento raccoglie in maniera dettagliata l'intera cronologia delle richieste, l'evoluzione del codice, l'architettura dei moduli e tutte le versioni implementate dall'inizio della sessione fino alla versione corrente (**v0.7.17**).
+Questo documento raccoglie in maniera dettagliata l'intera cronologia delle richieste, l'evoluzione del codice, l'architettura dei moduli e tutte le versioni implementate dall'inizio della sessione fino alla versione corrente (**v0.7.18**).
 
 ---
 
@@ -17,13 +17,14 @@ Questo documento raccoglie in maniera dettagliata l'intera cronologia delle rich
    - [Sezione Misceleus (Ventole Multiple, ADXL345, LED)](#37-sezione-misceleus-ventole-multiple-adxl345-led)
    - [Nuovo Tab Include & Resonance Tester](#38-nuovo-tab-include--resonance-tester)
    - [Integrazione Fedele con Mainsail: Sidebar, Temi e Palette Colori](#39-integrazione-fedele-con-mainsail-sidebar-temi-e-palette-colori)
+   - [File di Localizzazione Modulari e Matrice Inglese](#310-file-di-localizzazione-modulari-e-matrice-inglese)
 4. [Architettura del Repository e File Chiave](#4-architettura-del-repository-e-file-chiave)
 5. [Stato Attuale e Prossimi Passi](#5-stato-attuale-e-prossimi-passi)
 
 ---
 
 ## 1. Obiettivo Generale del Progetto
-**Klipper Configurator (KlifigUI)** nasce con lo scopo di fornire un'interfaccia web moderna, pulita, intuitiva e nativamente integrata con **Mainsail** e **Moonraker** per visualizzare, modificare, calibrare e validare l'intera configurazione di stampanti 3D basate su **Klipper** (`printer.cfg` e file inclusi).
+**Klipper Configurator (KlifigUI)** nasce con lo scopo di fornire un'interfaccia web moderna, pulita, intuitiva e nativamente integrata con **Mainsail** e **Moonraker** per visualizzare, modificare, calibrare e validare l'intera configurazione di stampanti 3D basate su **Klipper** (\`printer.cfg\` e file inclusi).
 
 ### Punti Chiave dell'Esperienza Utente:
 - **Nessuna perdita di configurazione**: backup automatici ad ogni salvataggio.
@@ -60,6 +61,7 @@ gitGraph
     commit id: "Modalità Mobile Icon-Only Topbar & Schede" tag: "v0.7.15"
     commit id: "Selettore File .cfg Dinamico & Responsive" tag: "v0.7.16"
     commit id: "Traduzione Completa Titoli Schede & Sezioni" tag: "v0.7.17"
+    commit id: "File di Localizzazione con Matrice Inglese" tag: "v0.7.18"
 ```
 
 ### Tabella Sintetica delle Versioni e Richieste
@@ -86,6 +88,7 @@ gitGraph
 | **v0.7.15** | *"nella modalita mobile trasforma i tasti in icone in modo da non rendere la UI inutilizzabile e fai lo stesso con la barra dei titoli delle sezioni"* | Modalità mobile ottimizzata per smartphone (`<= 768px`): testi pulsanti topbar e titoli schede sezioni nascosti mantenendo solo le icone SVG. La navbar si riduce a un'unica riga da 48px e le 9 schede si dispongono ordinatamente su una riga da 40px senza avvolgimenti ingombranti. |
 | **v0.7.16** | *"Il tasto di selezione file.cfg rendilo responsive rispetto al nome del file selezionato"* | Selettore `.cfg` con larghezza dinamica e responsive basata sul testo dell'opzione selezionata (canvas font measurement + `field-sizing: content`), limiti adattivi mobile e desktop per evitare sovrapposizioni e troncare intelligentemente con ellipsis solo quando necessario. |
 | **v0.7.17** | *"il titolo delle schede all'interno delle sezioni non viene tradotto, ad esempio 'Parametri Generali Klipper' oppure 'Ventole di raffreddamento klipper' ecc"* | Aggiunti attributi `data-i18n` a tutte le 27 card-title, divisori di sezione, header di tab (Include, Macro) e finestre modali; esteso il dizionario multilingua in `i18n.js` per tutte le 5 lingue (IT, EN, DE, FR, ES) e collegati i titoli dinamici di Stepper ed Estrusore in `app.js` all'evento `klifig:languageChanged`. |
+| **v0.7.18** | *"Crea un file per ogni lingua dove è possibile tradurre e modificare ogni testo di klipper config partendo da una matrice inglese"* | Creata la cartella modulare `dist/locales/` e `locales/` con 5 file (`en.json`, `it.json`, `de.json`, `fr.json`, `es.json`) e guida `locales/README.md`. `en.json` costituisce la matrice inglese con tutti i testi UI (111 chiavi), le etichette form (186 campi) e la documentazione tooltip (156 parametri). Aggiornato `i18n.js` con loader asincrono `loadLocale(lang)` e fallback offline incorporato. Collegato anche `tooltips.js` a `window.LOCALE_TOOLTIPS`. |
 
 ---
 
@@ -272,10 +275,30 @@ KlipperUI / KlifigUI/
 - ✅ **Connessioni Driver & Sensori**: supporto completo per UART, SPI hardware/software, RTD MAX31865, ventole multiple, LED e ADXL345.
 - ✅ **Feedback visivo**: evidenziazione modifiche non salvate in tempo reale con dot discreto.
 
+### 3.10. File di Localizzazione Modulari e Matrice Inglese
+- **Architettura Dedicata per Ogni Lingua**:
+  - Creata la directory modulare [`dist/locales/`](file:///d:/Antigravity/KlifigUI/dist/locales/) (servita da Nginx a runtime) specchiata nella directory di configurazione [`locales/`](file:///d:/Antigravity/KlifigUI/locales/) con 5 file JSON completi:
+    - [`en.json`](file:///d:/Antigravity/KlifigUI/dist/locales/en.json): **Matrice Inglese Master**, che funge da modello di riferimento standard per tutti i testi di Klipper Configurator.
+    - [`it.json`](file:///d:/Antigravity/KlifigUI/dist/locales/it.json): Traduzione italiana integrale.
+    - [`de.json`](file:///d:/Antigravity/KlifigUI/dist/locales/de.json): Traduzione tedesca integrale.
+    - [`fr.json`](file:///d:/Antigravity/KlifigUI/dist/locales/fr.json): Traduzione francese integrale.
+    - [`es.json`](file:///d:/Antigravity/KlifigUI/dist/locales/es.json): Traduzione spagnola integrale.
+- **Struttura dei File JSON**:
+  - `_meta`: codice lingua ISO, nome localizzato, bandiera emoji e descrizione.
+  - `ui`: 111 chiavi che coprono ogni pulsante topbar, scheda di navigazione, titolo di card/sezione, divisore, finestra modale, prompt e notifica toast.
+  - `labels`: 186 campi di form e checkbox identificati univocamente per ID elemento (es. `printer-kinematics`, `stepper-step-pin`, `extruder-nozzle-dia`).
+  - `tooltips`: 156 voci di documentazione tecnica parametri Klipper (titolo, spiegazione estesa `desc`, suggerimenti pratici `tip`, unità di misura `unit`).
+- **Caricatore Dinamico Asincrono & Tolleranza ai Guasti**:
+  - [`dist/js/i18n.js`](file:///d:/Antigravity/KlifigUI/dist/js/i18n.js) implementa `loadLocale(lang)` che effettua il `fetch` asincrono con parametro di cache-busting `?v=0.7.18`.
+  - In caso di assenza di rete o esecuzione su protocollo `file://` (dove le restrizioni CORS bloccano `fetch`), l'applicazione esegue un fallback trasparente sui dizionari incorporati in `i18n.js`, prevenendo qualsiasi errore a runtime.
+  - [`dist/js/tooltips.js`](file:///d:/Antigravity/KlifigUI/dist/js/tooltips.js) è sincronizzato con `window.LOCALE_TOOLTIPS`, visualizzando istantaneamente i tooltip nella lingua attiva e garantendo fallback automatico su matrice inglese e dizionario Klipper nativo.
+- **Guida per Traduttori & Sviluppatori**:
+  - Creato [`locales/README.md`](file:///d:/Antigravity/KlifigUI/locales/README.md) che documenta la struttura dei file, come modificare qualsiasi stringa dell'interfaccia e come aggiungere nuove lingue semplicemente duplicando la matrice `en.json`.
+
 ### Note di Sviluppo & Utilizzo:
 - Nel caso in cui il push automatico da console verso GitHub incontri il blocco credenziali non interattivo di Windows, è sufficiente eseguire dal terminale locale dell'utente:
   ```powershell
   cd d:\Antigravity\KlifigUI
   git push origin main
   ```
-  Tutti i commit fino a `v0.7.16` sono già stati generati e validati localmente.
+  Tutti i commit fino a `v0.7.18` sono generati e validati localmente.
