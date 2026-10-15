@@ -272,4 +272,4 @@ KlipperUI / KlifigUI/
   cd d:\Antigravity\KlifigUI
   git push origin main
   ```
-  Tutti i commit fino a `v0.7.14` sono già stati generati e validati localmente.
+  Tutti i commit fino a `v0.7.16` sono già stati generati e validati localmente.
