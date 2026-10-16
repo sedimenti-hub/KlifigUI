@@ -443,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p style="color: var(--text-secondary); margin-bottom: 0.75rem; font-size: 0.875rem;">Nessun microcontrollore secondario configurato.</p>
                     <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-mcu">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        + Aggiungi il tuo primo MCU secondario (es. toolhead, rpi, can0)
+                        + Aggiungi il tuo primo MCU secondario
                     </button>
                 </div>
             `;
@@ -477,33 +477,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <div class="form-row" style="margin-bottom: 0.85rem;">
                     <div class="form-group" style="flex: 1;">
-                        <label class="form-label">Nome MCU (Sezione [mcu &lt;nome&gt;]):</label>
+                        <label class="form-label">Nome MCU:</label>
                         <input type="text" class="form-control mcu-name-input" data-index="${index}" value="${mcu.name || ''}" placeholder="es. toolhead, rpi, can0, ebb36">
-                        <div class="form-helper">Questo nome identifica il microcontrollore e i suoi pin (es: <code>${mcu.name || 'toolhead'}:PB6</code>).</div>
+                        <div class="form-helper">Questo nome identifica il microcontrollore e i suoi pin.</div>
                     </div>
 
                     <div class="form-group" style="flex: 1;">
                         <label class="form-label">Metodo di Connessione:</label>
                         <select class="form-control mcu-conn-type-select" data-index="${index}">
-                            <option value="canbus" ${isCanbus ? 'selected' : ''}>CAN Bus (canbus_uuid)</option>
-                            <option value="serial" ${(!isCanbus && !isHost) ? 'selected' : ''}>USB / Seriale (/dev/serial/by-id/...)</option>
-                            <option value="host" ${isHost ? 'selected' : ''}>Raspberry Pi Linux MCU (/tmp/klipper_host_mcu)</option>
+                            <option value="canbus" ${isCanbus ? 'selected' : ''}>CAN Bus</option>
+                            <option value="serial" ${(!isCanbus && !isHost) ? 'selected' : ''}>USB / Seriale</option>
+                            <option value="host" ${isHost ? 'selected' : ''}>Raspberry Pi Linux MCU</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0.85rem;">
-                    <label class="form-label">${isCanbus ? 'UUID CAN Bus (canbus_uuid):' : (isHost ? 'Percorso Socket Linux MCU (serial):' : 'Porta Seriale USB (serial):')}</label>
+                    <label class="form-label">${isCanbus ? 'UUID CAN Bus:' : (isHost ? 'Percorso Socket Linux MCU:' : 'Porta Seriale USB:')}</label>
                     <input type="text" class="form-control mcu-address-input" data-index="${index}" value="${isCanbus ? (mcu.canbus_uuid || '') : (mcu.serial || '')}" placeholder="${isCanbus ? 'es. 43b0d2d3a1f8' : (isHost ? '/tmp/klipper_host_mcu' : '/dev/serial/by-id/usb-Klipper_...')}" ${isHost ? 'readonly' : ''}>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Baud Rate (Opzionale):</label>
+                        <label class="form-label">Baud Rate:</label>
                         <input type="text" class="form-control mcu-baud-input" data-index="${index}" value="${mcu.baud || ''}" placeholder="250000">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Restart Method (Opzionale):</label>
+                        <label class="form-label">Restart Method:</label>
                         <input type="text" class="form-control mcu-restart-input" data-index="${index}" value="${mcu.restart_method || ''}" placeholder="command">
                     </div>
                 </div>
@@ -627,7 +627,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateDriverSpiModeVisibility() {
         const isSoft = dom.driverSpiMode && dom.driverSpiMode.value === 'software';
         if (dom.driverSpiBusGroup) dom.driverSpiBusGroup.style.display = isSoft ? 'none' : 'block';
-        if (dom.driverSpiSoftGroup) dom.driverSpiSoftGroup.style.display = isSoft ? 'flex' : 'none';
+        if (dom.driverSpiSoftGroup) dom.driverSpiSoftGroup.style.display = isSoft ? 'grid' : 'none';
     }
 
     if (dom.driverConnTypeSelect) {
@@ -704,7 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateExtruderDriverSpiModeVisibility() {
         const isSoft = dom.extruderDriverSpiMode && dom.extruderDriverSpiMode.value === 'software';
         if (dom.extruderDriverSpiBusGroup) dom.extruderDriverSpiBusGroup.style.display = isSoft ? 'none' : 'block';
-        if (dom.extruderDriverSpiSoftGroup) dom.extruderDriverSpiSoftGroup.style.display = isSoft ? 'flex' : 'none';
+        if (dom.extruderDriverSpiSoftGroup) dom.extruderDriverSpiSoftGroup.style.display = isSoft ? 'grid' : 'none';
     }
 
     if (dom.extruderDriverConnTypeSelect) {
@@ -768,7 +768,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (dom.extruderSensorPinLabel) {
-            dom.extruderSensorPinLabel.textContent = isSpi ? 'Sensor Pin / CS Pin (sensor_pin):' : 'Sensor Pin (sensor_pin):';
+            const infoCircle = dom.extruderSensorPinLabel.querySelector('.info-circle');
+            dom.extruderSensorPinLabel.textContent = isSpi ? 'Sensor Pin / CS Pin: ' : 'Sensor Pin: ';
+            if (infoCircle) dom.extruderSensorPinLabel.appendChild(infoCircle);
         }
 
         const isSoft = dom.extruderSensorSpiMode && dom.extruderSensorSpiMode.value === 'software';
@@ -776,7 +778,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.extruderSensorSpiBusGroup.style.display = isSoft ? 'none' : 'block';
         }
         if (dom.extruderSensorSpiSoftGroup) {
-            dom.extruderSensorSpiSoftGroup.style.display = isSoft ? 'flex' : 'none';
+            dom.extruderSensorSpiSoftGroup.style.display = isSoft ? 'grid' : 'none';
         }
 
         if (dom.extruderSensorRtdFields) {
@@ -814,13 +816,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     function updateExtruderControlVisibility() {
         const isPid = !dom.extruderControlType || dom.extruderControlType.value === 'pid';
-        if (dom.extruderPidFields) dom.extruderPidFields.style.display = isPid ? 'flex' : 'none';
+        if (dom.extruderPidFields) dom.extruderPidFields.style.display = isPid ? 'grid' : 'none';
         if (dom.extruderWatermarkFields) dom.extruderWatermarkFields.style.display = isPid ? 'none' : 'block';
     }
 
     function updateBedControlVisibility() {
         const isPid = !dom.bedControlType || dom.bedControlType.value === 'pid';
-        if (dom.bedPidFields) dom.bedPidFields.style.display = isPid ? 'flex' : 'none';
+        if (dom.bedPidFields) dom.bedPidFields.style.display = isPid ? 'grid' : 'none';
         if (dom.bedWatermarkFields) dom.bedWatermarkFields.style.display = isPid ? 'none' : 'block';
     }
 
@@ -866,7 +868,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateAdxlSpiModeVisibility() {
         const isSoft = dom.adxlSpiMode && dom.adxlSpiMode.value === 'software';
         if (dom.adxlSpiBusGroup) dom.adxlSpiBusGroup.style.display = isSoft ? 'none' : 'block';
-        if (dom.adxlSpiSoftGroup) dom.adxlSpiSoftGroup.style.display = isSoft ? 'flex' : 'none';
+        if (dom.adxlSpiSoftGroup) dom.adxlSpiSoftGroup.style.display = isSoft ? 'grid' : 'none';
     }
 
     if (dom.checkEnableAdxl) {
@@ -939,7 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="text-align: center; padding: 1.25rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
                     <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;">Nessuna ventola ausiliaria aggiuntiva configurata.</p>
                     <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-fan">
-                        + Aggiungi una ventola ausiliaria (es. dissipatore hotend, box elettronica, camera)
+                        + Aggiungi una ventola ausiliaria
                     </button>
                 </div>
             `;
@@ -958,11 +960,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Riscaldatore Associato (heater):</label>
+                            <label class="form-label">Riscaldatore Associato:</label>
                             <input type="text" class="form-control fan-heater-input" data-index="${index}" placeholder="extruder" value="${fan.heater || 'extruder'}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Temperatura Attivazione (heater_temp):</label>
+                            <label class="form-label">Temperatura Attivazione:</label>
                             <input type="number" step="1" class="form-control fan-heater-temp-input" data-index="${index}" placeholder="50.0" value="${fan.heater_temp || '50.0'}">
                         </div>
                     </div>
@@ -971,7 +973,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Stepper da Monitorare (stepper):</label>
+                            <label class="form-label">Stepper da Monitorare:</label>
                             <input type="text" class="form-control fan-stepper-input" data-index="${index}" placeholder="stepper_x, stepper_y" value="${fan.stepper || ''}">
                             <div class="form-helper">Lascia vuoto per monitorare tutti i motori.</div>
                         </div>
@@ -981,15 +983,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Tipo Sensore (sensor_type):</label>
+                            <label class="form-label">Tipo Sensore:</label>
                             <input type="text" class="form-control fan-sens-type-input" data-index="${index}" placeholder="EPCOS 100K B57560G104F" value="${fan.sensor_type || 'EPCOS 100K B57560G104F'}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Pin Sensore (sensor_pin):</label>
+                            <label class="form-label">Pin Sensore:</label>
                             <input type="text" class="form-control fan-sens-pin-input" data-index="${index}" placeholder="PC5" value="${fan.sensor_pin || ''}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Temp Target (target_temp):</label>
+                            <label class="form-label">Temp Target:</label>
                             <input type="number" class="form-control fan-target-temp-input" data-index="${index}" placeholder="45.0" value="${fan.target_temp || '45.0'}">
                         </div>
                     </div>
@@ -998,7 +1000,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Potenza Massima (max_power):</label>
+                            <label class="form-label">Potenza Massima:</label>
                             <input type="number" step="0.1" min="0" max="1" class="form-control fan-max-power-input" data-index="${index}" placeholder="1.0" value="${fan.max_power || '1.0'}">
                         </div>
                     </div>
@@ -1018,10 +1020,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="form-group">
                         <label class="form-label">Tipologia di Assegnazione Klipper:</label>
                         <select class="form-control fan-type-select" data-index="${index}">
-                            <option value="heater_fan" ${fan.type === 'heater_fan' ? 'selected' : ''}>heater_fan (Dissipatore Hotend / Riscaldatori)</option>
-                            <option value="controller_fan" ${fan.type === 'controller_fan' ? 'selected' : ''}>controller_fan (Driver Motori / Elettronica)</option>
-                            <option value="temperature_fan" ${fan.type === 'temperature_fan' ? 'selected' : ''}>temperature_fan (Termoregolata con sensore)</option>
-                            <option value="fan_generic" ${fan.type === 'fan_generic' ? 'selected' : ''}>fan_generic (Ventola ausiliaria manuale M106/G-code)</option>
+                            <option value="heater_fan" ${fan.type === 'heater_fan' ? 'selected' : ''}>heater_fan</option>
+                            <option value="controller_fan" ${fan.type === 'controller_fan' ? 'selected' : ''}>controller_fan</option>
+                            <option value="temperature_fan" ${fan.type === 'temperature_fan' ? 'selected' : ''}>temperature_fan</option>
+                            <option value="fan_generic" ${fan.type === 'fan_generic' ? 'selected' : ''}>fan_generic</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -1029,7 +1031,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="text" class="form-control fan-name-input" data-index="${index}" placeholder="hotend_fan" value="${fan.name || ''}">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Pin di Controllo (pin):</label>
+                        <label class="form-label">Pin di Controllo:</label>
                         <input type="text" class="form-control fan-pin-input" data-index="${index}" placeholder="PC6" value="${fan.pin || ''}">
                     </div>
                 </div>
@@ -1135,7 +1137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="text-align: center; padding: 1.25rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
                     <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;" data-i18n="misc.no_leds">Nessuna striscia LED o Neopixel configurata.</p>
                     <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-led" data-i18n="misc.empty_add_led">
-                        + Aggiungi LED / Neopixel (es. StealthBurner, barre LED camera)
+                        + Aggiungi LED / Neopixel
                     </button>
                 </div>
             `;
@@ -1154,15 +1156,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_chain_count">Numero LED (chain_count):</label>
+                            <label class="form-label" data-i18n="lbl.led_chain_count">Numero LED:</label>
                             <input type="number" step="1" min="1" class="form-control led-chain-input" data-index="${index}" placeholder="1" value="${led.chain_count || '1'}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_color_order">Ordine Colori (color_order):</label>
+                            <label class="form-label" data-i18n="lbl.led_color_order">Ordine Colori:</label>
                             <select class="form-control led-order-select" data-index="${index}">
-                                <option value="GRB" ${led.color_order === 'GRB' ? 'selected' : ''}>GRB (Standard WS2812B)</option>
+                                <option value="GRB" ${led.color_order === 'GRB' ? 'selected' : ''}>GRB</option>
                                 <option value="RGB" ${led.color_order === 'RGB' ? 'selected' : ''}>RGB</option>
-                                <option value="GRBW" ${led.color_order === 'GRBW' ? 'selected' : ''}>GRBW (SK6812 RGBW con Bianco)</option>
+                                <option value="GRBW" ${led.color_order === 'GRBW' ? 'selected' : ''}>GRBW</option>
                                 <option value="RGBW" ${led.color_order === 'RGBW' ? 'selected' : ''}>RGBW</option>
                             </select>
                         </div>
@@ -1172,19 +1174,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_red_pin">Pin Rosso (red_pin):</label>
-                            <input type="text" class="form-control led-red-input" data-index="${index}" placeholder="opzionale (es. PA1)" value="${led.red_pin || ''}">
+                            <label class="form-label" data-i18n="lbl.led_red_pin">Pin Rosso:</label>
+                            <input type="text" class="form-control led-red-input" data-index="${index}" placeholder="es. PA1" value="${led.red_pin || ''}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_green_pin">Pin Verde (green_pin):</label>
-                            <input type="text" class="form-control led-green-input" data-index="${index}" placeholder="opzionale (es. PA2)" value="${led.green_pin || ''}">
+                            <label class="form-label" data-i18n="lbl.led_green_pin">Pin Verde:</label>
+                            <input type="text" class="form-control led-green-input" data-index="${index}" placeholder="es. PA2" value="${led.green_pin || ''}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_blue_pin">Pin Blu (blue_pin):</label>
-                            <input type="text" class="form-control led-blue-input" data-index="${index}" placeholder="opzionale (es. PA3)" value="${led.blue_pin || ''}">
+                            <label class="form-label" data-i18n="lbl.led_blue_pin">Pin Blu:</label>
+                            <input type="text" class="form-control led-blue-input" data-index="${index}" placeholder="es. PA3" value="${led.blue_pin || ''}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_cycle_time">Ciclo PWM (cycle_time):</label>
+                            <label class="form-label" data-i18n="lbl.led_cycle_time">Ciclo PWM:</label>
                             <input type="text" class="form-control led-cycle-input" data-index="${index}" placeholder="0.010" value="${led.cycle_time || ''}">
                         </div>
                     </div>
@@ -1193,10 +1195,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const headerTag = led.name ? `[${led.type} ${led.name}]` : `[${led.type}]`;
             const pinLabel = led.type === 'led' 
-                ? 'Pin Bianco / Principale (white_pin):' 
-                : (led.type === 'neopixel' ? 'Pin Dati LED (pin):' : 'Pin LED (pin):');
+                ? 'Pin Bianco / Principale:' 
+                : (led.type === 'neopixel' ? 'Pin Dati LED:' : 'Pin LED:');
             const pinPlaceholder = led.type === 'led' ? 'es. PA0' : (led.type === 'neopixel' ? 'es. PB0' : 'es. PC5');
-            const namePlaceholder = led.type === 'led' ? 'caselight (opzionale per [led])' : 'caselight';
+            const namePlaceholder = 'caselight';
 
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
@@ -1211,9 +1213,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="form-group">
                         <label class="form-label" data-i18n="lbl.led_type">Tipo LED:</label>
                         <select class="form-control led-type-select" data-index="${index}">
-                            <option value="neopixel" ${led.type === 'neopixel' ? 'selected' : ''}>neopixel (Strisce indirizzabili RGB/RGBW WS2812)</option>
-                            <option value="led" ${led.type === 'led' ? 'selected' : ''}>led (Klipper [led] / [led &lt;nome&gt;] Standard)</option>
-                            <option value="output_pin" ${led.type === 'output_pin' ? 'selected' : ''}>output_pin (LED Monocromatico / Barra PWM)</option>
+                            <option value="neopixel" ${led.type === 'neopixel' ? 'selected' : ''}>neopixel</option>
+                            <option value="led" ${led.type === 'led' ? 'selected' : ''}>led</option>
+                            <option value="output_pin" ${led.type === 'output_pin' ? 'selected' : ''}>output_pin</option>
                         </select>
                     </div>
                     <div class="form-group">

@@ -165,11 +165,11 @@
                     <div class="form-group">
                         <label class="form-label" for="printer-kinematics">Tipo di Cinematica Principale:</label>
                         <select class="form-control" id="printer-kinematics">
-                            <option value="cartesian" data-i18n="opt.kinematics_cartesian">Cartesiana (Ender 3, Prusa i3, Sovol)</option>
-                            <option value="corexy" data-i18n="opt.kinematics_corexy">CoreXY (Voron 2.4/Trident, RatRig, Bambu)</option>
-                            <option value="corexz" data-i18n="opt.kinematics_corexz">CoreXZ (Voron Switchwire)</option>
-                            <option value="delta" data-i18n="opt.kinematics_delta">Delta (Kossel, Flsun)</option>
-                            <option value="hybrid_corexy" data-i18n="opt.kinematics_hybrid_corexy">Hybrid CoreXY (IDEX CoreXY)</option>
+                            <option value="cartesian" data-i18n="opt.kinematics_cartesian">Cartesiana</option>
+                            <option value="corexy" data-i18n="opt.kinematics_corexy">CoreXY</option>
+                            <option value="corexz" data-i18n="opt.kinematics_corexz">CoreXZ</option>
+                            <option value="delta" data-i18n="opt.kinematics_delta">Delta</option>
+                            <option value="hybrid_corexy" data-i18n="opt.kinematics_hybrid_corexy">Hybrid CoreXY</option>
                             <option value="rotary_delta" data-i18n="opt.kinematics_rotary_delta">Rotary Delta</option>
                             <option value="polar" data-i18n="opt.kinematics_polar">Polare</option>
                             <option value="none" data-i18n="opt.kinematics_none">Nessuna</option>
@@ -178,7 +178,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="printer-max-velocity">Velocità Massima (max_velocity):</label>
+                        <label class="form-label" for="printer-max-velocity">Velocità Massima:</label>
                         <div class="input-with-unit">
                             <input type="number" class="form-control" id="printer-max-velocity" placeholder="300" min="10" max="1000">
                             <span class="input-unit">mm/s</span>
@@ -186,7 +186,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="printer-max-accel">Accelerazione Massima (max_accel):</label>
+                        <label class="form-label" for="printer-max-accel">Accelerazione Massima:</label>
                         <div class="input-with-unit">
                             <input type="number" class="form-control" id="printer-max-accel" placeholder="3000" min="100" max="50000">
                             <span class="input-unit">mm/s²</span>
@@ -195,7 +195,7 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="printer-cruise-ratio">Rapporto Crociera (minimum_cruise_ratio):</label>
+                            <label class="form-label" for="printer-cruise-ratio">Rapporto Crociera:</label>
                             <input type="number" step="0.05" class="form-control" id="printer-cruise-ratio" placeholder="0.5" min="0" max="1">
                         </div>
 
@@ -227,7 +227,7 @@
                     </div>
 
                     <div class="form-group" style="margin-top: 0.75rem;">
-                        <label class="form-label" for="printer-max-accel-to-decel">Max Accel to Decel (Opzionale legacy):</label>
+                        <label class="form-label" for="printer-max-accel-to-decel">Max Accel to Decel:</label>
                         <div class="input-with-unit">
                             <input type="number" class="form-control" id="printer-max-accel-to-decel" placeholder="Lascia vuoto se usi minimum_cruise_ratio" data-i18n-placeholder="placeholder.max_accel_to_decel">
                             <span class="input-unit">mm/s²</span>
@@ -238,7 +238,7 @@
                 <!-- Card 2: Architettura Avanzata: IDEX e Multi-Asse Z -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.mechanical_arch">Architettura Meccanica (IDEX & Multi-Z)</span>
+                        <span class="card-title" data-i18n="card.mechanical_arch">Architettura Meccanica</span>
                         <span class="card-tag" data-i18n="tag.hardware_layout">Hardware Layout</span>
                     </div>
 
@@ -246,7 +246,7 @@
                     <div class="form-group" style="padding: 0.9rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-idex">
-                            <strong style="color: var(--primary-light); font-size: 0.95rem;" data-i18n="idex.enable_label">Abilita Sistema IDEX (Dual Carriage / Doppio Carrello X)</strong>
+                            <strong style="color: var(--primary-light); font-size: 0.95rem;" data-i18n="idex.enable_label">Abilita Sistema IDEX</strong>
                         </label>
                         <div class="form-helper" style="margin-top: 0.4rem;" data-i18n="helper.enable_idex">
                             Abilita il secondo carrello <code>[dual_carriage]</code> indipendente sull'asse X e il secondo estrusore <code>[extruder1]</code>.
@@ -255,15 +255,15 @@
 
                     <!-- Configurazione Multi-Asse Z -->
                     <div class="form-group" style="margin-top: 1.25rem;">
-                        <label class="form-label" for="select-z-motor-count">Numero di Motori Asse Z (Multi-Asse Z):</label>
+                        <label class="form-label" for="select-z-motor-count">Numero di Motori Asse Z:</label>
                         <select class="form-control" id="select-z-motor-count">
-                            <option value="1" data-i18n="opt.z_motor_1">1 Motore Z (Standard singolo asse [stepper_z])</option>
-                            <option value="2" data-i18n="opt.z_motor_2">2 Motori Z (Dual Z: [stepper_z], [stepper_z1])</option>
-                            <option value="3" data-i18n="opt.z_motor_3">3 Motori Z (Triple Z: [stepper_z], [stepper_z1], [stepper_z2] - es. Trident)</option>
-                            <option value="4" data-i18n="opt.z_motor_4">4 Motori Z (Quad Z: [stepper_z], [stepper_z1], [stepper_z2], [stepper_z3] - es. Voron 2.4)</option>
+                            <option value="1" data-i18n="opt.z_motor_1">1 Motore Z</option>
+                            <option value="2" data-i18n="opt.z_motor_2">2 Motori Z</option>
+                            <option value="3" data-i18n="opt.z_motor_3">3 Motori Z</option>
+                            <option value="4" data-i18n="opt.z_motor_4">4 Motori Z</option>
                         </select>
                         <div class="form-helper" style="margin-top: 0.4rem;" data-i18n="helper.z_motor_count">
-                            Modifica automaticamente i motori disponibili nella scheda <strong>Stepper</strong> e aggiorna le opzioni di livellamento nella scheda <strong>Calibration</strong> (abilitando <code>[z_tilt]</code> o <code>[quad_gantry_level]</code>).
+                            Modifica automaticamente i motori disponibili nella scheda <strong>Stepper</strong> e aggiorna le opzioni di livellamento nella scheda <strong>Calibration</strong>.
                         </div>
                     </div>
 
@@ -275,26 +275,26 @@
                 <!-- Card 7: Parametri Delta (Visibili se cinematica = delta) -->
                 <div class="card" id="card-delta-params" style="display: none;">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.delta_geometry">Geometria Delta (Opzionale)</span>
+                        <span class="card-title" data-i18n="card.delta_geometry">Geometria Delta</span>
                         <span class="card-tag" data-i18n="tag.delta_geometry">Geometria Delta</span>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="delta-arm-length">Lunghezza Braccio (arm_length):</label>
+                            <label class="form-label" for="delta-arm-length">Lunghezza Braccio:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.1" class="form-control" id="delta-arm-length" placeholder="265.0">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="delta-radius">Raggio Delta (delta_radius):</label>
+                            <label class="form-label" for="delta-radius">Raggio Delta:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.1" class="form-control" id="delta-radius" placeholder="130.0">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="delta-print-radius">Raggio di Stampa (print_radius):</label>
+                            <label class="form-label" for="delta-print-radius">Raggio di Stampa:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.1" class="form-control" id="delta-print-radius" placeholder="100.0">
                                 <span class="input-unit">mm</span>
@@ -318,14 +318,14 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="x-pos-min">Min (position_min):</label>
+                            <label class="form-label" for="x-pos-min">Min:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="x-pos-min" placeholder="0">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="x-pos-max">Max (position_max):</label>
+                            <label class="form-label" for="x-pos-max">Max:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="x-pos-max" placeholder="235">
                                 <span class="input-unit">mm</span>
@@ -374,26 +374,26 @@
                 <!-- Card 4: Asse Dual Carriage (X2 IDEX) - Visibile solo se IDEX abilitato -->
                 <div class="card" id="card-dual-carriage" style="display: none;">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.axis_dc">Dual Carriage (Secondo Carrello X IDEX)</span>
+                        <span class="card-title" data-i18n="card.axis_dc">Dual Carriage</span>
                         <span class="card-tag">[dual_carriage]</span>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="dc-pos-min">Min (position_min):</label>
+                            <label class="form-label" for="dc-pos-min">Min:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="dc-pos-min" placeholder="0">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="dc-pos-max">Max (position_max):</label>
+                            <label class="form-label" for="dc-pos-max">Max:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="dc-pos-max" placeholder="300">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="dc-pos-endstop">Endstop (Parcheggio X2):</label>
+                            <label class="form-label" for="dc-pos-endstop">Endstop:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="dc-pos-endstop" placeholder="300">
                                 <span class="input-unit">mm</span>
@@ -440,14 +440,14 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="y-pos-min">Min (position_min):</label>
+                            <label class="form-label" for="y-pos-min">Min:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="y-pos-min" placeholder="0">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="y-pos-max">Max (position_max):</label>
+                            <label class="form-label" for="y-pos-max">Max:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="y-pos-max" placeholder="235">
                                 <span class="input-unit">mm</span>
@@ -501,21 +501,21 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="z-pos-min">Min (position_min):</label>
+                            <label class="form-label" for="z-pos-min">Min:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.5" class="form-control" id="z-pos-min" placeholder="-2.0">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="z-pos-max">Max (position_max):</label>
+                            <label class="form-label" for="z-pos-max">Max:</label>
                             <div class="input-with-unit">
                                 <input type="number" class="form-control" id="z-pos-max" placeholder="250">
                                 <span class="input-unit">mm</span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="z-pos-endstop">Endstop (se fisico):</label>
+                            <label class="form-label" for="z-pos-endstop">Endstop:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.1" class="form-control" id="z-pos-endstop" placeholder="0.0">
                                 <span class="input-unit">mm</span>
@@ -565,26 +565,26 @@
                 <!-- MCU Principale [mcu] -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.mcu_main">Microcontrollore Principale (Scheda Madre)</span>
+                        <span class="card-title" data-i18n="card.mcu_main">Microcontrollore Principale</span>
                         <span class="card-tag">[mcu]</span>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="mcu-conn-type">Metodo di Connessione:</label>
                         <select class="form-control" id="mcu-conn-type">
-                            <option value="serial" data-i18n="opt.conn_usb_serial">USB / Seriale (/dev/serial/by-id/...)</option>
-                            <option value="canbus" data-i18n="opt.conn_canbus_uuid">CAN Bus (canbus_uuid)</option>
-                            <option value="uart" data-i18n="opt.conn_uart_gpio">UART GPIO (/dev/ttyAMA0 o /dev/ttyS0)</option>
+                            <option value="serial" data-i18n="opt.conn_usb_serial">USB / Seriale</option>
+                            <option value="canbus" data-i18n="opt.conn_canbus_uuid">CAN Bus</option>
+                            <option value="uart" data-i18n="opt.conn_uart_gpio">UART GPIO</option>
                         </select>
                     </div>
 
                     <div class="form-group" id="group-mcu-serial">
-                        <label class="form-label" for="mcu-serial">Porta Seriale USB (serial):</label>
+                        <label class="form-label" for="mcu-serial">Porta Seriale USB:</label>
                         <input type="text" class="form-control" id="mcu-serial" placeholder="/dev/serial/by-id/usb-Klipper_stm32...">
                         <div class="form-helper" data-i18n="helper.mcu_serial">Percorso identificativo univoco della porta seriale USB.</div>
                     </div>
 
                     <div class="form-group" id="group-mcu-canbus" style="display: none;">
-                        <label class="form-label" for="mcu-canbus-uuid">UUID CAN Bus (canbus_uuid):</label>
+                        <label class="form-label" for="mcu-canbus-uuid">UUID CAN Bus:</label>
                         <input type="text" class="form-control" id="mcu-canbus-uuid" placeholder="es. 43b0d2d3a1f8">
                         <div class="form-helper" data-i18n="helper.mcu_canbus">Indirizzo a 12 cifre della scheda su bus CAN.</div>
                     </div>
@@ -593,7 +593,7 @@
                         <div class="form-group">
                             <label class="form-label" for="mcu-baud">Baud Rate:</label>
                             <select class="form-control" id="mcu-baud">
-                                <option value="250000" data-i18n="opt.baud_250k">250000 (Standard)</option>
+                                <option value="250000" data-i18n="opt.baud_250k">250000</option>
                                 <option value="115200">115200</option>
                                 <option value="500000">500000</option>
                             </select>
@@ -602,7 +602,7 @@
                         <div class="form-group">
                             <label class="form-label" for="mcu-restart-method">Metodo di Riavvio:</label>
                             <select class="form-control" id="mcu-restart-method">
-                                <option value="command" data-i18n="opt.restart_cmd_default">command (Predefinito)</option>
+                                <option value="command" data-i18n="opt.restart_cmd_default">command</option>
                                 <option value="rpi_usb">rpi_usb</option>
                                 <option value="cheetah">cheetah</option>
                             </select>
@@ -628,7 +628,7 @@
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-mcu-temp" checked>
-                            <strong data-i18n="chk.mcu_temp">Abilita Sensore Temperatura Chip Scheda Madre (MCU)</strong>
+                            <strong data-i18n="chk.mcu_temp">Abilita Sensore Temperatura Chip Scheda Madre</strong>
                         </label>
                         <div class="form-helper" data-i18n="helper.mcu_temp">Visualizza la temperatura del microcontrollore STM32/RP2040.</div>
                     </div>
@@ -639,10 +639,8 @@
                 <div class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
                         <div>
-                            <span class="card-title" data-i18n="card.mcu_extra">Microcontrollori Secondari & Toolhead ([mcu &lt;nome&gt;])</span>
-                            <div class="card-subtitle" style="margin: 0; margin-top: 0.25rem;" data-i18n="subtitle.mcu_extra_desc">
-                                Gestisci schede ausiliarie (CAN bus toolhead EBB/SB2209, Raspberry Pi GPIO, expander).
-                            </div>
+                            <span class="card-title" data-i18n="card.mcu_extra">Microcontrollori Secondari & Toolhead</span>
+                            <div class="card-subtitle" style="margin: 0; margin-top: 0.25rem;" data-i18n="subtitle.mcu_extra_desc"> Gestisci schede ausiliarie. </div>
                         </div>
                         <button type="button" class="btn btn-primary btn-sm" id="btn-add-mcu" data-i18n="btn.add_mcu_full">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -706,7 +704,7 @@
                         <div class="form-group">
                             <label class="form-label" for="stepper-microsteps">Microsteps:</label>
                             <select class="form-control" id="stepper-microsteps">
-                                <option value="16" data-i18n="opt.microsteps_16">16 (Standard consigliato)</option>
+                                <option value="16" data-i18n="opt.microsteps_16">16</option>
                                 <option value="32">32</option>
                                 <option value="64">64</option>
                                 <option value="128">128</option>
@@ -716,8 +714,8 @@
                         <div class="form-group">
                             <label class="form-label" for="stepper-steps-rotation">Gradi Motore:</label>
                             <select class="form-control" id="stepper-steps-rotation">
-                                <option value="200" data-i18n="opt.steps_200">200 passi (Motore 1.8° standard)</option>
-                                <option value="400" data-i18n="opt.steps_400">400 passi (Motore 0.9° alta precisione)</option>
+                                <option value="200" data-i18n="opt.steps_200">200 passi</option>
+                                <option value="400" data-i18n="opt.steps_400">400 passi</option>
                             </select>
                         </div>
                     </div>
@@ -742,7 +740,7 @@
                     </div>
 
                     <div id="notice-aux-z" style="display: none; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-secondary);">
-                        ℹ️ <em data-i18n="helper.stepper_z_notice">I limiti di corsa ed endstop per gli assi Z ausiliari (Z1, Z2, Z3) sono gestiti centralmente dall'asse principale [stepper_z].</em>
+                        ℹ️ <em data-i18n="helper.stepper_z_notice">I limiti di corsa ed endstop per gli assi Z ausiliari sono gestiti centralmente dall'asse principale [stepper_z].</em>
                     </div>
                 </div>
 
@@ -764,15 +762,15 @@
                                 <option value="tmc2240">TMC2240</option>
                                 <option value="tmc2130">TMC2130</option>
                                 <option value="tmc2660">TMC2660</option>
-                                <option value="generic" data-i18n="opt.driver_generic">A4988 / Generico (Standalone)</option>
+                                <option value="generic" data-i18n="opt.driver_generic">A4988 / Generico</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="driver-conn-type-select">Tipo Connessione Driver:</label>
                             <select class="form-control" id="driver-conn-type-select">
-                                <option value="uart" data-i18n="opt.driver_uart">UART (Seriale 1/2 pin - TMC2209 / TMC2208 / ecc.)</option>
-                                <option value="spi" data-i18n="opt.driver_spi">SPI (Bus SPI - TMC5160 / TMC2130 / ecc.)</option>
-                                <option value="standalone" data-i18n="opt.driver_standalone">Standalone (Nessun bus dati / A4988 / Ponticelli)</option>
+                                <option value="uart" data-i18n="opt.driver_uart">UART</option>
+                                <option value="spi" data-i18n="opt.driver_spi">SPI</option>
+                                <option value="standalone" data-i18n="opt.driver_standalone">Standalone</option>
                             </select>
                         </div>
                     </div>
@@ -780,7 +778,7 @@
                     <!-- Campi Connessione: STANDALONE -->
                     <div id="driver-conn-standalone-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                         <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-                            ℹ️ <strong data-i18n="chk.standalone_mode">Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper (es. A4988, DRV8825 o TMC configurato con ponticelli fisici). Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC in <code>printer.cfg</code>.
+                            ℹ️ <strong data-i18n="chk.standalone_mode">Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper. Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC in <code>printer.cfg</code>.
                         </div>
                     </div>
 
@@ -788,19 +786,19 @@
                     <div id="driver-conn-uart-fields">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="driver-uart-pin">Pin UART (uart_pin):</label>
+                                <label class="form-label" for="driver-uart-pin">Pin UART:</label>
                                 <input type="text" class="form-control" id="driver-uart-pin" placeholder="PC11">
                                 <div class="form-helper" data-i18n="helper.driver_uart">Pin di comunicazione seriale UART per questo asse.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="driver-tx-pin">Pin TX (tx_pin - Opzionale):</label>
+                                <label class="form-label" for="driver-tx-pin">Pin TX:</label>
                                 <input type="text" class="form-control" id="driver-tx-pin" placeholder="PC10">
                                 <div class="form-helper" data-i18n="helper.driver_tx">Opzionale. Da specificare solo se la board usa pin RX e TX separati.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="driver-uart-address">Indirizzo UART (uart_address):</label>
+                                <label class="form-label" for="driver-uart-address">Indirizzo UART:</label>
                                 <input type="number" class="form-control" id="driver-uart-address" placeholder="0" min="0" max="3">
-                                <div class="form-helper" data-i18n="helper.driver_address">Opzionale (0-3). Usato quando più driver condividono lo stesso pin UART.</div>
+                                <div class="form-helper" data-i18n="helper.driver_address">Opzionale. Usato quando più driver condividono lo stesso pin UART.</div>
                             </div>
                         </div>
                     </div>
@@ -809,34 +807,34 @@
                     <div id="driver-conn-spi-fields" style="display: none;">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="driver-cs-pin">Pin Chip Select (cs_pin):</label>
+                                <label class="form-label" for="driver-cs-pin">Pin Chip Select:</label>
                                 <input type="text" class="form-control" id="driver-cs-pin" placeholder="PD11">
                                 <div class="form-helper" data-i18n="helper.driver_cs">Pin CS dedicato a questo driver.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="driver-spi-mode">Modalità Bus SPI:</label>
                                 <select class="form-control" id="driver-spi-mode">
-                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI (Bus MCU)</option>
-                                    <option value="software" data-i18n="opt.spi_software">Software SPI (Bit-banging)</option>
+                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI</option>
+                                    <option value="software" data-i18n="opt.spi_software">Software SPI</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group" id="driver-spi-bus-group">
-                            <label class="form-label" for="driver-spi-bus">Bus SPI Hardware (spi_bus):</label>
+                            <label class="form-label" for="driver-spi-bus">Bus SPI Hardware:</label>
                             <input type="text" class="form-control" id="driver-spi-bus" placeholder="spi1">
-                            <div class="form-helper" data-i18n="helper.driver_spi_bus">Bus SPI configurato sulla MCU (es. spi1, spi2, spi3a).</div>
+                            <div class="form-helper" data-i18n="helper.driver_spi_bus">Bus SPI configurato sulla MCU.</div>
                         </div>
                         <div class="form-row" id="driver-spi-soft-group" style="display: none;">
                             <div class="form-group">
-                                <label class="form-label" for="driver-spi-sclk">Pin SCLK (spi_software_sclk_pin):</label>
+                                <label class="form-label" for="driver-spi-sclk">Pin SCLK:</label>
                                 <input type="text" class="form-control" id="driver-spi-sclk" placeholder="PE12">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="driver-spi-mosi">Pin MOSI (spi_software_mosi_pin):</label>
+                                <label class="form-label" for="driver-spi-mosi">Pin MOSI:</label>
                                 <input type="text" class="form-control" id="driver-spi-mosi" placeholder="PE14">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="driver-spi-miso">Pin MISO (spi_software_miso_pin):</label>
+                                <label class="form-label" for="driver-spi-miso">Pin MISO:</label>
                                 <input type="text" class="form-control" id="driver-spi-miso" placeholder="PE13">
                             </div>
                         </div>
@@ -846,7 +844,7 @@
                     <div id="driver-smart-fields">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="driver-run-current">Corrente Operativa (run_current):</label>
+                                <label class="form-label" for="driver-run-current">Corrente Operativa:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.05" class="form-control" id="driver-run-current" placeholder="0.800" min="0.1" max="2.5">
                                     <span class="input-unit">A RMS</span>
@@ -857,8 +855,8 @@
                             <div class="form-group">
                                 <label class="form-label" for="driver-stealthchop">Modalità StealthChop:</label>
                                 <select class="form-control" id="driver-stealthchop">
-                                    <option value="999999" data-i18n="opt.stealthchop_silent">Silenziosa (StealthChop attivo)</option>
-                                    <option value="0" data-i18n="opt.spreadcycle_torque">SpreadCycle (Più coppia / Meno passi persi)</option>
+                                    <option value="999999" data-i18n="opt.stealthchop_silent">Silenziosa</option>
+                                    <option value="0" data-i18n="opt.spreadcycle_torque">SpreadCycle</option>
                                 </select>
                             </div>
                         </div>
@@ -867,10 +865,10 @@
                         <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="check-enable-hold-current">
-                                <strong data-i18n="chk.hold_current">Abilita Corrente di Mantenimento (hold_current)</strong>
+                                <strong data-i18n="chk.hold_current">Abilita Corrente di Mantenimento</strong>
                             </label>
                             <div id="group-hold-current-field" style="display: none; margin-top: 0.75rem;">
-                                <label class="form-label" for="driver-hold-current">Corrente a Riposo (hold_current):</label>
+                                <label class="form-label" for="driver-hold-current">Corrente a Riposo:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.05" class="form-control" id="driver-hold-current" placeholder="0.500" min="0.05" max="2.5">
                                     <span class="input-unit">A RMS</span>
@@ -883,10 +881,10 @@
                         <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="check-enable-sense-resistor">
-                                <strong data-i18n="chk.sense_resistor">Specifica Valore Resistenza di Sense (sense_resistor)</strong>
+                                <strong data-i18n="chk.sense_resistor">Specifica Valore Resistenza di Sense</strong>
                             </label>
                             <div id="group-sense-resistor-field" style="display: none; margin-top: 0.75rem;">
-                                <label class="form-label" for="driver-sense-resistor">Resistenza di Sense (sense_resistor):</label>
+                                <label class="form-label" for="driver-sense-resistor">Resistenza di Sense:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.005" class="form-control" id="driver-sense-resistor" placeholder="0.110" min="0.010" max="0.500">
                                     <span class="input-unit">Ω</span>
@@ -898,7 +896,7 @@
                         <div class="form-group">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="driver-interpolate" checked>
-                                <strong data-i18n="chk.interpolate">Interpolazione a 256 microstep (interpolate: True)</strong>
+                                <strong data-i18n="chk.interpolate">Interpolazione a 256 microstep</strong>
                             </label>
                         </div>
 
@@ -906,7 +904,7 @@
                         <div class="form-group" id="group-sensorless-homing" style="margin-top: 1rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm);">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="driver-sensorless-enable">
-                                <strong data-i18n="chk.sensorless">Homing Senza Finecorsa Fisico (Sensorless Homing)</strong>
+                                <strong data-i18n="chk.sensorless">Homing Senza Finecorsa Fisico</strong>
                             </label>
                             <div id="sensorless-details" style="display: none; margin-top: 0.75rem;">
                                 <div class="form-row">
@@ -915,9 +913,9 @@
                                         <input type="text" class="form-control" id="driver-diag-pin" placeholder="^PC0">
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label" for="driver-sgthrs">Sensibilità StallGuard (driver_SGTHRS / driver_SGT):</label>
+                                        <label class="form-label" for="driver-sgthrs">Sensibilità StallGuard:</label>
                                         <input type="number" class="form-control" id="driver-sgthrs" placeholder="100" min="-64" max="255">
-                                        <div class="form-helper" data-i18n="helper.driver_stallguard">TMC2209/2240: 0-255 (più alto = più sensibile). TMC5160: -64 a 63 (più basso = più sensibile).</div>
+                                        <div class="form-helper" data-i18n="helper.driver_stallguard">TMC2209/2240: 0-255. TMC5160: -64 a 63.</div>
                                     </div>
                                 </div>
                             </div>
@@ -969,14 +967,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="extruder-gear-ratio">Rapporto Ingranaggi (gear_ratio):</label>
+                            <label class="form-label" for="extruder-gear-ratio">Rapporto Ingranaggi:</label>
                             <input type="text" class="form-control" id="extruder-gear-ratio" placeholder="50:17 o 50:10 o vuoto" data-i18n-placeholder="placeholder.gear_ratio">
                         </div>
                     </div>
 
                     <div class="form-row" style="margin-top: 1rem;">
                         <div class="form-group">
-                            <label class="form-label" for="extruder-nozzle-dia">Diametro Ugello (nozzle_diameter):</label>
+                            <label class="form-label" for="extruder-nozzle-dia">Diametro Ugello:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.1" class="form-control" id="extruder-nozzle-dia" placeholder="0.400">
                                 <span class="input-unit">mm</span>
@@ -985,7 +983,7 @@
                         <div class="form-group">
                             <label class="form-label" for="extruder-filament-dia">Diametro Filamento:</label>
                             <select class="form-control" id="extruder-filament-dia">
-                                <option value="1.750" data-i18n="opt.filament_175">1.75 mm (Standard)</option>
+                                <option value="1.750" data-i18n="opt.filament_175">1.75 mm</option>
                                 <option value="2.850">2.85 mm</option>
                             </select>
                         </div>
@@ -1007,17 +1005,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="extruder-sensor-type">Tipo di Sensore (sensor_type):</label>
+                        <label class="form-label" for="extruder-sensor-type">Tipo di Sensore:</label>
                         <select class="form-control" id="extruder-sensor-type">
-                            <option value="EPCOS 100K B57560G104F" data-i18n="opt.therm_epcos">EPCOS 100K B57560G104F (Creality / Stock)</option>
-                            <option value="Generic 3950" data-i18n="opt.therm_generic_3950">Generic 3950 (Molto comune / Voron)</option>
-                            <option value="ATC Semitec 104GT-2" data-i18n="opt.therm_atc_semitec">ATC Semitec 104GT-2 (E3D V6 / Prusa)</option>
-                            <option value="ATC Semitec 104NT-4-R025H42G" data-i18n="opt.therm_atc_revo">ATC Semitec 104NT (E3D Revo)</option>
-                            <option value="PT1000" data-i18n="opt.therm_pt1000">PT1000 (Analogico a 2 fili su pullup 4.7K)</option>
-                            <option value="MAX31865" data-i18n="opt.therm_max31865">MAX31865 (Amplificatore SPI RTD PT100/PT1000)</option>
-                            <option value="MAX6675" data-i18n="opt.therm_max6675">MAX6675 (Termocoppia Tipo K SPI)</option>
-                            <option value="MAX31855" data-i18n="opt.therm_max31855">MAX31855 (Termocoppia SPI)</option>
-                            <option value="MAX31856" data-i18n="opt.therm_max31856">MAX31856 (Termocoppia SPI avanzata)</option>
+                            <option value="EPCOS 100K B57560G104F" data-i18n="opt.therm_epcos">EPCOS 100K B57560G104F</option>
+                            <option value="Generic 3950" data-i18n="opt.therm_generic_3950">Generic 3950</option>
+                            <option value="ATC Semitec 104GT-2" data-i18n="opt.therm_atc_semitec">ATC Semitec 104GT-2</option>
+                            <option value="ATC Semitec 104NT-4-R025H42G" data-i18n="opt.therm_atc_revo">ATC Semitec 104NT</option>
+                            <option value="PT1000" data-i18n="opt.therm_pt1000">PT1000</option>
+                            <option value="MAX31865" data-i18n="opt.therm_max31865">MAX31865</option>
+                            <option value="MAX6675" data-i18n="opt.therm_max6675">MAX6675</option>
+                            <option value="MAX31855" data-i18n="opt.therm_max31855">MAX31855</option>
+                            <option value="MAX31856" data-i18n="opt.therm_max31856">MAX31856</option>
                             <option value="SliceEngineering 450">Slice Engineering 450</option>
                         </select>
                     </div>
@@ -1032,81 +1030,79 @@
                             <div class="form-group">
                                 <label class="form-label" for="extruder-sensor-spi-mode">Modalità Bus SPI:</label>
                                 <select class="form-control" id="extruder-sensor-spi-mode">
-                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI (Bus MCU)</option>
-                                    <option value="software" data-i18n="opt.spi_software">Software SPI (Bit-banging)</option>
+                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI</option>
+                                    <option value="software" data-i18n="opt.spi_software">Software SPI</option>
                                 </select>
                             </div>
                             <div class="form-group" id="extruder-sensor-spi-bus-group">
-                                <label class="form-label" for="extruder-sensor-spi-bus">Bus SPI (spi_bus):</label>
+                                <label class="form-label" for="extruder-sensor-spi-bus">Bus SPI:</label>
                                 <input type="text" class="form-control" id="extruder-sensor-spi-bus" placeholder="spi1">
                                 <div class="form-helper" data-i18n="helper.extruder_sensor_spi">Es: spi1, spi2, spi3a, ecc.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="extruder-sensor-spi-speed">Velocità SPI (spi_speed):</label>
+                                <label class="form-label" for="extruder-sensor-spi-speed">Velocità SPI:</label>
                                 <div class="input-with-unit">
                                     <input type="number" class="form-control" id="extruder-sensor-spi-speed" placeholder="4000000" value="4000000">
                                     <span class="input-unit">Hz</span>
                                 </div>
-                                <div class="form-helper" data-i18n="helper.extruder_sensor_speed">Default di Klipper: 4000000 (4 MHz).</div>
+                                <div class="form-helper" data-i18n="helper.extruder_sensor_speed">Default di Klipper: 4000000.</div>
                             </div>
                         </div>
 
                         <!-- Pin Software SPI (se attiva modalità software) -->
                         <div class="form-row" id="extruder-sensor-spi-soft-group" style="display: none; margin-top: 0.5rem;">
                             <div class="form-group">
-                                <label class="form-label" for="extruder-sensor-spi-sclk">SCLK Pin (spi_software_sclk_pin):</label>
+                                <label class="form-label" for="extruder-sensor-spi-sclk">SCLK Pin:</label>
                                 <input type="text" class="form-control" id="extruder-sensor-spi-sclk" placeholder="PE12">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="extruder-sensor-spi-mosi">MOSI Pin (spi_software_mosi_pin):</label>
+                                <label class="form-label" for="extruder-sensor-spi-mosi">MOSI Pin:</label>
                                 <input type="text" class="form-control" id="extruder-sensor-spi-mosi" placeholder="PE14">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="extruder-sensor-spi-miso">MISO Pin (spi_software_miso_pin):</label>
+                                <label class="form-label" for="extruder-sensor-spi-miso">MISO Pin:</label>
                                 <input type="text" class="form-control" id="extruder-sensor-spi-miso" placeholder="PE13">
                             </div>
                         </div>
 
                         <!-- Parametri RTD specifici per MAX31865 -->
                         <div id="extruder-sensor-rtd-fields" style="display: none; margin-top: 1rem; padding-top: 0.85rem; border-top: 1px dashed rgba(255,255,255,0.08);">
-                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem;" data-i18n="subtitle.rtd_sensor">
-                                🌡️ Parametri Sensore RTD (MAX31865)
-                            </div>
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem;" data-i18n="subtitle.rtd_sensor"> 🌡️ Parametri Sensore RTD </div>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label" for="extruder-rtd-nominal-r">Resistenza Nominale a 0°C (rtd_nominal_r):</label>
+                                    <label class="form-label" for="extruder-rtd-nominal-r">Resistenza Nominale a 0°C:</label>
                                     <select class="form-control" id="extruder-rtd-nominal-r">
-                                        <option value="100" data-i18n="opt.rtd_100">100 Ω (Sonda PT100)</option>
-                                        <option value="1000" data-i18n="opt.rtd_1000">1000 Ω (Sonda PT1000)</option>
+                                        <option value="100" data-i18n="opt.rtd_100">100 Ω</option>
+                                        <option value="1000" data-i18n="opt.rtd_1000">1000 Ω</option>
                                     </select>
                                     <div class="form-helper" data-i18n="helper.extruder_rtd_nominal">100 Ω per PT100 standard, 1000 Ω per PT1000.</div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="extruder-rtd-reference-r">Resistenza di Riferimento (rtd_reference_r):</label>
+                                    <label class="form-label" for="extruder-rtd-reference-r">Resistenza di Riferimento:</label>
                                     <div class="input-with-unit">
                                         <input type="number" step="1" class="form-control" id="extruder-rtd-reference-r" placeholder="430" value="430">
                                         <span class="input-unit">Ω</span>
                                     </div>
-                                    <div class="form-helper" data-i18n="helper.extruder_rtd_reference">430 Ω per board PT100 (Adafruit/BTT), 4300 Ω per board PT1000.</div>
+                                    <div class="form-helper" data-i18n="helper.extruder_rtd_reference">430 Ω per board PT100, 4300 Ω per board PT1000.</div>
                                 </div>
                             </div>
 
                             <div class="form-row" style="margin-top: 0.75rem;">
                                 <div class="form-group">
-                                    <label class="form-label" for="extruder-rtd-num-wires">Numero di Fili Sonda (rtd_num_of_wires):</label>
+                                    <label class="form-label" for="extruder-rtd-num-wires">Numero di Fili Sonda:</label>
                                     <select class="form-control" id="extruder-rtd-num-wires">
                                         <option value="2" data-i18n="opt.wires_2">2 fili</option>
                                         <option value="3" data-i18n="opt.wires_3">3 fili</option>
-                                        <option value="4" data-i18n="opt.wires_4">4 fili (Massima accuratezza)</option>
+                                        <option value="4" data-i18n="opt.wires_4">4 fili</option>
                                     </select>
                                     <div class="form-helper" data-i18n="helper.extruder_rtd_wires">Numero di conduttori fisici della sonda RTD.</div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="extruder-rtd-filter">Filtro Rumore AC (rtd_use_50Hz_filter):</label>
+                                    <label class="form-label" for="extruder-rtd-filter">Filtro Rumore AC:</label>
                                     <select class="form-control" id="extruder-rtd-filter">
-                                        <option value="True" data-i18n="opt.filter_50hz_mains">50 Hz (Frequenza Rete Elettrica Italia / Europa)</option>
-                                        <option value="False" data-i18n="opt.filter_60hz_mains">60 Hz (Frequenza Rete USA / America)</option>
+                                        <option value="True" data-i18n="opt.filter_50hz_mains">50 Hz</option>
+                                        <option value="False" data-i18n="opt.filter_60hz_mains">60 Hz</option>
                                     </select>
                                     <div class="form-helper" data-i18n="helper.extruder_rtd_filter">Filtra le oscillazioni introdotte dalla linea elettrica.</div>
                                 </div>
@@ -1120,7 +1116,7 @@
                             <input type="text" class="form-control" id="extruder-heater-pin" placeholder="PA2">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="extruder-sensor-pin" id="label-extruder-sensor-pin">Sensor Pin (CS per SPI):</label>
+                            <label class="form-label" for="extruder-sensor-pin" id="label-extruder-sensor-pin">Sensor Pin:</label>
                             <input type="text" class="form-control" id="extruder-sensor-pin" placeholder="PA1">
                         </div>
                     </div>
@@ -1155,10 +1151,10 @@
                     <div class="card-title" style="margin-bottom: 0.5rem;" data-i18n="card.extruder_algo">Controllo Temperatura</div>
                     
                     <div class="form-group">
-                        <label class="form-label" for="extruder-control-type">Tipologia di Controllo (control):</label>
+                        <label class="form-label" for="extruder-control-type">Tipologia di Controllo:</label>
                         <select class="form-control" id="extruder-control-type">
-                            <option value="pid" data-i18n="opt.ctrl_pid_cont">PID (Regolazione continua proporzionale-integrale-derivativa)</option>
-                            <option value="watermark" data-i18n="opt.ctrl_watermark_hyst">Watermark (Controllo isteresi bang-bang on/off)</option>
+                            <option value="pid" data-i18n="opt.ctrl_pid_cont">PID</option>
+                            <option value="watermark" data-i18n="opt.ctrl_watermark_hyst">Watermark</option>
                         </select>
                         <div class="form-helper" data-i18n="helper.extruder_control">Seleziona PID per mantenere una temperatura costante e precisa sull'hotend.</div>
                     </div>
@@ -1180,7 +1176,7 @@
 
                     <div id="extruder-watermark-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                         <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label" for="extruder-max-delta">Tolleranza Isteresi (max_delta):</label>
+                            <label class="form-label" for="extruder-max-delta">Tolleranza Isteresi:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.1" class="form-control" id="extruder-max-delta" placeholder="2.0" value="2.0">
                                 <span class="input-unit">°C</span>
@@ -1208,15 +1204,15 @@
                                 <option value="tmc2240">TMC2240</option>
                                 <option value="tmc2130">TMC2130</option>
                                 <option value="tmc2660">TMC2660</option>
-                                <option value="generic" data-i18n="opt.driver_generic">A4988 / Generico (Standalone)</option>
+                                <option value="generic" data-i18n="opt.driver_generic">A4988 / Generico</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="extruder-driver-conn-type-select">Tipo Connessione Driver:</label>
                             <select class="form-control" id="extruder-driver-conn-type-select">
-                                <option value="uart" data-i18n="opt.driver_uart">UART (Seriale 1/2 pin - TMC2209 / TMC2208 / ecc.)</option>
-                                <option value="spi" data-i18n="opt.driver_spi">SPI (Bus SPI - TMC5160 / TMC2130 / ecc.)</option>
-                                <option value="standalone" data-i18n="opt.driver_standalone">Standalone (Nessun bus dati / A4988 / Ponticelli)</option>
+                                <option value="uart" data-i18n="opt.driver_uart">UART</option>
+                                <option value="spi" data-i18n="opt.driver_spi">SPI</option>
+                                <option value="standalone" data-i18n="opt.driver_standalone">Standalone</option>
                             </select>
                         </div>
                     </div>
@@ -1224,7 +1220,7 @@
                     <!-- Campi Connessione: STANDALONE -->
                     <div id="extruder-driver-conn-standalone-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                         <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-                            ℹ️ <strong data-i18n="chk.standalone_mode">Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper (es. A4988, DRV8825 o TMC configurato con ponticelli fisici). Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC per l'estrusore in <code>printer.cfg</code>.
+                            ℹ️ <strong data-i18n="chk.standalone_mode">Modalità Standalone:</strong> Il driver non comunica via bus dati con Klipper. Non sono richiesti PIN di comunicazione dati UART/SPI e non verrà generata una sezione TMC per l'estrusore in <code>printer.cfg</code>.
                         </div>
                     </div>
 
@@ -1232,19 +1228,19 @@
                     <div id="extruder-driver-conn-uart-fields">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="extruder-driver-uart-pin">Pin UART (uart_pin):</label>
+                                <label class="form-label" for="extruder-driver-uart-pin">Pin UART:</label>
                                 <input type="text" class="form-control" id="extruder-driver-uart-pin" placeholder="PC11">
                                 <div class="form-helper" data-i18n="helper.extruder_driver_uart">Pin di comunicazione seriale UART per l'estrusore.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="extruder-driver-tx-pin">Pin TX (tx_pin - Opzionale):</label>
+                                <label class="form-label" for="extruder-driver-tx-pin">Pin TX:</label>
                                 <input type="text" class="form-control" id="extruder-driver-tx-pin" placeholder="PC10">
                                 <div class="form-helper" data-i18n="helper.driver_tx">Opzionale. Da specificare solo se la board usa pin RX e TX separati.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="extruder-driver-uart-address">Indirizzo UART (uart_address):</label>
+                                <label class="form-label" for="extruder-driver-uart-address">Indirizzo UART:</label>
                                 <input type="number" class="form-control" id="extruder-driver-uart-address" placeholder="0" min="0" max="3">
-                                <div class="form-helper" data-i18n="helper.driver_address">Opzionale (0-3). Usato quando più driver condividono lo stesso pin UART.</div>
+                                <div class="form-helper" data-i18n="helper.driver_address">Opzionale. Usato quando più driver condividono lo stesso pin UART.</div>
                             </div>
                         </div>
                     </div>
@@ -1253,34 +1249,34 @@
                     <div id="extruder-driver-conn-spi-fields" style="display: none;">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="extruder-driver-cs-pin">Pin Chip Select (cs_pin):</label>
+                                <label class="form-label" for="extruder-driver-cs-pin">Pin Chip Select:</label>
                                 <input type="text" class="form-control" id="extruder-driver-cs-pin" placeholder="PD11">
                                 <div class="form-helper" data-i18n="helper.extruder_driver_cs">Pin CS dedicato al driver dell'estrusore.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="extruder-driver-spi-mode">Modalità Bus SPI:</label>
                                 <select class="form-control" id="extruder-driver-spi-mode">
-                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI (Bus MCU)</option>
-                                    <option value="software" data-i18n="opt.spi_software">Software SPI (Bit-banging)</option>
+                                    <option value="hardware" data-i18n="opt.driver_hw_spi">Hardware SPI</option>
+                                    <option value="software" data-i18n="opt.spi_software">Software SPI</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group" id="extruder-driver-spi-bus-group">
-                            <label class="form-label" for="extruder-driver-spi-bus">Bus SPI Hardware (spi_bus):</label>
+                            <label class="form-label" for="extruder-driver-spi-bus">Bus SPI Hardware:</label>
                             <input type="text" class="form-control" id="extruder-driver-spi-bus" placeholder="spi1">
-                            <div class="form-helper" data-i18n="helper.driver_spi_bus">Bus SPI configurato sulla MCU (es. spi1, spi2, spi3a).</div>
+                            <div class="form-helper" data-i18n="helper.driver_spi_bus">Bus SPI configurato sulla MCU.</div>
                         </div>
                         <div class="form-row" id="extruder-driver-spi-soft-group" style="display: none;">
                             <div class="form-group">
-                                <label class="form-label" for="extruder-driver-spi-sclk">Pin SCLK (spi_software_sclk_pin):</label>
+                                <label class="form-label" for="extruder-driver-spi-sclk">Pin SCLK:</label>
                                 <input type="text" class="form-control" id="extruder-driver-spi-sclk" placeholder="PE12">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="extruder-driver-spi-mosi">Pin MOSI (spi_software_mosi_pin):</label>
+                                <label class="form-label" for="extruder-driver-spi-mosi">Pin MOSI:</label>
                                 <input type="text" class="form-control" id="extruder-driver-spi-mosi" placeholder="PE14">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="extruder-driver-spi-miso">Pin MISO (spi_software_miso_pin):</label>
+                                <label class="form-label" for="extruder-driver-spi-miso">Pin MISO:</label>
                                 <input type="text" class="form-control" id="extruder-driver-spi-miso" placeholder="PE13">
                             </div>
                         </div>
@@ -1290,19 +1286,19 @@
                     <div id="extruder-driver-smart-fields">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="extruder-driver-run-current">Corrente Operativa (run_current):</label>
+                                <label class="form-label" for="extruder-driver-run-current">Corrente Operativa:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.05" class="form-control" id="extruder-driver-run-current" placeholder="0.650" min="0.1" max="2.0">
                                     <span class="input-unit">A RMS</span>
                                 </div>
-                                <div class="form-helper" data-i18n="helper.extruder_current">Tipicamente 0.500A - 0.700A per motori pancake / mini estrusori (es. Orbiter, Stealthburner, BMG).</div>
+                                <div class="form-helper" data-i18n="helper.extruder_current">Tipicamente 0.500A - 0.700A per motori pancake / mini estrusori.</div>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="extruder-driver-stealthchop">Modalità StealthChop:</label>
                                 <select class="form-control" id="extruder-driver-stealthchop">
-                                    <option value="0" data-i18n="opt.spreadcycle_extruder">SpreadCycle (Consigliato per estrusore - Più coppia e precisione)</option>
-                                    <option value="999999" data-i18n="opt.stealthchop_silent">Silenziosa (StealthChop attivo)</option>
+                                    <option value="0" data-i18n="opt.spreadcycle_extruder">SpreadCycle</option>
+                                    <option value="999999" data-i18n="opt.stealthchop_silent">Silenziosa</option>
                                 </select>
                             </div>
                         </div>
@@ -1311,10 +1307,10 @@
                         <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="extruder-check-enable-hold-current">
-                                <strong data-i18n="chk.hold_current">Abilita Corrente di Mantenimento (hold_current)</strong>
+                                <strong data-i18n="chk.hold_current">Abilita Corrente di Mantenimento</strong>
                             </label>
                             <div id="extruder-group-hold-current-field" style="display: none; margin-top: 0.75rem;">
-                                <label class="form-label" for="extruder-driver-hold-current">Corrente a Riposo (hold_current):</label>
+                                <label class="form-label" for="extruder-driver-hold-current">Corrente a Riposo:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.05" class="form-control" id="extruder-driver-hold-current" placeholder="0.400" min="0.05" max="2.0">
                                     <span class="input-unit">A RMS</span>
@@ -1327,10 +1323,10 @@
                         <div class="form-group" style="padding: 0.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="extruder-check-enable-sense-resistor">
-                                <strong data-i18n="chk.sense_resistor">Specifica Valore Resistenza di Sense (sense_resistor)</strong>
+                                <strong data-i18n="chk.sense_resistor">Specifica Valore Resistenza di Sense</strong>
                             </label>
                             <div id="extruder-group-sense-resistor-field" style="display: none; margin-top: 0.75rem;">
-                                <label class="form-label" for="extruder-driver-sense-resistor">Resistenza di Sense (sense_resistor):</label>
+                                <label class="form-label" for="extruder-driver-sense-resistor">Resistenza di Sense:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.005" class="form-control" id="extruder-driver-sense-resistor" placeholder="0.110" min="0.010" max="0.500">
                                     <span class="input-unit">Ω</span>
@@ -1342,7 +1338,7 @@
                         <div class="form-group">
                             <label class="checkbox-inline">
                                 <input type="checkbox" id="extruder-driver-interpolate" checked>
-                                <strong data-i18n="chk.interpolate">Interpolazione a 256 microstep (interpolate: True)</strong>
+                                <strong data-i18n="chk.interpolate">Interpolazione a 256 microstep</strong>
                             </label>
                         </div>
                     </div>
@@ -1362,10 +1358,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="bed-sensor-type">Tipo di Sensore Piatto (sensor_type):</label>
+                        <label class="form-label" for="bed-sensor-type">Tipo di Sensore Piatto:</label>
                         <select class="form-control" id="bed-sensor-type">
-                            <option value="EPCOS 100K B57560G104F" data-i18n="opt.therm_epcos_std">EPCOS 100K B57560G104F (Creality / Standard)</option>
-                            <option value="Generic 3950" data-i18n="opt.therm_generic_3950_voron">Generic 3950 (Molto comune su Voron)</option>
+                            <option value="EPCOS 100K B57560G104F" data-i18n="opt.therm_epcos_std">EPCOS 100K B57560G104F</option>
+                            <option value="Generic 3950" data-i18n="opt.therm_generic_3950_voron">Generic 3950</option>
                             <option value="ATC Semitec 104GT-2">ATC Semitec 104GT-2</option>
                             <option value="NTC 100K MGB18">NTC 100K MGB18</option>
                         </select>
@@ -1373,11 +1369,11 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="bed-heater-pin">Pin Riscaldatore (heater_pin):</label>
+                            <label class="form-label" for="bed-heater-pin">Pin Riscaldatore:</label>
                             <input type="text" class="form-control" id="bed-heater-pin" placeholder="PA3">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="bed-sensor-pin">Pin Sensore (sensor_pin):</label>
+                            <label class="form-label" for="bed-sensor-pin">Pin Sensore:</label>
                             <input type="text" class="form-control" id="bed-sensor-pin" placeholder="PA0">
                         </div>
                     </div>
@@ -1410,8 +1406,8 @@
                     <div class="form-group">
                         <label class="form-label" for="bed-control-type">Algoritmo di Controllo:</label>
                         <select class="form-control" id="bed-control-type">
-                            <option value="pid" data-i18n="opt.ctrl_pid_precise">PID (Regolazione continua precisa)</option>
-                            <option value="watermark" data-i18n="opt.ctrl_watermark_simple">Watermark (Bang-bang semplice on/off)</option>
+                            <option value="pid" data-i18n="opt.ctrl_pid_precise">PID</option>
+                            <option value="watermark" data-i18n="opt.ctrl_watermark_simple">Watermark</option>
                         </select>
                     </div>
 
@@ -1432,7 +1428,7 @@
 
                     <div id="bed-watermark-fields" style="display: none; padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                         <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label" for="bed-max-delta">Tolleranza Isteresi (max_delta):</label>
+                            <label class="form-label" for="bed-max-delta">Tolleranza Isteresi:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.1" class="form-control" id="bed-max-delta" placeholder="2.0" value="2.0">
                                 <span class="input-unit">°C</span>
@@ -1471,17 +1467,15 @@
 
                     <!-- Ventola Raffreddamento Pezzo Principale ([fan]) -->
                     <div style="padding: 0.85rem; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
-                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.fan_part">
-                            💨 Ventola Raffreddamento Pezzo Principale ([fan])
-                        </div>
+                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.fan_part"> 💨 Ventola Raffreddamento Pezzo Principale </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="fan-part-pin">Pin Ventola Pezzo (pin):</label>
+                                <label class="form-label" for="fan-part-pin">Pin Ventola Pezzo:</label>
                                 <input type="text" class="form-control" id="fan-part-pin" placeholder="PA8">
                                 <div class="form-helper" data-i18n="helper.fan_part">Controllata dallo slicer tramite comandi M106 / M107.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="fan-part-kick">Kick Start Time (s):</label>
+                                <label class="form-label" for="fan-part-kick">Kick Start Time:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.1" class="form-control" id="fan-part-kick" placeholder="0.5">
                                     <span class="input-unit">s</span>
@@ -1503,62 +1497,62 @@
                 <!-- Accelerometro ADXL345 ([adxl345]) -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.adxl">Accelerometro Risonanze ([adxl345])</span>
+                        <span class="card-title" data-i18n="card.adxl">Accelerometro Risonanze</span>
                         <span class="card-tag">[adxl345]</span>
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-adxl">
-                            <strong data-i18n="chk.adxl">Abilita Accelerometro ADXL345 (Misurazione risonanze testa/piatto)</strong>
+                            <strong data-i18n="chk.adxl">Abilita Accelerometro ADXL345</strong>
                         </label>
                     </div>
 
                     <div id="adxl345-fields" style="display: none;">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="adxl-cs-pin">CS Pin (cs_pin):</label>
+                                <label class="form-label" for="adxl-cs-pin">CS Pin:</label>
                                 <input type="text" class="form-control" id="adxl-cs-pin" placeholder="rpi:None o PB12" data-i18n-placeholder="placeholder.adxl_cs">
                                 <div class="form-helper" data-i18n="helper.adxl_cs">Es: rpi:None se collegato al Raspberry, oppure un pin SPI CS della MCU.</div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="adxl-spi-mode">Modalità Connessione SPI:</label>
                                 <select class="form-control" id="adxl-spi-mode">
-                                    <option value="hardware" data-i18n="opt.spi_hardware">Hardware SPI (spi_bus)</option>
-                                    <option value="software" data-i18n="opt.spi_software">Software SPI (Bit-banging)</option>
+                                    <option value="hardware" data-i18n="opt.spi_hardware">Hardware SPI</option>
+                                    <option value="software" data-i18n="opt.spi_software">Software SPI</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group" id="adxl-spi-bus-group">
-                            <label class="form-label" for="adxl-spi-bus">Bus SPI Hardware (spi_bus):</label>
+                            <label class="form-label" for="adxl-spi-bus">Bus SPI Hardware:</label>
                             <input type="text" class="form-control" id="adxl-spi-bus" placeholder="spidev0.0 o spi1" data-i18n-placeholder="placeholder.adxl_spi">
-                            <div class="form-helper" data-i18n="helper.adxl_spi_bus">Es: spidev0.0 (su Raspberry Pi) o spi1/spi2 (su MCU).</div>
+                            <div class="form-helper" data-i18n="helper.adxl_spi_bus">Es: spidev0.0 o spi1/spi2.</div>
                         </div>
 
                         <div class="form-row" id="adxl-spi-soft-group" style="display: none;">
                             <div class="form-group">
-                                <label class="form-label" for="adxl-spi-sclk">SCLK Pin (spi_software_sclk_pin):</label>
+                                <label class="form-label" for="adxl-spi-sclk">SCLK Pin:</label>
                                 <input type="text" class="form-control" id="adxl-spi-sclk" placeholder="PB10">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="adxl-spi-mosi">MOSI Pin (spi_software_mosi_pin):</label>
+                                <label class="form-label" for="adxl-spi-mosi">MOSI Pin:</label>
                                 <input type="text" class="form-control" id="adxl-spi-mosi" placeholder="PB11">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="adxl-spi-miso">MISO Pin (spi_software_miso_pin):</label>
+                                <label class="form-label" for="adxl-spi-miso">MISO Pin:</label>
                                 <input type="text" class="form-control" id="adxl-spi-miso" placeholder="PB2">
                             </div>
                         </div>
 
                         <div class="form-row" style="margin-top: 0.5rem;">
                             <div class="form-group">
-                                <label class="form-label" for="adxl-axes-map">Mappatura Assi (axes_map):</label>
+                                <label class="form-label" for="adxl-axes-map">Mappatura Assi:</label>
                                 <input type="text" class="form-control" id="adxl-axes-map" placeholder="x, y, z" value="x, y, z">
                                 <div class="form-helper" data-i18n="helper.adxl_axes_map">Es: x, y, z oppure x, -z, y per orientare correttamente il sensore.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="adxl-rate">Frequenza Campionamento (rate):</label>
+                                <label class="form-label" for="adxl-rate">Frequenza Campionamento:</label>
                                 <input type="number" class="form-control" id="adxl-rate" placeholder="3200" value="3200">
                                 <div class="form-helper" data-i18n="helper.adxl_rate">Default consigliato da Klipper: 3200 Hz.</div>
                             </div>
@@ -1622,7 +1616,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="idle-timeout">Idle Timeout (Spegnimento motori/riscaldatori):</label>
+                        <label class="form-label" for="idle-timeout">Idle Timeout:</label>
                         <div class="input-with-unit">
                             <input type="number" class="form-control" id="idle-timeout" placeholder="1800">
                             <span class="input-unit">sec</span>
@@ -1639,7 +1633,7 @@
         <section class="tab-pane" id="tab-include">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
                 <div>
-                    <h2 style="font-size: 1.15rem; font-weight: 600;" data-i18n="include.title">File di Configurazione Inclusi ([include])</h2>
+                    <h2 style="font-size: 1.15rem; font-weight: 600;" data-i18n="include.title">File di Configurazione Inclusi</h2>
                     <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="include.desc">Organizza la tua configurazione Klipper modulare includendo file .cfg esterni.</p>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
@@ -1677,7 +1671,7 @@
         <section class="tab-pane" id="tab-macro">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
                 <div>
-                    <h2 style="font-size: 1.15rem; font-weight: 600;" data-i18n="macro.title">Macro G-Code Personalizzate ([gcode_macro])</h2>
+                    <h2 style="font-size: 1.15rem; font-weight: 600;" data-i18n="macro.title">Macro G-Code Personalizzate</h2>
                     <p style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="macro.desc">Gestisci, crea e modifica le macro per la gestione stampe in Mainsail.</p>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
@@ -1707,16 +1701,16 @@
                 <!-- Sonda / BLTouch / Probe -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.probe">Sonda Livellamento (Probe / BLTouch)</span>
+                        <span class="card-title" data-i18n="card.probe">Sonda Livellamento</span>
                         <span class="card-tag" data-i18n="tag.leveling_sensor">Sensore Livellamento</span>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" for="probe-type-select">Tipo di Sonda Installata:</label>
                         <select class="form-control" id="probe-type-select">
-                            <option value="none" data-i18n="opt.probe_none">Nessuna Sonda (Endstop Z Meccanico Standard)</option>
-                            <option value="bltouch" data-i18n="opt.probe_bltouch">BLTouch / 3DTouch / CR Touch ([bltouch])</option>
-                            <option value="probe" data-i18n="opt.probe_inductive">Sonda Induttiva / Microswitch / Klipper Tap ([probe])</option>
+                            <option value="none" data-i18n="opt.probe_none">Nessuna Sonda</option>
+                            <option value="bltouch" data-i18n="opt.probe_bltouch">BLTouch / 3DTouch / CR Touch</option>
+                            <option value="probe" data-i18n="opt.probe_inductive">Sonda Induttiva / Microswitch / Klipper Tap</option>
                         </select>
                     </div>
 
@@ -1727,7 +1721,7 @@
                                 <input type="text" class="form-control" id="probe-sensor-pin" placeholder="^PC14">
                             </div>
                             <div class="form-group" id="group-probe-control-pin">
-                                <label class="form-label" for="probe-control-pin">Control Pin (per BLTouch):</label>
+                                <label class="form-label" for="probe-control-pin">Control Pin:</label>
                                 <input type="text" class="form-control" id="probe-control-pin" placeholder="PA1">
                             </div>
                         </div>
@@ -1749,7 +1743,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="probe-z-offset">Z Offset (Base):</label>
+                                <label class="form-label" for="probe-z-offset">Z Offset:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.01" class="form-control" id="probe-z-offset" placeholder="2.50">
                                     <span class="input-unit">mm</span>
@@ -1762,15 +1756,15 @@
                                 <label class="form-label" for="probe-samples">Campioni per punto:</label>
                                 <select class="form-control" id="probe-samples">
                                     <option value="1" data-i18n="opt.sample_1">1 lettura</option>
-                                    <option value="2" selected data-i18n="opt.sample_2">2 letture (consigliato)</option>
-                                    <option value="3" data-i18n="opt.sample_3">3 letture (massima precisione)</option>
+                                    <option value="2" selected data-i18n="opt.sample_2">2 letture</option>
+                                    <option value="3" data-i18n="opt.sample_3">3 letture</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="probe-samples-result">Risultato Campioni:</label>
                                 <select class="form-control" id="probe-samples-result">
-                                    <option value="median" data-i18n="opt.sample_median">median (Mediana)</option>
-                                    <option value="average" data-i18n="opt.sample_average">average (Media)</option>
+                                    <option value="median" data-i18n="opt.sample_median">median</option>
+                                    <option value="average" data-i18n="opt.sample_average">average</option>
                                 </select>
                             </div>
                         </div>
@@ -1780,20 +1774,20 @@
                 <!-- Safe Z Home -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.safe_z_home">Homing Sicuro al Centro ([safe_z_home])</span>
+                        <span class="card-title" data-i18n="card.safe_z_home">Homing Sicuro al Centro</span>
                         <span class="card-tag">[safe_z_home]</span>
                     </div>
 
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-safe-z" checked>
-                            <strong data-i18n="chk.safe_z_home">Abilita Safe Z Home (Homing Z al centro del piatto)</strong>
+                            <strong data-i18n="chk.safe_z_home">Abilita Safe Z Home</strong>
                         </label>
                     </div>
 
                     <div id="safe-z-fields">
                         <div class="form-group">
-                            <label class="form-label" for="safe-z-pos">Coordinate Centro (home_xy_position):</label>
+                            <label class="form-label" for="safe-z-pos">Coordinate Centro:</label>
                             <input type="text" class="form-control" id="safe-z-pos" placeholder="117.5, 117.5">
                         </div>
 
@@ -1819,26 +1813,26 @@
                 <!-- Livellamento Multi-Asse Z (Z-Tilt Leveling: [z_tilt]) per 2 o 3 motori Z -->
                 <div class="card" id="card-z-tilt" style="display: none;">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.z_tilt">Allineamento Indipendente Motori Z ([z_tilt])</span>
+                        <span class="card-title" data-i18n="card.z_tilt">Allineamento Indipendente Motori Z</span>
                         <span class="card-tag">[z_tilt]</span>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="z-tilt-positions">Posizioni Punti Pivot Motori Z (z_positions):</label>
+                        <label class="form-label" for="z-tilt-positions">Posizioni Punti Pivot Motori Z:</label>
                         <input type="text" class="form-control" id="z-tilt-positions" placeholder="-50, 18 \n 350, 18">
-                        <div class="form-helper" data-i18n="helper.z_tilt_positions">Coordinate fisiche dei perni dei motori Z (una per riga o separate da virgola).</div>
+                        <div class="form-helper" data-i18n="helper.z_tilt_positions">Coordinate fisiche dei perni dei motori Z.</div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="z-tilt-points">Punti Sonda Piatto da Verificare (points):</label>
+                        <label class="form-label" for="z-tilt-points">Punti Sonda Piatto da Verificare:</label>
                         <input type="text" class="form-control" id="z-tilt-points" placeholder="30, 110 \n 200, 110">
                         <div class="form-helper" data-i18n="helper.z_tilt_points">Coordinate del piatto dove la sonda misurerà l'inclinazione.</div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="z-tilt-retries">Tentativi Max (retries):</label>
+                            <label class="form-label" for="z-tilt-retries">Tentativi Max:</label>
                             <input type="number" class="form-control" id="z-tilt-retries" value="3">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="z-tilt-tolerance">Tolleranza (retry_tolerance):</label>
+                            <label class="form-label" for="z-tilt-tolerance">Tolleranza:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.005" class="form-control" id="z-tilt-tolerance" value="0.02">
                                 <span class="input-unit">mm</span>
@@ -1850,24 +1844,24 @@
                 <!-- Livellamento Quad Gantry Level ([quad_gantry_level]) per 4 motori Z -->
                 <div class="card" id="card-quad-gantry" style="display: none;">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.quad_gantry_level">Allineamento 4 Motori Z ([quad_gantry_level])</span>
+                        <span class="card-title" data-i18n="card.quad_gantry_level">Allineamento 4 Motori Z</span>
                         <span class="card-tag">[quad_gantry_level]</span>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="qgl-corners">Angoli Esterni Gantry (gantry_corners):</label>
+                        <label class="form-label" for="qgl-corners">Angoli Esterni Gantry:</label>
                         <input type="text" class="form-control" id="qgl-corners" placeholder="-60, -10 \n 360, 370">
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="qgl-points">4 Punti Sonda da Verificare (points):</label>
+                        <label class="form-label" for="qgl-points">4 Punti Sonda da Verificare:</label>
                         <input type="text" class="form-control" id="qgl-points" placeholder="50, 25 \n 50, 225 \n 250, 225 \n 250, 25">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="qgl-retries">Tentativi Max (retries):</label>
+                            <label class="form-label" for="qgl-retries">Tentativi Max:</label>
                             <input type="number" class="form-control" id="qgl-retries" value="5">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="qgl-tolerance">Tolleranza (retry_tolerance):</label>
+                            <label class="form-label" for="qgl-tolerance">Tolleranza:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.0025" class="form-control" id="qgl-tolerance" value="0.0075">
                                 <span class="input-unit">mm</span>
@@ -1879,34 +1873,34 @@
                 <!-- Bed Mesh Livellamento ([bed_mesh]) -->
                 <div class="card">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.bed_mesh">Griglia Livellamento Piatto ([bed_mesh])</span>
+                        <span class="card-title" data-i18n="card.bed_mesh">Griglia Livellamento Piatto</span>
                         <span class="card-tag">[bed_mesh]</span>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="mesh-min">Coordinate Min (mesh_min):</label>
+                            <label class="form-label" for="mesh-min">Coordinate Min:</label>
                             <input type="text" class="form-control" id="mesh-min" placeholder="15, 15">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="mesh-max">Coordinate Max (mesh_max):</label>
+                            <label class="form-label" for="mesh-max">Coordinate Max:</label>
                             <input type="text" class="form-control" id="mesh-max" placeholder="200, 200">
                         </div>
                     </div>
 
                     <div class="form-row" style="margin-top: 1rem;">
                         <div class="form-group">
-                            <label class="form-label" for="mesh-probe-count">Punti Griglia (probe_count):</label>
+                            <label class="form-label" for="mesh-probe-count">Punti Griglia:</label>
                             <select class="form-control" id="mesh-probe-count">
-                                <option value="3, 3" data-i18n="opt.mesh_3x3">3x3 (9 punti - veloce)</option>
-                                <option value="5, 5" selected data-i18n="opt.mesh_5x5">5x5 (25 punti - standard)</option>
-                                <option value="7, 7" data-i18n="opt.mesh_7x7">7x7 (49 punti - alta densità)</option>
+                                <option value="3, 3" data-i18n="opt.mesh_3x3">3x3</option>
+                                <option value="5, 5" selected data-i18n="opt.mesh_5x5">5x5</option>
+                                <option value="7, 7" data-i18n="opt.mesh_7x7">7x7</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="mesh-algorithm">Algoritmo di Interpolazione:</label>
                             <select class="form-control" id="mesh-algorithm">
-                                <option value="bicubic" selected data-i18n="opt.mesh_bicubic">bicubic (Curva fluida)</option>
+                                <option value="bicubic" selected data-i18n="opt.mesh_bicubic">bicubic</option>
                                 <option value="lagrange">lagrange</option>
                             </select>
                         </div>
@@ -1916,7 +1910,7 @@
                 <!-- Input Shaper, Resonance Tester & Z-Offset ([input_shaper] / [resonance_tester]) -->
                 <div class="card" style="grid-column: 1 / -1;">
                     <div class="card-header">
-                        <span class="card-title" data-i18n="card.resonance_tester">Compensazione Risonanze & Calibrazione ([input_shaper] / [resonance_tester])</span>
+                        <span class="card-title" data-i18n="card.resonance_tester">Compensazione Risonanze & Calibrazione</span>
                         <span class="card-tag" data-i18n="tag.resonances_z_offset">Risonanze & Z-Offset</span>
                     </div>
 
@@ -1924,14 +1918,14 @@
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-shaper" checked>
-                            <strong data-i18n="chk.input_shaper">Abilita Filtro Input Shaper (Elimina il Ghosting / Ringing)</strong>
+                            <strong data-i18n="chk.input_shaper">Abilita Filtro Input Shaper</strong>
                         </label>
                     </div>
 
                     <div id="shaper-fields">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="shaper-freq-x">Frequenza Asse X (shaper_freq_x):</label>
+                                <label class="form-label" for="shaper-freq-x">Frequenza Asse X:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.1" class="form-control" id="shaper-freq-x" placeholder="45.2">
                                     <span class="input-unit">Hz</span>
@@ -1940,7 +1934,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="shaper-type-x">Tipo Filtro X:</label>
                                 <select class="form-control" id="shaper-type-x">
-                                    <option value="mzv" data-i18n="opt.shaper_mzv">mzv (Consigliato)</option>
+                                    <option value="mzv" data-i18n="opt.shaper_mzv">mzv</option>
                                     <option value="zv">zv</option>
                                     <option value="ei">ei</option>
                                     <option value="2hump_ei">2hump_ei</option>
@@ -1951,7 +1945,7 @@
 
                         <div class="form-row" style="margin-top: 1rem;">
                             <div class="form-group">
-                                <label class="form-label" for="shaper-freq-y">Frequenza Asse Y (shaper_freq_y):</label>
+                                <label class="form-label" for="shaper-freq-y">Frequenza Asse Y:</label>
                                 <div class="input-with-unit">
                                     <input type="number" step="0.1" class="form-control" id="shaper-freq-y" placeholder="42.0">
                                     <span class="input-unit">Hz</span>
@@ -1960,7 +1954,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="shaper-type-y">Tipo Filtro Y:</label>
                                 <select class="form-control" id="shaper-type-y">
-                                    <option value="mzv" data-i18n="opt.shaper_mzv">mzv (Consigliato)</option>
+                                    <option value="mzv" data-i18n="opt.shaper_mzv">mzv</option>
                                     <option value="zv">zv</option>
                                     <option value="ei">ei</option>
                                     <option value="2hump_ei">2hump_ei</option>
@@ -1973,39 +1967,37 @@
                     <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
 
                     <!-- Sezione 2: Resonance Tester Automatico ([resonance_tester]) -->
-                    <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.res_tester">
-                        📊 Resonance Tester Automatico ([resonance_tester])
-                    </div>
+                    <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.res_tester"> 📊 Resonance Tester Automatico </div>
 
                     <div class="form-group">
                         <label class="checkbox-inline">
                             <input type="checkbox" id="check-enable-resonance-tester">
-                            <strong data-i18n="chk.resonance_tester">Abilita Sezione Resonance Tester (Test automatico risonanze con accelerometro)</strong>
+                            <strong data-i18n="chk.resonance_tester">Abilita Sezione Resonance Tester</strong>
                         </label>
                     </div>
 
                     <div id="resonance-tester-fields" style="display: none;">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="res-accel-chip">Chip Accelerometro (accel_chip):</label>
+                                <label class="form-label" for="res-accel-chip">Chip Accelerometro:</label>
                                 <input type="text" class="form-control" id="res-accel-chip" placeholder="adxl345" value="adxl345">
-                                <div class="form-helper" data-i18n="helper.res_accel_chip">Nome del sensore accelerometro definito nel file (es. adxl345).</div>
+                                <div class="form-helper" data-i18n="helper.res_accel_chip">Nome del sensore accelerometro definito nel file.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="res-probe-points">Punto di Test X, Y, Z (probe_points):</label>
+                                <label class="form-label" for="res-probe-points">Punto di Test X, Y, Z:</label>
                                 <input type="text" class="form-control" id="res-probe-points" placeholder="100, 100, 20" value="100, 100, 20">
-                                <div class="form-helper" data-i18n="helper.res_probe_points">Coordinate fisiche del piatto (es. centro piatto: 100, 100, 20).</div>
+                                <div class="form-helper" data-i18n="helper.res_probe_points">Coordinate fisiche del piatto.</div>
                             </div>
                         </div>
 
                         <div class="form-row" style="margin-top: 0.5rem;">
                             <div class="form-group">
-                                <label class="form-label" for="res-accel-per-hz">Accelerazione per Hz (accel_per_hz):</label>
+                                <label class="form-label" for="res-accel-per-hz">Accelerazione per Hz:</label>
                                 <input type="number" step="5" class="form-control" id="res-accel-per-hz" placeholder="75" value="75">
                                 <div class="form-helper" data-i18n="helper.res_accel_per_hz">Default consigliato da Klipper: 75.</div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="res-max-smoothing">Max Smoothing (max_smoothing):</label>
+                                <label class="form-label" for="res-max-smoothing">Max Smoothing:</label>
                                 <input type="number" step="0.01" class="form-control" id="res-max-smoothing" placeholder="0.25">
                                 <div class="form-helper" data-i18n="helper.res_max_smoothing">Lascia vuoto per il valore automatico calcolato da Klipper.</div>
                             </div>
@@ -2015,17 +2007,15 @@
                     <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
 
                     <!-- Sezione 3: Z-Offset Rapido nello Stesso Box -->
-                    <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.probe_z_offset">
-                        📏 Regolazione Z-Offset Sonda ([probe] / [bltouch])
-                    </div>
+                    <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--primary-light); display: flex; align-items: center; gap: 0.4rem;" data-i18n="subtitle.probe_z_offset"> 📏 Regolazione Z-Offset Sonda </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label" for="calibration-z-offset">Altezza Z-Offset (z_offset):</label>
+                            <label class="form-label" for="calibration-z-offset">Altezza Z-Offset:</label>
                             <div class="input-with-unit">
                                 <input type="number" step="0.005" class="form-control" id="calibration-z-offset" placeholder="2.500">
                                 <span class="input-unit">mm</span>
                             </div>
-                            <div class="form-helper" data-i18n="helper.calib_z_offset">Distanza di trigger Z tra la sonda e l'ugello (sincronizzato con il valore Sonda).</div>
+                            <div class="form-helper" data-i18n="helper.calib_z_offset">Distanza di trigger Z tra la sonda e l'ugello.</div>
                         </div>
                     </div>
                 </div>
@@ -2082,17 +2072,17 @@
 
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.25rem 0;">
 
-                <div class="card-title" style="margin-bottom: 0.75rem; font-size: 0.95rem;" data-i18n="modal.lang_title">Lingua & Localizzazione (Mainsail Sync)</div>
+                <div class="card-title" style="margin-bottom: 0.75rem; font-size: 0.95rem;" data-i18n="modal.lang_title">Lingua & Localizzazione</div>
 
                 <div style="padding: 0.85rem; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="modal.detected_lang">Lingua Rilevata:</span>
-                        <span id="active-detected-lang-text" class="nav-badge" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">🇮🇹 Italiano (Auto)</span>
+                        <span id="active-detected-lang-text" class="nav-badge" style="font-size: 0.75rem; padding: 0.15rem 0.5rem;">🇮🇹 Italiano</span>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
                         <label class="form-label" for="select-ui-language">Lingua Interfaccia:</label>
                         <select class="form-control" id="select-ui-language">
-                            <option value="auto" data-i18n="opt.lang_auto">Automatica (Sincronizza con Mainsail)</option>
+                            <option value="auto" data-i18n="opt.lang_auto">Automatica</option>
                             <option value="it">🇮🇹 Italiano</option>
                             <option value="en">🇬🇧 English</option>
                             <option value="de">🇩🇪 Deutsch</option>
@@ -2122,7 +2112,7 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="font-size: 0.85rem; color: var(--text-secondary);" data-i18n="modal.theme_mode_label">Modalità Tema:</span>
-                        <span id="active-theme-mode-text" style="font-size: 0.85rem; font-weight: 600;">Scuro (Dark)</span>
+                        <span id="active-theme-mode-text" style="font-size: 0.85rem; font-weight: 600;">Scuro</span>
                     </div>
                 </div>
 
@@ -2143,7 +2133,7 @@
                 <div class="form-group" style="margin-bottom: 0;">
                     <label class="checkbox-inline">
                         <input type="checkbox" id="check-force-light-mode">
-                        <strong data-i18n="modal.force_light_label">Forza Modalità Chiara (Light Theme)</strong>
+                        <strong data-i18n="modal.force_light_label">Forza Modalità Chiara</strong>
                     </label>
                 </div>
             </div>
@@ -2165,19 +2155,19 @@
                 <div class="form-group">
                     <label class="form-label" data-i18n="calc.drive_type">Tipo di Trasmissione:</label>
                     <select class="form-control" id="calc-drive-type">
-                        <option value="belt" data-i18n="calc.belt_lead">Cinghia Dentata (GT2 2mm)</option>
+                        <option value="belt" data-i18n="calc.belt_lead">Cinghia Dentata</option>
                         <option value="leadscrew" data-i18n="calc.leadscrew">Barra Filettata / Vite Trapezia</option>
                     </select>
                 </div>
                 <div id="calc-belt-fields">
                     <div class="form-group">
-                        <label class="form-label" data-i18n="calc.pulley_teeth">Numero Denti Puleggia (es: 16 o 20 denti):</label>
+                        <label class="form-label" data-i18n="calc.pulley_teeth">Numero Denti Puleggia:</label>
                         <input type="number" class="form-control" id="calc-pulley-teeth" value="20">
                     </div>
                 </div>
                 <div id="calc-lead-fields" style="display: none;">
                     <div class="form-group">
-                        <label class="form-label" data-i18n="calc.lead_pitch">Passo Barra (Lead in mm per giro - es: T8x8 = 8, T8x4 = 4):</label>
+                        <label class="form-label" data-i18n="calc.lead_pitch">Passo Barra:</label>
                         <input type="number" class="form-control" id="calc-leadscrew-pitch" value="8">
                     </div>
                 </div>

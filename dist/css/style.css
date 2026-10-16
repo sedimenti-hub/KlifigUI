@@ -686,6 +686,10 @@ body {
     margin-bottom: 1.25rem;
 }
 
+.grid-container > * {
+    min-width: 0;
+}
+
 .grid-2-col {
     grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
 }
@@ -720,6 +724,10 @@ body {
     padding: 1.25rem;
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .card:hover {
@@ -730,9 +738,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.5rem;
     padding-bottom: 0.85rem;
     margin-bottom: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    flex-wrap: wrap;
 }
 
 .card-title {
@@ -742,6 +752,7 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    min-width: 0;
 }
 
 .card-tag {
@@ -751,6 +762,7 @@ body {
     background: rgba(255, 255, 255, 0.08);
     color: var(--text-secondary);
     font-family: monospace;
+    flex-shrink: 0;
 }
 
 .card-subtitle {
@@ -765,6 +777,8 @@ body {
    -------------------------------------------------------------------------- */
 .form-group {
     margin-bottom: 1rem;
+    min-width: 0;
+    max-width: 100%;
 }
 
 .form-group:last-child {
@@ -775,16 +789,20 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.35rem;
     font-size: 0.85rem;
     font-weight: 500;
     color: var(--text-primary);
     margin-bottom: 0.4rem;
+    min-width: 0;
+    overflow-wrap: break-word;
 }
 
 .form-helper {
     font-size: 0.75rem;
     color: var(--text-secondary);
     margin-top: 0.3rem;
+    overflow-wrap: break-word;
 }
 
 /* --------------------------------------------------------------------------
@@ -908,6 +926,9 @@ body {
 
 .form-control {
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
     background-color: var(--bg-input);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
@@ -915,6 +936,7 @@ body {
     padding: 0.55rem 0.8rem;
     font-size: 0.875rem;
     transition: var(--transition);
+    text-overflow: ellipsis;
 }
 
 .input-with-unit .form-control {
@@ -1061,8 +1083,19 @@ textarea.form-control {
 /* Form Row per affiancare input (es: Min / Max) */
 .form-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+
+.form-row > .form-group {
+    min-width: 0;
+    max-width: 100%;
+    flex: 1 1 120px;
+    margin-bottom: 0;
 }
 
 /* Checkbox and Invert Pin Pill */

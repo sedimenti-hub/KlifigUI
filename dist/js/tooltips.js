@@ -907,14 +907,42 @@
         },
         'adxl-cs-pin': {
             param: 'cs_pin',
+            unit: 'Pin MCU / Host',
             title: 'Pin Chip Select ADXL345',
             desc: 'Pin digitale per selezionare l\'accelerometro sul bus SPI.',
             tip: 'Es. rpi:None o gpio pin su toolhead'
+        },
+        'adxl-spi-mode': {
+            param: 'spi_bus / spi_software_*_pin',
+            title: 'Modalità Connessione SPI Accelerometro',
+            desc: 'Seleziona tra bus SPI hardware (spi_bus) o emulazione SPI software tramite pin dedicati (Bit-banging).',
+            tip: 'Hardware SPI o Software SPI (Bit-banging)'
         },
         'adxl-spi-bus': {
             param: 'spi_bus',
             title: 'Bus SPI Accelerometro',
             desc: 'Nome del bus SPI hardware utilizzato per leggere i dati dall\'accelerometro (es. spidev0.0, spi1).'
+        },
+        'adxl-spi-sclk': {
+            param: 'spi_software_sclk_pin',
+            unit: 'Pin MCU',
+            title: 'Pin SCLK SPI Software Accelerometro',
+            desc: 'Pin di clock seriale (SCL/SCLK) per la comunicazione SPI software dell\'accelerometro ADXL345.',
+            tip: 'Es. head:PB10, PB13'
+        },
+        'adxl-spi-mosi': {
+            param: 'spi_software_mosi_pin',
+            unit: 'Pin MCU',
+            title: 'Pin MOSI SPI Software Accelerometro',
+            desc: 'Pin dati Master Out Slave In (SDA/MOSI) per la comunicazione SPI software dell\'accelerometro ADXL345.',
+            tip: 'Es. head:PB11, PB15'
+        },
+        'adxl-spi-miso': {
+            param: 'spi_software_miso_pin',
+            unit: 'Pin MCU',
+            title: 'Pin MISO SPI Software Accelerometro',
+            desc: 'Pin dati Master In Slave Out (SDO/MISO) per la comunicazione SPI software dell\'accelerometro ADXL345.',
+            tip: 'Es. head:PB2, PB14'
         },
         'adxl-axes-map': {
             param: 'axes_map',
@@ -928,6 +956,11 @@
             desc: 'Frequenza di acquisizione dati dell\'accelerometro (da 1600 Hz a 3200 Hz).',
             unit: 'Hz',
             tip: 'Valore standard Klipper: 3200'
+        },
+        'check-enable-resonance-tester': {
+            param: '[resonance_tester]',
+            title: 'Abilitazione Resonance Tester',
+            desc: 'Attiva la sezione [resonance_tester] per consentire i test automatici delle risonanze con accelerometro (TEST_RESONANCES / SHAPER_CALIBRATE).'
         },
         'res-accel-chip': {
             param: 'accel_chip',
@@ -950,6 +983,173 @@
             param: 'max_smoothing',
             title: 'Livellamento Massimo Tollerato',
             desc: 'Massimo fattore di smoothing accettabile durante il calcolo automatico dello shaper ottimale.'
+        },
+        'calibration-z-offset': {
+            param: 'z_offset',
+            unit: 'mm',
+            title: 'Altezza Z-Offset Sonda',
+            desc: 'Distanza verticale tra il punto di attivazione della sonda e la punta dell\'ugello (sincronizzata con la scheda Sonda).'
+        },
+        'extruder-sensor-spi-mode': {
+            param: 'spi_bus / spi_software_*_pin',
+            title: 'Modalità Connessione SPI Sensore',
+            desc: 'Seleziona se l\'amplificatore termico (MAX31865/MAX6675) comunica su bus SPI hardware della MCU o tramite pin SPI software (Bit-banging).'
+        },
+        'extruder-sensor-spi-bus': {
+            param: 'spi_bus',
+            title: 'Bus SPI Sensore Termico',
+            desc: 'Identificativo del bus SPI hardware della MCU collegato al sensore di temperatura (es. spi1, spi2).'
+        },
+        'extruder-sensor-spi-speed': {
+            param: 'spi_speed',
+            unit: 'Hz',
+            title: 'Frequenza Clock SPI Sensore',
+            desc: 'Velocità di comunicazione sul bus SPI in Hertz per il sensore termico.',
+            tip: 'Default Klipper: 4000000 (4 MHz)'
+        },
+        'extruder-sensor-spi-sclk': {
+            param: 'spi_software_sclk_pin',
+            unit: 'Pin MCU',
+            title: 'Pin SCLK SPI Software Sensore',
+            desc: 'Pin di clock seriale (SCK/SCLK) per comunicazione SPI software del sensore termico.'
+        },
+        'extruder-sensor-spi-mosi': {
+            param: 'spi_software_mosi_pin',
+            unit: 'Pin MCU',
+            title: 'Pin MOSI SPI Software Sensore',
+            desc: 'Pin dati Master Out Slave In (MOSI/SDI) per comunicazione SPI software del sensore termico.'
+        },
+        'extruder-sensor-spi-miso': {
+            param: 'spi_software_miso_pin',
+            unit: 'Pin MCU',
+            title: 'Pin MISO SPI Software Sensore',
+            desc: 'Pin dati Master In Slave Out (MISO/SDO) per comunicazione SPI software del sensore termico.'
+        },
+        'extruder-driver-model-select': {
+            param: '[tmcXXXX extruder]',
+            title: 'Modello Driver Estrusore',
+            desc: 'Modello del driver stepper installato per il motore dell\'estrusore (es. TMC2209, TMC5160, Standalone).'
+        },
+        'extruder-driver-conn-type-select': {
+            param: 'uart_pin / cs_pin',
+            title: 'Tipo Comunicazione Driver Estrusore',
+            desc: 'Modalità di collegamento dati tra MCU/toolhead e il driver dell\'estrusore (UART, SPI o Standalone).'
+        },
+        'extruder-driver-uart-pin': {
+            param: 'uart_pin',
+            unit: 'Pin MCU',
+            title: 'Pin UART Driver Estrusore',
+            desc: 'Pin digitale bidirezionale utilizzato per la comunicazione seriale UART con il driver dell\'estrusore.'
+        },
+        'extruder-driver-tx-pin': {
+            param: 'tx_pin',
+            unit: 'Pin MCU (Opzionale)',
+            title: 'Pin TX Dedicato Driver Estrusore',
+            desc: 'Pin di trasmissione separato usato solo su schede che non utilizzano una linea UART single-wire.'
+        },
+        'extruder-driver-uart-address': {
+            param: 'uart_address',
+            unit: '0 - 3',
+            title: 'Indirizzo Multi-Nodo UART',
+            desc: 'Indirizzo hardware (0-3) del driver quando più chip TMC2209 condividono la stessa linea UART.'
+        },
+        'extruder-driver-cs-pin': {
+            param: 'cs_pin',
+            unit: 'Pin MCU',
+            title: 'Pin Chip Select SPI Driver Estrusore',
+            desc: 'Pin di abilitazione Chip Select (CS) per il driver estrusore su bus SPI.'
+        },
+        'extruder-driver-spi-mode': {
+            param: 'spi_bus / spi_software_*_pin',
+            title: 'Modalità Connessione SPI Driver Estrusore',
+            desc: 'Seleziona tra bus SPI hardware della MCU o emulazione SPI software tramite pin dedicati (Bit-banging).'
+        },
+        'extruder-driver-spi-bus': {
+            param: 'spi_bus',
+            title: 'Bus SPI Hardware Driver Estrusore',
+            desc: 'Nome del bus SPI hardware della MCU utilizzato dal driver estrusore (es. spi1, spi2).'
+        },
+        'extruder-driver-spi-sclk': {
+            param: 'spi_software_sclk_pin',
+            unit: 'Pin MCU',
+            title: 'Pin SCLK SPI Software Driver Estrusore',
+            desc: 'Pin di clock seriale (SCK) per il bus SPI software del driver estrusore.'
+        },
+        'extruder-driver-spi-mosi': {
+            param: 'spi_software_mosi_pin',
+            unit: 'Pin MCU',
+            title: 'Pin MOSI SPI Software Driver Estrusore',
+            desc: 'Pin dati MOSI per il bus SPI software del driver estrusore.'
+        },
+        'extruder-driver-spi-miso': {
+            param: 'spi_software_miso_pin',
+            unit: 'Pin MCU',
+            title: 'Pin MISO SPI Software Driver Estrusore',
+            desc: 'Pin dati MISO per il bus SPI software del driver estrusore.'
+        },
+        'extruder-driver-run-current': {
+            param: 'run_current',
+            unit: 'A (Ampere)',
+            title: 'Corrente Operativa Estrusore',
+            desc: 'Corrente RMS erogata al motore dell\'estrusore durante la stampa.',
+            tip: 'Motori pancake (Orbiter/SB/Sherpa): 0.50A - 0.70A'
+        },
+        'extruder-driver-stealthchop': {
+            param: 'stealthchop_threshold',
+            unit: 'mm/s',
+            title: 'Modalità StealthChop / SpreadCycle Estrusore',
+            desc: 'Soglia di velocità per la modalità silenziosa. Per l\'estrusore si consiglia SpreadCycle (0) per massimizzare coppia e precisione.',
+            tip: 'Consigliato per estrusore: 0 (SpreadCycle)'
+        },
+        'extruder-check-enable-hold-current': {
+            param: 'hold_current',
+            title: 'Abilita Corrente di Mantenimento Estrusore',
+            desc: 'Attiva una corrente ridotta quando l\'estrusore è fermo. Klipper sconsiglia hold_current sull\'estrusore per evitare imprecisioni.'
+        },
+        'extruder-driver-hold-current': {
+            param: 'hold_current',
+            unit: 'A (Ampere)',
+            title: 'Corrente a Riposo Estrusore',
+            desc: 'Corrente mantenuta sugli avvolgimenti quando il motore dell\'estrusore è fermo.'
+        },
+        'extruder-check-enable-sense-resistor': {
+            param: 'sense_resistor',
+            title: 'Specifica Resistenza di Sense Estrusore',
+            desc: 'Abilita l\'inserimento manuale del valore del resistore di campionamento corrente del driver estrusore.'
+        },
+        'extruder-driver-sense-resistor': {
+            param: 'sense_resistor',
+            unit: 'Ω (Ohm)',
+            title: 'Resistenza di Sense Driver Estrusore',
+            desc: 'Valore in Ohm dei resistori di sense sulla scheda driver.',
+            tip: 'TMC2209: 0.110 Ω | TMC5160: 0.075 Ω'
+        },
+        'extruder-driver-interpolate': {
+            param: 'interpolate',
+            title: 'Interpolazione a 256 Microstep',
+            desc: 'Abilita l\'interpolazione interna del driver estrusore a 256 microstep (interpolate: True).'
+        },
+        'virtual-sd-path': {
+            param: 'path ([virtual_sdcard])',
+            title: 'Percorso Cartella File G-Code',
+            desc: 'Percorso nel file system Linux dove Moonraker e Klipper salvano e leggono i file G-Code di stampa.',
+            tip: 'Default: ~/printer_data/gcodes'
+        },
+        'calc-drive-type': {
+            param: 'rotation_distance',
+            title: 'Tipo di Trasmissione Meccanica',
+            desc: 'Seleziona tra trasmissione a cinghia dentata (GT2 2mm) o vite trapezia per calcolare la rotation_distance.'
+        },
+        'calc-pulley-teeth': {
+            param: 'rotation_distance = denti × 2',
+            title: 'Numero Denti Puleggia',
+            desc: 'Numero di denti della puleggia motrice montata sull\'albero motore (es. 16 o 20 denti).'
+        },
+        'calc-leadscrew-pitch': {
+            param: 'rotation_distance = lead',
+            unit: 'mm/giro',
+            title: 'Passo Barra Filettata (Lead)',
+            desc: 'Millimetri di avanzamento lineare per un giro completo della vite (es. T8x8 = 8, T8x4 = 4, T8x2 = 2).'
         },
 
         // --- Modali, Sistema & Topbar ---
@@ -1018,6 +1218,35 @@
         if (name && KLIPPER_TOOLTIPS[name]) {
             return Object.assign({ id: name }, KLIPPER_TOOLTIPS[name]);
         }
+
+        // Classi dinamiche MCU, Ventole, LED
+        const cls = el?.className || '';
+        if (cls.includes('mcu-name-input')) return { param: '[mcu <nome>]', title: 'Nome Identificativo MCU Secondario', desc: 'Nome univoco della scheda secondaria o toolhead board usato nei prefissi dei pin (es. toolhead:PA0, rpi:gpio12).' };
+        if (cls.includes('mcu-conn-type-select')) return { param: 'serial / canbus_uuid', title: 'Metodo di Connessione MCU', desc: 'Seleziona tra CAN Bus (canbus_uuid), porta seriale USB (/dev/serial/by-id/...) o processo Linux MCU (/tmp/klipper_host_mcu).' };
+        if (cls.includes('mcu-address-input')) return { param: 'serial / canbus_uuid', title: 'Indirizzo o UUID MCU', desc: 'Percorso seriale USB del dispositivo Linux oppure codice univoco a 12 caratteri esadecimali per schede CAN Bus.' };
+        if (cls.includes('mcu-baud-input')) return { param: 'baud', unit: 'bps', title: 'Velocità Seriale (Baud Rate)', desc: 'Velocità di comunicazione seriale (opzionale, default Klipper: 250000).' };
+        if (cls.includes('mcu-restart-input')) return { param: 'restart_method', title: 'Metodo di Riavvio MCU', desc: 'Metodo utilizzato dall\'host per riavviare il microcontrollore (es. command, arduino, rpi_usb).' };
+
+        if (cls.includes('fan-type-select')) return { param: '[heater_fan] / [controller_fan] / [temperature_fan] / [fan_generic]', title: 'Tipologia Ventola Klipper', desc: 'Definisce il comportamento della ventola: heater_fan (dissipatore hotend), controller_fan (elettronica/driver), temperature_fan (termoregolata) o fan_generic (controllo manuale).' };
+        if (cls.includes('fan-name-input')) return { param: '<nome_ventola>', title: 'Nome Ventola Ausiliaria', desc: 'Identificativo univoco della ventola in Klipper e Mainsail (es. hotend_fan, controller_fan, chamber_fan).' };
+        if (cls.includes('fan-pin-input')) return { param: 'pin', unit: 'Pin MCU', title: 'Pin di Controllo Ventola', desc: 'Pin MOSFET della scheda madre o toolhead che alimenta la ventola.' };
+        if (cls.includes('fan-heater-input')) return { param: 'heater', title: 'Riscaldatore Associato', desc: 'Riscaldatore monitorato per attivare automaticamente la ventola (default: extruder).' };
+        if (cls.includes('fan-heater-temp-input')) return { param: 'heater_temp', unit: '°C', title: 'Temperatura di Attivazione', desc: 'Soglia di temperatura sopra la quale la ventola si accende automaticamente (default: 50.0 °C).' };
+        if (cls.includes('fan-stepper-input')) return { param: 'stepper', title: 'Motori Stepper Monitorati', desc: 'Elenco di stepper che attivano la ventola elettronica quando alimentati (vuoto = tutti gli stepper).' };
+        if (cls.includes('fan-sens-type-input')) return { param: 'sensor_type', title: 'Tipo Sensore Temperatura', desc: 'Modello di termistore utilizzato per rilevare la temperatura della ventola termoregolata.' };
+        if (cls.includes('fan-sens-pin-input')) return { param: 'sensor_pin', unit: 'Pin ADC', title: 'Pin Sensore Temperatura', desc: 'Pin analogico collegato al termistore della ventola.' };
+        if (cls.includes('fan-target-temp-input')) return { param: 'target_temp', unit: '°C', title: 'Temperatura Target', desc: 'Temperatura obiettivo mantenuta dalla ventola termoregolata.' };
+        if (cls.includes('fan-max-power-input')) return { param: 'max_power', unit: '0.0 - 1.0', title: 'Potenza Massima Ventola', desc: 'Potenza massima PWM erogabile alla ventola (da 0.0 a 1.0, default: 1.0).' };
+
+        if (cls.includes('led-type-select')) return { param: '[neopixel] / [led] / [output_pin]', title: 'Tipologia Illuminazione LED', desc: 'neopixel: strisce indirizzabili WS2812/SK6812; led: modulo Klipper [led] standard per pin RGB/RGBW/Bianco; output_pin: barra LED monocromatica PWM.' };
+        if (cls.includes('led-name-input')) return { param: '<nome_led>', title: 'Nome Identificativo LED', desc: 'Nome della sezione LED in Klipper e Mainsail (es. caselight, sb_leds).' };
+        if (cls.includes('led-pin-input')) return { param: 'pin / white_pin', unit: 'Pin MCU', title: 'Pin Principale o Bianco LED', desc: 'Pin dati per strisce Neopixel, pin di uscita per output_pin, oppure white_pin per sezioni [led].' };
+        if (cls.includes('led-chain-input')) return { param: 'chain_count', title: 'Numero di LED nella Catena', desc: 'Quantità totale di diodi LED indirizzabili collegati in serie sulla striscia Neopixel.' };
+        if (cls.includes('led-order-select')) return { param: 'color_order', title: 'Ordine Canali Colore', desc: 'Sequenza hardware dei colori nei chip Neopixel (GRB per WS2812B, GRBW o RGBW per SK6812).' };
+        if (cls.includes('led-red-input')) return { param: 'red_pin', unit: 'Pin MCU', title: 'Pin Canale Rosso', desc: 'Pin del microcontrollore collegato al canale Rosso della striscia LED standard [led].' };
+        if (cls.includes('led-green-input')) return { param: 'green_pin', unit: 'Pin MCU', title: 'Pin Canale Verde', desc: 'Pin del microcontrollore collegato al canale Verde della striscia LED standard [led].' };
+        if (cls.includes('led-blue-input')) return { param: 'blue_pin', unit: 'Pin MCU', title: 'Pin Canale Blu', desc: 'Pin del microcontrollore collegato al canale Blu della striscia LED standard [led].' };
+        if (cls.includes('led-cycle-input')) return { param: 'cycle_time', unit: 's', title: 'Tempo di Ciclo PWM', desc: 'Durata in secondi del ciclo PWM per il controllo luminosità LED (default Klipper: 0.010).' };
 
         // Ricerca per parole chiave e pattern frequenti nei parametri Klipper
         const labelText = (labelEl?.textContent || '').trim().toLowerCase();
