@@ -436,14 +436,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderExtraMcus() {
         if (!dom.extraMcuListContainer) return;
         dom.extraMcuListContainer.innerHTML = '';
+        const t = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
 
         if (state.extraMcus.length === 0) {
             dom.extraMcuListContainer.innerHTML = `
                 <div style="text-align: center; padding: 1.75rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
-                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem; font-size: 0.875rem;">Nessun microcontrollore secondario configurato.</p>
-                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-mcu">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem; font-size: 0.875rem;" data-i18n="mcu.empty_notice">${t('mcu.empty_notice', 'Nessun microcontrollore secondario configurato.')}</p>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-mcu" data-i18n="mcu.btn_add_first">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        + Aggiungi il tuo primo MCU secondario
+                        <span class="btn-text">${t('mcu.btn_add_first', '+ Aggiungi il tuo primo MCU secondario')}</span>
                     </button>
                 </div>
             `;
@@ -463,47 +464,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const isCanbus = mcu.connType === 'canbus';
             const isHost = mcu.connType === 'host';
+            const addrLabelKey = isCanbus ? 'mcu.uuid_label' : (isHost ? 'mcu.socket_label' : 'mcu.serial_label');
+            const addrLabelFallback = isCanbus ? 'UUID CAN Bus:' : (isHost ? 'Percorso Socket Linux MCU:' : 'Porta Seriale USB:');
 
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem;">
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                         <span style="font-weight: 700; color: var(--primary-light); font-size: 0.95rem;">[mcu ${mcu.name || 'nuovo'}]</span>
-                        <span class="card-tag">MCU Secondario</span>
+                        <span class="card-tag" data-i18n="mcu.tag_secondary">${t('mcu.tag_secondary', 'MCU Secondario')}</span>
                     </div>
-                    <button type="button" class="btn btn-danger btn-sm btn-delete-mcu" data-index="${index}" title="Elimina questo MCU">
-                        Elimina MCU
+                    <button type="button" class="btn btn-danger btn-sm btn-delete-mcu" data-index="${index}" data-i18n="btn.delete_mcu" data-i18n-title="btn.delete_mcu" title="${t('btn.delete_mcu', 'Elimina MCU')}">
+                        ${t('btn.delete_mcu', 'Elimina MCU')}
                     </button>
                 </div>
 
                 <div class="form-row" style="margin-bottom: 0.85rem;">
                     <div class="form-group" style="flex: 1;">
-                        <label class="form-label">Nome MCU:</label>
-                        <input type="text" class="form-control mcu-name-input" data-index="${index}" value="${mcu.name || ''}" placeholder="es. toolhead, rpi, can0, ebb36">
-                        <div class="form-helper">Questo nome identifica il microcontrollore e i suoi pin.</div>
+                        <label class="form-label" data-i18n="mcu.name_label">${t('mcu.name_label', 'Nome MCU:')}</label>
+                        <input type="text" class="form-control mcu-name-input" data-index="${index}" value="${mcu.name || ''}" placeholder="toolhead, rpi, can0, ebb36">
+                        <div class="form-helper" data-i18n="mcu.helper_name">${t('mcu.helper_name', 'Questo nome identifica il microcontrollore e i suoi pin.')}</div>
                     </div>
 
                     <div class="form-group" style="flex: 1;">
-                        <label class="form-label">Metodo di Connessione:</label>
+                        <label class="form-label" data-i18n="mcu.conn_method">${t('mcu.conn_method', 'Metodo di Connessione:')}</label>
                         <select class="form-control mcu-conn-type-select" data-index="${index}">
-                            <option value="canbus" ${isCanbus ? 'selected' : ''}>CAN Bus</option>
-                            <option value="serial" ${(!isCanbus && !isHost) ? 'selected' : ''}>USB / Seriale</option>
-                            <option value="host" ${isHost ? 'selected' : ''}>Raspberry Pi Linux MCU</option>
+                            <option value="canbus" data-i18n="opt.conn_canbus_uuid" ${isCanbus ? 'selected' : ''}>${t('opt.conn_canbus_uuid', 'CAN Bus')}</option>
+                            <option value="serial" data-i18n="opt.conn_usb_serial" ${(!isCanbus && !isHost) ? 'selected' : ''}>${t('opt.conn_usb_serial', 'USB / Seriale')}</option>
+                            <option value="host" data-i18n="opt.conn_host_mcu" ${isHost ? 'selected' : ''}>${t('opt.conn_host_mcu', 'Raspberry Pi Linux MCU')}</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0.85rem;">
-                    <label class="form-label">${isCanbus ? 'UUID CAN Bus:' : (isHost ? 'Percorso Socket Linux MCU:' : 'Porta Seriale USB:')}</label>
-                    <input type="text" class="form-control mcu-address-input" data-index="${index}" value="${isCanbus ? (mcu.canbus_uuid || '') : (mcu.serial || '')}" placeholder="${isCanbus ? 'es. 43b0d2d3a1f8' : (isHost ? '/tmp/klipper_host_mcu' : '/dev/serial/by-id/usb-Klipper_...')}" ${isHost ? 'readonly' : ''}>
+                    <label class="form-label" data-i18n="${addrLabelKey}">${t(addrLabelKey, addrLabelFallback)}</label>
+                    <input type="text" class="form-control mcu-address-input" data-index="${index}" value="${isCanbus ? (mcu.canbus_uuid || '') : (mcu.serial || '')}" placeholder="${isCanbus ? '43b0d2d3a1f8' : (isHost ? '/tmp/klipper_host_mcu' : '/dev/serial/by-id/usb-Klipper_...')}" ${isHost ? 'readonly' : ''}>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Baud Rate:</label>
+                        <label class="form-label" data-i18n="mcu.baud_label">${t('mcu.baud_label', 'Baud Rate:')}</label>
                         <input type="text" class="form-control mcu-baud-input" data-index="${index}" value="${mcu.baud || ''}" placeholder="250000">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Restart Method:</label>
+                        <label class="form-label" data-i18n="mcu.restart_label">${t('mcu.restart_label', 'Restart Method:')}</label>
                         <input type="text" class="form-control mcu-restart-input" data-index="${index}" value="${mcu.restart_method || ''}" placeholder="command">
                     </div>
                 </div>
@@ -935,13 +938,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderExtraFans() {
         if (!dom.extraFanListContainer) return;
         dom.extraFanListContainer.innerHTML = '';
+        const t = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
 
         if (state.extraFans.length === 0) {
             dom.extraFanListContainer.innerHTML = `
                 <div style="text-align: center; padding: 1.25rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
-                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;">Nessuna ventola ausiliaria aggiuntiva configurata.</p>
-                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-fan">
-                        + Aggiungi una ventola ausiliaria
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;" data-i18n="fan.empty_notice">${t('fan.empty_notice', 'Nessuna ventola ausiliaria aggiuntiva configurata.')}</p>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-fan" data-i18n="fan.btn_add_first">
+                        ${t('fan.btn_add_first', '+ Aggiungi una ventola ausiliaria')}
                     </button>
                 </div>
             `;
@@ -960,11 +964,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Riscaldatore Associato:</label>
+                            <label class="form-label" data-i18n="lbl.fan_heater">${t('lbl.fan_heater', 'Riscaldatore Associato:')}</label>
                             <input type="text" class="form-control fan-heater-input" data-index="${index}" placeholder="extruder" value="${fan.heater || 'extruder'}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Temperatura Attivazione:</label>
+                            <label class="form-label" data-i18n="lbl.fan_heater_temp">${t('lbl.fan_heater_temp', 'Temperatura Attivazione:')}</label>
                             <input type="number" step="1" class="form-control fan-heater-temp-input" data-index="${index}" placeholder="50.0" value="${fan.heater_temp || '50.0'}">
                         </div>
                     </div>
@@ -973,9 +977,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Stepper da Monitorare:</label>
+                            <label class="form-label" data-i18n="lbl.fan_stepper">${t('lbl.fan_stepper', 'Stepper da Monitorare:')}</label>
                             <input type="text" class="form-control fan-stepper-input" data-index="${index}" placeholder="stepper_x, stepper_y" value="${fan.stepper || ''}">
-                            <div class="form-helper">Lascia vuoto per monitorare tutti i motori.</div>
+                            <div class="form-helper" data-i18n="helper.fan_stepper">${t('helper.fan_stepper', 'Lascia vuoto per monitorare tutti i motori.')}</div>
                         </div>
                     </div>
                 `;
@@ -983,15 +987,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Tipo Sensore:</label>
+                            <label class="form-label" data-i18n="lbl.fan_sensor_type">${t('lbl.fan_sensor_type', 'Tipo Sensore:')}</label>
                             <input type="text" class="form-control fan-sens-type-input" data-index="${index}" placeholder="EPCOS 100K B57560G104F" value="${fan.sensor_type || 'EPCOS 100K B57560G104F'}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Pin Sensore:</label>
+                            <label class="form-label" data-i18n="lbl.fan_sensor_pin">${t('lbl.fan_sensor_pin', 'Pin Sensore:')}</label>
                             <input type="text" class="form-control fan-sens-pin-input" data-index="${index}" placeholder="PC5" value="${fan.sensor_pin || ''}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Temp Target:</label>
+                            <label class="form-label" data-i18n="lbl.fan_target_temp">${t('lbl.fan_target_temp', 'Temp Target:')}</label>
                             <input type="number" class="form-control fan-target-temp-input" data-index="${index}" placeholder="45.0" value="${fan.target_temp || '45.0'}">
                         </div>
                     </div>
@@ -1000,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Potenza Massima:</label>
+                            <label class="form-label" data-i18n="lbl.fan_max_power">${t('lbl.fan_max_power', 'Potenza Massima:')}</label>
                             <input type="number" step="0.1" min="0" max="1" class="form-control fan-max-power-input" data-index="${index}" placeholder="1.0" value="${fan.max_power || '1.0'}">
                         </div>
                     </div>
@@ -1010,15 +1014,15 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
                     <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem;">
-                        <span>🌀 Ventola [${fan.type} ${fan.name || 'unnamed'}]</span>
+                        <span>🌀 <span data-i18n="fan.card_prefix">${t('fan.card_prefix', 'Ventola')}</span> [${fan.type} ${fan.name || 'unnamed'}]</span>
                     </div>
-                    <button type="button" class="btn btn-secondary btn-sm btn-delete-fan" data-index="${index}" style="color: var(--danger); padding: 0.15rem 0.45rem;" title="Rimuovi ventola">
-                        ✕ Elimina
+                    <button type="button" class="btn btn-secondary btn-sm btn-delete-fan" data-index="${index}" style="color: var(--danger); padding: 0.15rem 0.45rem;" data-i18n="btn.delete_short" data-i18n-title="btn.delete_fan" title="${t('btn.delete_fan', 'Rimuovi ventola')}">
+                        ${t('btn.delete_short', '✕ Elimina')}
                     </button>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Tipologia di Assegnazione Klipper:</label>
+                        <label class="form-label" data-i18n="lbl.fan_type">${t('lbl.fan_type', 'Tipologia di Assegnazione Klipper:')}</label>
                         <select class="form-control fan-type-select" data-index="${index}">
                             <option value="heater_fan" ${fan.type === 'heater_fan' ? 'selected' : ''}>heater_fan</option>
                             <option value="controller_fan" ${fan.type === 'controller_fan' ? 'selected' : ''}>controller_fan</option>
@@ -1027,11 +1031,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Identificatore / Nome Ventola:</label>
+                        <label class="form-label" data-i18n="lbl.fan_name">${t('lbl.fan_name', 'Identificatore / Nome Ventola:')}</label>
                         <input type="text" class="form-control fan-name-input" data-index="${index}" placeholder="hotend_fan" value="${fan.name || ''}">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Pin di Controllo:</label>
+                        <label class="form-label" data-i18n="lbl.fan_pin">${t('lbl.fan_pin', 'Pin di Controllo:')}</label>
                         <input type="text" class="form-control fan-pin-input" data-index="${index}" placeholder="PC6" value="${fan.pin || ''}">
                     </div>
                 </div>
@@ -1131,13 +1135,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderLeds() {
         if (!dom.ledListContainer) return;
         dom.ledListContainer.innerHTML = '';
+        const t = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
 
         if (state.leds.length === 0) {
             dom.ledListContainer.innerHTML = `
                 <div style="text-align: center; padding: 1.25rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
-                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;" data-i18n="misc.no_leds">Nessuna striscia LED o Neopixel configurata.</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;" data-i18n="misc.no_leds">${t('misc.no_leds', 'Nessuna striscia LED o Neopixel configurata.')}</p>
                     <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-led" data-i18n="misc.empty_add_led">
-                        + Aggiungi LED / Neopixel
+                        ${t('misc.empty_add_led', '+ Aggiungi LED / Neopixel')}
                     </button>
                 </div>
             `;
@@ -1156,11 +1161,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_chain_count">Numero LED:</label>
+                            <label class="form-label" data-i18n="lbl.led_chain_count">${t('lbl.led_chain_count', 'Numero LED:')}</label>
                             <input type="number" step="1" min="1" class="form-control led-chain-input" data-index="${index}" placeholder="1" value="${led.chain_count || '1'}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_color_order">Ordine Colori:</label>
+                            <label class="form-label" data-i18n="lbl.led_color_order">${t('lbl.led_color_order', 'Ordine Colori:')}</label>
                             <select class="form-control led-order-select" data-index="${index}">
                                 <option value="GRB" ${led.color_order === 'GRB' ? 'selected' : ''}>GRB</option>
                                 <option value="RGB" ${led.color_order === 'RGB' ? 'selected' : ''}>RGB</option>
@@ -1174,19 +1179,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_red_pin">Pin Rosso:</label>
-                            <input type="text" class="form-control led-red-input" data-index="${index}" placeholder="es. PA1" value="${led.red_pin || ''}">
+                            <label class="form-label" data-i18n="lbl.led_red_pin">${t('lbl.led_red_pin', 'Pin Rosso:')}</label>
+                            <input type="text" class="form-control led-red-input" data-index="${index}" placeholder="PA1" value="${led.red_pin || ''}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_green_pin">Pin Verde:</label>
-                            <input type="text" class="form-control led-green-input" data-index="${index}" placeholder="es. PA2" value="${led.green_pin || ''}">
+                            <label class="form-label" data-i18n="lbl.led_green_pin">${t('lbl.led_green_pin', 'Pin Verde:')}</label>
+                            <input type="text" class="form-control led-green-input" data-index="${index}" placeholder="PA2" value="${led.green_pin || ''}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_blue_pin">Pin Blu:</label>
-                            <input type="text" class="form-control led-blue-input" data-index="${index}" placeholder="es. PA3" value="${led.blue_pin || ''}">
+                            <label class="form-label" data-i18n="lbl.led_blue_pin">${t('lbl.led_blue_pin', 'Pin Blu:')}</label>
+                            <input type="text" class="form-control led-blue-input" data-index="${index}" placeholder="PA3" value="${led.blue_pin || ''}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" data-i18n="lbl.led_cycle_time">Ciclo PWM:</label>
+                            <label class="form-label" data-i18n="lbl.led_cycle_time">${t('lbl.led_cycle_time', 'Ciclo PWM:')}</label>
                             <input type="text" class="form-control led-cycle-input" data-index="${index}" placeholder="0.010" value="${led.cycle_time || ''}">
                         </div>
                     </div>
@@ -1194,10 +1199,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const headerTag = led.name ? `[${led.type} ${led.name}]` : `[${led.type}]`;
-            const pinLabel = led.type === 'led' 
-                ? 'Pin Bianco / Principale:' 
+            const pinLabelKey = led.type === 'led'
+                ? 'lbl.led_white_pin'
+                : (led.type === 'neopixel' ? 'lbl.led_data_pin' : 'lbl.led_pin');
+            const pinLabelFallback = led.type === 'led'
+                ? 'Pin Bianco / Principale:'
                 : (led.type === 'neopixel' ? 'Pin Dati LED:' : 'Pin LED:');
-            const pinPlaceholder = led.type === 'led' ? 'es. PA0' : (led.type === 'neopixel' ? 'es. PB0' : 'es. PC5');
+            const pinPlaceholder = led.type === 'led' ? 'PA0' : (led.type === 'neopixel' ? 'PB0' : 'PC5');
             const namePlaceholder = 'caselight';
 
             card.innerHTML = `
@@ -1205,13 +1213,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem;">
                         <span>💡 ${headerTag}</span>
                     </div>
-                    <button type="button" class="btn btn-secondary btn-sm btn-delete-led" data-index="${index}" style="color: var(--danger); padding: 0.15rem 0.45rem;" title="Rimuovi LED">
-                        ✕ Elimina
+                    <button type="button" class="btn btn-secondary btn-sm btn-delete-led" data-index="${index}" style="color: var(--danger); padding: 0.15rem 0.45rem;" data-i18n="btn.delete_short" data-i18n-title="btn.delete_led" title="${t('btn.delete_led', 'Rimuovi LED')}">
+                        ${t('btn.delete_short', '✕ Elimina')}
                     </button>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label" data-i18n="lbl.led_type">Tipo LED:</label>
+                        <label class="form-label" data-i18n="lbl.led_type">${t('lbl.led_type', 'Tipo LED:')}</label>
                         <select class="form-control led-type-select" data-index="${index}">
                             <option value="neopixel" ${led.type === 'neopixel' ? 'selected' : ''}>neopixel</option>
                             <option value="led" ${led.type === 'led' ? 'selected' : ''}>led</option>
@@ -1219,11 +1227,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" data-i18n="lbl.led_name">Nome LED:</label>
+                        <label class="form-label" data-i18n="lbl.led_name">${t('lbl.led_name', 'Nome LED:')}</label>
                         <input type="text" class="form-control led-name-input" data-index="${index}" placeholder="${namePlaceholder}" value="${led.name || ''}">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">${pinLabel}</label>
+                        <label class="form-label" data-i18n="${pinLabelKey}">${t(pinLabelKey, pinLabelFallback)}</label>
                         <input type="text" class="form-control led-pin-input" data-index="${index}" placeholder="${pinPlaceholder}" value="${led.pin || led.white_pin || ''}">
                     </div>
                 </div>
@@ -1365,12 +1373,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderIncludes() {
         if (!dom.includeListContainer) return;
         dom.includeListContainer.innerHTML = '';
+        const t = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
 
         if (state.includes.length === 0) {
             dom.includeListContainer.innerHTML = `
                 <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">Nessun file esterno [include] configurato nel file principale.</p>
-                    <p style="font-size: 0.8rem; color: var(--text-muted);">Usa i bottoni rapidi sopra o il pulsante 'Nuovo File Include' per aggiungerne uno.</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem;" data-i18n="include.empty_notice">${t('include.empty_notice', 'Nessun file esterno [include] configurato nel file principale.')}</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);" data-i18n="include.empty_hint">${t('include.empty_hint', "Usa i bottoni rapidi sopra o il pulsante 'Nuovo File Include' per aggiungerne uno.")}</p>
                 </div>
             `;
             return;
@@ -1384,12 +1393,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="display: flex; align-items: center; gap: 0.75rem; flex: 1;">
                     <span style="color: var(--primary-light); font-size: 1.1rem;">📄</span>
                     <div style="flex: 1;">
-                        <input type="text" class="form-control include-file-input" data-index="${index}" value="${inc.file}" placeholder="nome_file.cfg" style="font-family: monospace;">
+                        <input type="text" class="form-control include-file-input" data-index="${index}" value="${inc.file}" placeholder="macros.cfg" style="font-family: monospace;">
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     <span class="card-tag" style="margin: 0;">[include ${inc.file}]</span>
-                    <button type="button" class="btn btn-secondary btn-sm btn-delete-include" data-index="${index}" style="color: var(--danger); padding: 0.25rem 0.5rem;" title="Rimuovi include">
+                    <button type="button" class="btn btn-secondary btn-sm btn-delete-include" data-index="${index}" style="color: var(--danger); padding: 0.25rem 0.5rem;" data-i18n-title="btn.delete_include" title="${t('btn.delete_include', 'Rimuovi include')}">
                         ✕
                     </button>
                 </div>
@@ -2061,11 +2070,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------------------------
     function renderMacroList() {
         dom.macroListContainer.innerHTML = '';
+        const t = (k, fallback) => (window.i18n && typeof window.i18n.t === 'function' && window.i18n.t(k) !== k) ? window.i18n.t(k) : fallback;
         if (state.macros.length === 0) {
             dom.macroListContainer.innerHTML = `
                 <div style="text-align: center; padding: 2.5rem; background: var(--bg-card); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Nessuna macro [gcode_macro] presente nel file di configurazione.</p>
-                    <button class="btn btn-secondary btn-sm" id="btn-empty-insert-template">Inserisci Template Macro Essenziali (START_PRINT, END_PRINT, CANCEL)</button>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;" data-i18n="macro.empty_notice">${t('macro.empty_notice', 'Nessuna macro [gcode_macro] presente nel file di configurazione.')}</p>
+                    <button class="btn btn-secondary btn-sm" id="btn-empty-insert-template" data-i18n="macro.btn_insert_tpl">${t('macro.btn_insert_tpl', 'Inserisci Template Macro Essenziali')}</button>
                 </div>
             `;
             const btnInsert = document.getElementById('btn-empty-insert-template');
@@ -2082,15 +2092,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span style="font-weight: 700; color: var(--primary-light);">[gcode_macro ${macro.name}]</span>
                     </div>
                     <div style="display: flex; gap: 0.4rem;">
-                        <button class="btn btn-danger btn-sm btn-delete-macro" data-index="${index}" title="Elimina Macro">Elimina</button>
+                        <button class="btn btn-danger btn-sm btn-delete-macro" data-index="${index}" data-i18n="btn.delete_macro" data-i18n-title="btn.delete_macro" title="${t('btn.delete_macro', 'Elimina Macro')}">${t('btn.delete_macro', 'Elimina')}</button>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Descrizione:</label>
-                    <input type="text" class="form-control macro-desc-input" data-index="${index}" value="${macro.description || ''}" placeholder="Spiegazione dell'azione eseguita">
+                    <label class="form-label" data-i18n="lbl.macro_desc">${t('lbl.macro_desc', 'Descrizione:')}</label>
+                    <input type="text" class="form-control macro-desc-input" data-index="${index}" value="${macro.description || ''}" data-i18n-placeholder="placeholder.macro_desc" placeholder="${t('placeholder.macro_desc', "Spiegazione dell'azione eseguita")}">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Codice G-Code / Jinja2:</label>
+                    <label class="form-label" data-i18n="lbl.macro_gcode">${t('lbl.macro_gcode', 'Codice G-Code / Jinja2:')}</label>
                     <textarea class="form-control macro-gcode-input" data-index="${index}" style="min-height: 120px;">${macro.gcode || ''}</textarea>
                 </div>
             `;
