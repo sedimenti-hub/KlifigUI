@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Misceleus ADXL345
         checkEnableAdxl: document.getElementById('check-enable-adxl'),
         adxl345Fields: document.getElementById('adxl345-fields'),
+        adxlFields: document.getElementById('adxl345-fields'),
         adxlCsPin: document.getElementById('adxl-cs-pin'),
         adxlSpiMode: document.getElementById('adxl-spi-mode'),
         adxlSpiBusGroup: document.getElementById('adxl-spi-bus-group'),
@@ -870,9 +871,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (dom.checkEnableAdxl) {
         dom.checkEnableAdxl.addEventListener('change', () => {
-            if (dom.adxl345Fields) {
-                dom.adxl345Fields.style.display = dom.checkEnableAdxl.checked ? 'block' : 'none';
-            }
+            const isChecked = dom.checkEnableAdxl.checked;
+            if (dom.adxl345Fields) dom.adxl345Fields.style.display = isChecked ? 'block' : 'none';
+            if (dom.adxlFields) dom.adxlFields.style.display = isChecked ? 'block' : 'none';
+            updateAdxlSpiModeVisibility();
+            checkDirtyState();
         });
     }
 
@@ -1094,7 +1097,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dom.btnAddFan) dom.btnAddFan.addEventListener('click', addExtraFan);
 
     // -------------------------------------------------------------------------
-    // Gestione LED (neopixel, output_pin)
+    // Gestione LED (neopixel, led, output_pin)
     // -------------------------------------------------------------------------
     function syncLedsFromDom() {
         if (!dom.ledListContainer) return;
@@ -1104,11 +1107,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const nameInp = dom.ledListContainer.querySelector(`.led-name-input[data-index="${idx}"]`);
             if (nameInp) led.name = nameInp.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
             const pinInp = dom.ledListContainer.querySelector(`.led-pin-input[data-index="${idx}"]`);
-            if (pinInp) led.pin = pinInp.value.trim();
+            if (pinInp) {
+                led.pin = pinInp.value.trim();
+                if (led.type === 'led') led.white_pin = led.pin;
+            }
             const chainInp = dom.ledListContainer.querySelector(`.led-chain-input[data-index="${idx}"]`);
             if (chainInp) led.chain_count = chainInp.value.trim();
             const orderSel = dom.ledListContainer.querySelector(`.led-order-select[data-index="${idx}"]`);
             if (orderSel) led.color_order = orderSel.value;
+            const redInp = dom.ledListContainer.querySelector(`.led-red-input[data-index="${idx}"]`);
+            if (redInp) led.red_pin = redInp.value.trim();
+            const greenInp = dom.ledListContainer.querySelector(`.led-green-input[data-index="${idx}"]`);
+            if (greenInp) led.green_pin = greenInp.value.trim();
+            const blueInp = dom.ledListContainer.querySelector(`.led-blue-input[data-index="${idx}"]`);
+            if (blueInp) led.blue_pin = blueInp.value.trim();
+            const cycleInp = dom.ledListContainer.querySelector(`.led-cycle-input[data-index="${idx}"]`);
+            if (cycleInp) led.cycle_time = cycleInp.value.trim();
         });
     }
 
@@ -1119,8 +1133,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (state.leds.length === 0) {
             dom.ledListContainer.innerHTML = `
                 <div style="text-align: center; padding: 1.25rem; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
-                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;">Nessuna striscia LED o Neopixel configurata.</p>
-                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-led">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.85rem;" data-i18n="misc.no_leds">Nessuna striscia LED o Neopixel configurata.</p>
+                    <button type="button" class="btn btn-secondary btn-sm" id="btn-empty-add-led" data-i18n="misc.empty_add_led">
                         + Aggiungi LED / Neopixel (es. StealthBurner, barre LED camera)
                     </button>
                 </div>
@@ -1140,11 +1154,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 extraHtml = `
                     <div class="form-row" style="margin-top: 0.5rem;">
                         <div class="form-group">
-                            <label class="form-label">Numero LED (chain_count):</label>
+                            <label class="form-label" data-i18n="lbl.led_chain_count">Numero LED (chain_count):</label>
                             <input type="number" step="1" min="1" class="form-control led-chain-input" data-index="${index}" placeholder="1" value="${led.chain_count || '1'}">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Ordine Colori (color_order):</label>
+                            <label class="form-label" data-i18n="lbl.led_color_order">Ordine Colori (color_order):</label>
                             <select class="form-control led-order-select" data-index="${index}">
                                 <option value="GRB" ${led.color_order === 'GRB' ? 'selected' : ''}>GRB (Standard WS2812B)</option>
                                 <option value="RGB" ${led.color_order === 'RGB' ? 'selected' : ''}>RGB</option>
@@ -1154,12 +1168,40 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 `;
+            } else if (led.type === 'led') {
+                extraHtml = `
+                    <div class="form-row" style="margin-top: 0.5rem;">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="lbl.led_red_pin">Pin Rosso (red_pin):</label>
+                            <input type="text" class="form-control led-red-input" data-index="${index}" placeholder="opzionale (es. PA1)" value="${led.red_pin || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="lbl.led_green_pin">Pin Verde (green_pin):</label>
+                            <input type="text" class="form-control led-green-input" data-index="${index}" placeholder="opzionale (es. PA2)" value="${led.green_pin || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="lbl.led_blue_pin">Pin Blu (blue_pin):</label>
+                            <input type="text" class="form-control led-blue-input" data-index="${index}" placeholder="opzionale (es. PA3)" value="${led.blue_pin || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="lbl.led_cycle_time">Ciclo PWM (cycle_time):</label>
+                            <input type="text" class="form-control led-cycle-input" data-index="${index}" placeholder="0.010" value="${led.cycle_time || ''}">
+                        </div>
+                    </div>
+                `;
             }
+
+            const headerTag = led.name ? `[${led.type} ${led.name}]` : `[${led.type}]`;
+            const pinLabel = led.type === 'led' 
+                ? 'Pin Bianco / Principale (white_pin):' 
+                : (led.type === 'neopixel' ? 'Pin Dati LED (pin):' : 'Pin LED (pin):');
+            const pinPlaceholder = led.type === 'led' ? 'es. PA0' : (led.type === 'neopixel' ? 'es. PB0' : 'es. PC5');
+            const namePlaceholder = led.type === 'led' ? 'caselight (opzionale per [led])' : 'caselight';
 
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
                     <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.4rem;">
-                        <span>💡 [${led.type} ${led.name || 'unnamed'}]</span>
+                        <span>💡 ${headerTag}</span>
                     </div>
                     <button type="button" class="btn btn-secondary btn-sm btn-delete-led" data-index="${index}" style="color: var(--danger); padding: 0.15rem 0.45rem;" title="Rimuovi LED">
                         ✕ Elimina
@@ -1167,19 +1209,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Tipo LED:</label>
+                        <label class="form-label" data-i18n="lbl.led_type">Tipo LED:</label>
                         <select class="form-control led-type-select" data-index="${index}">
                             <option value="neopixel" ${led.type === 'neopixel' ? 'selected' : ''}>neopixel (Strisce indirizzabili RGB/RGBW WS2812)</option>
+                            <option value="led" ${led.type === 'led' ? 'selected' : ''}>led (Klipper [led] / [led &lt;nome&gt;] Standard)</option>
                             <option value="output_pin" ${led.type === 'output_pin' ? 'selected' : ''}>output_pin (LED Monocromatico / Barra PWM)</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Nome LED:</label>
-                        <input type="text" class="form-control led-name-input" data-index="${index}" placeholder="caselight" value="${led.name || ''}">
+                        <label class="form-label" data-i18n="lbl.led_name">Nome LED:</label>
+                        <input type="text" class="form-control led-name-input" data-index="${index}" placeholder="${namePlaceholder}" value="${led.name || ''}">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Pin LED:</label>
-                        <input type="text" class="form-control led-pin-input" data-index="${index}" placeholder="PB0" value="${led.pin || ''}">
+                        <label class="form-label">${pinLabel}</label>
+                        <input type="text" class="form-control led-pin-input" data-index="${index}" placeholder="${pinPlaceholder}" value="${led.pin || led.white_pin || ''}">
                     </div>
                 </div>
                 ${extraHtml}
@@ -1194,6 +1237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const idx = parseInt(e.target.dataset.index, 10);
                 state.leds[idx].type = e.target.value;
                 renderLeds();
+                checkDirtyState();
             });
         });
 
@@ -1201,6 +1245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             inp.addEventListener('input', (e) => {
                 const idx = parseInt(e.target.dataset.index, 10);
                 state.leds[idx].name = e.target.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+                checkDirtyState();
             });
         });
 
@@ -1208,6 +1253,58 @@ document.addEventListener('DOMContentLoaded', () => {
             inp.addEventListener('input', (e) => {
                 const idx = parseInt(e.target.dataset.index, 10);
                 state.leds[idx].pin = e.target.value.trim();
+                if (state.leds[idx].type === 'led') {
+                    state.leds[idx].white_pin = state.leds[idx].pin;
+                }
+                checkDirtyState();
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.led-chain-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].chain_count = e.target.value.trim();
+                checkDirtyState();
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.led-order-select').forEach(sel => {
+            sel.addEventListener('change', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].color_order = e.target.value;
+                checkDirtyState();
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.led-red-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].red_pin = e.target.value.trim();
+                checkDirtyState();
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.led-green-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].green_pin = e.target.value.trim();
+                checkDirtyState();
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.led-blue-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].blue_pin = e.target.value.trim();
+                checkDirtyState();
+            });
+        });
+
+        dom.ledListContainer.querySelectorAll('.led-cycle-input').forEach(inp => {
+            inp.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.index, 10);
+                state.leds[idx].cycle_time = e.target.value.trim();
+                checkDirtyState();
             });
         });
 
@@ -1217,7 +1314,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const idx = parseInt(btn.dataset.index, 10);
                 const removed = state.leds.splice(idx, 1)[0];
                 renderLeds();
-                showToast(`LED [${removed.type} ${removed.name}] rimosso`, 'info');
+                showToast(`LED [${removed.type} ${removed.name || ''}] rimosso`, 'info');
                 checkDirtyState();
             });
         });
@@ -1233,6 +1330,11 @@ document.addEventListener('DOMContentLoaded', () => {
             type: 'neopixel',
             name: defaultName,
             pin: '',
+            white_pin: '',
+            red_pin: '',
+            green_pin: '',
+            blue_pin: '',
+            cycle_time: '',
             chain_count: '1',
             color_order: 'GRB',
             initial_red: '0.0',
@@ -2653,16 +2755,19 @@ document.addEventListener('DOMContentLoaded', () => {
         renderExtraFans();
 
         // Accelerometro ADXL345
-        const hasAdxl = p.hasSection('adxl345');
+        const adxlSec = p.sectionOrder.find(s => s === 'adxl345' || s.startsWith('adxl345 '));
+        const hasAdxl = !!adxlSec;
+        state.adxlSectionName = adxlSec || 'adxl345';
         if (dom.checkEnableAdxl) {
             dom.checkEnableAdxl.checked = hasAdxl;
+            if (dom.adxl345Fields) dom.adxl345Fields.style.display = hasAdxl ? 'block' : 'none';
             if (dom.adxlFields) dom.adxlFields.style.display = hasAdxl ? 'block' : 'none';
         }
         if (hasAdxl) {
-            if (dom.adxlCsPin) dom.adxlCsPin.value = p.get('adxl345', 'cs_pin', '');
-            const sclk = p.get('adxl345', 'spi_software_sclk_pin', '');
-            const mosi = p.get('adxl345', 'spi_software_mosi_pin', '');
-            const miso = p.get('adxl345', 'spi_software_miso_pin', '');
+            if (dom.adxlCsPin) dom.adxlCsPin.value = p.get(adxlSec, 'cs_pin', '');
+            const sclk = p.get(adxlSec, 'spi_software_sclk_pin', '');
+            const mosi = p.get(adxlSec, 'spi_software_mosi_pin', '');
+            const miso = p.get(adxlSec, 'spi_software_miso_pin', '');
             if (sclk || mosi || miso) {
                 if (dom.adxlSpiMode) dom.adxlSpiMode.value = 'software';
                 if (dom.adxlSpiSclk) dom.adxlSpiSclk.value = sclk;
@@ -2670,22 +2775,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (dom.adxlSpiMiso) dom.adxlSpiMiso.value = miso;
             } else {
                 if (dom.adxlSpiMode) dom.adxlSpiMode.value = 'hardware';
-                if (dom.adxlSpiBus) dom.adxlSpiBus.value = p.get('adxl345', 'spi_bus', '');
+                if (dom.adxlSpiBus) dom.adxlSpiBus.value = p.get(adxlSec, 'spi_bus', '');
             }
-            if (dom.adxlAxesMap) dom.adxlAxesMap.value = p.get('adxl345', 'axes_map', 'x, y, z');
-            if (dom.adxlRate) dom.adxlRate.value = p.get('adxl345', 'rate', '3200');
+            if (dom.adxlAxesMap) dom.adxlAxesMap.value = p.get(adxlSec, 'axes_map', 'x, y, z');
+            if (dom.adxlRate) dom.adxlRate.value = p.get(adxlSec, 'rate', '3200');
         }
         updateAdxlSpiModeVisibility();
 
         // Illuminazione LED & Neopixel
+        state.loadedLedSections = [];
         state.leds = [];
         for (const secName of p.sectionOrder) {
             if (secName.startsWith('neopixel ') || secName === 'neopixel') {
-                const name = secName === 'neopixel' ? 'led' : secName.slice('neopixel '.length).trim();
+                state.loadedLedSections.push(secName);
+                const name = secName === 'neopixel' ? '' : secName.slice('neopixel '.length).trim();
                 state.leds.push({
                     type: 'neopixel',
-                    name: name,
+                    name: name || 'led',
                     pin: p.get(secName, 'pin', ''),
+                    white_pin: '',
+                    red_pin: '',
+                    green_pin: '',
+                    blue_pin: '',
+                    cycle_time: '',
                     chain_count: p.get(secName, 'chain_count', '1'),
                     color_order: p.get(secName, 'color_order', 'GRB'),
                     initial_red: p.get(secName, 'initial_red', '0.0'),
@@ -2693,12 +2805,47 @@ document.addEventListener('DOMContentLoaded', () => {
                     initial_blue: p.get(secName, 'initial_blue', '0.0'),
                     initial_white: p.get(secName, 'initial_white', '0.0')
                 });
+            } else if (secName.startsWith('led ') || secName === 'led') {
+                state.loadedLedSections.push(secName);
+                const name = secName === 'led' ? '' : secName.slice('led '.length).trim();
+                const whitePin = p.get(secName, 'white_pin', p.get(secName, 'pin', ''));
+                const redPin = p.get(secName, 'red_pin', '');
+                const greenPin = p.get(secName, 'green_pin', '');
+                const bluePin = p.get(secName, 'blue_pin', '');
+                state.leds.push({
+                    type: 'led',
+                    name: name,
+                    pin: whitePin || redPin || '',
+                    white_pin: whitePin,
+                    red_pin: redPin,
+                    green_pin: greenPin,
+                    blue_pin: bluePin,
+                    cycle_time: p.get(secName, 'cycle_time', ''),
+                    chain_count: '1',
+                    color_order: 'GRB',
+                    initial_red: p.get(secName, 'initial_RED', p.get(secName, 'initial_red', '0.0')),
+                    initial_green: p.get(secName, 'initial_GREEN', p.get(secName, 'initial_green', '0.0')),
+                    initial_blue: p.get(secName, 'initial_BLUE', p.get(secName, 'initial_blue', '0.0')),
+                    initial_white: p.get(secName, 'initial_WHITE', p.get(secName, 'initial_white', '0.0'))
+                });
             } else if (secName.startsWith('output_pin ') && (secName.toLowerCase().includes('led') || secName.toLowerCase().includes('light'))) {
+                state.loadedLedSections.push(secName);
                 const name = secName.slice('output_pin '.length).trim();
                 state.leds.push({
                     type: 'output_pin',
                     name: name,
-                    pin: p.get(secName, 'pin', '')
+                    pin: p.get(secName, 'pin', ''),
+                    white_pin: '',
+                    red_pin: '',
+                    green_pin: '',
+                    blue_pin: '',
+                    cycle_time: '',
+                    chain_count: '1',
+                    color_order: 'GRB',
+                    initial_red: '0.0',
+                    initial_green: '0.0',
+                    initial_blue: '0.0',
+                    initial_white: '0.0'
                 });
             }
         }
@@ -3010,32 +3157,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Salva Accelerometro ADXL345
+        const targetAdxlSec = state.adxlSectionName || 'adxl345';
         if (dom.checkEnableAdxl && dom.checkEnableAdxl.checked) {
-            p.set('adxl345', 'cs_pin', dom.adxlCsPin.value.trim());
+            p.set(targetAdxlSec, 'cs_pin', dom.adxlCsPin.value.trim());
             if (dom.adxlSpiMode.value === 'software') {
-                p.set('adxl345', 'spi_software_sclk_pin', dom.adxlSpiSclk.value.trim());
-                p.set('adxl345', 'spi_software_mosi_pin', dom.adxlSpiMosi.value.trim());
-                p.set('adxl345', 'spi_software_miso_pin', dom.adxlSpiMiso.value.trim());
-                p.set('adxl345', 'spi_bus', null);
+                p.set(targetAdxlSec, 'spi_software_sclk_pin', dom.adxlSpiSclk.value.trim());
+                p.set(targetAdxlSec, 'spi_software_mosi_pin', dom.adxlSpiMosi.value.trim());
+                p.set(targetAdxlSec, 'spi_software_miso_pin', dom.adxlSpiMiso.value.trim());
+                p.set(targetAdxlSec, 'spi_bus', null);
             } else {
-                p.set('adxl345', 'spi_bus', dom.adxlSpiBus.value.trim());
-                p.set('adxl345', 'spi_software_sclk_pin', null);
-                p.set('adxl345', 'spi_software_mosi_pin', null);
-                p.set('adxl345', 'spi_software_miso_pin', null);
+                p.set(targetAdxlSec, 'spi_bus', dom.adxlSpiBus.value.trim());
+                p.set(targetAdxlSec, 'spi_software_sclk_pin', null);
+                p.set(targetAdxlSec, 'spi_software_mosi_pin', null);
+                p.set(targetAdxlSec, 'spi_software_miso_pin', null);
             }
             if (dom.adxlAxesMap.value.trim()) {
-                p.set('adxl345', 'axes_map', dom.adxlAxesMap.value.trim());
+                p.set(targetAdxlSec, 'axes_map', dom.adxlAxesMap.value.trim());
             }
             if (dom.adxlRate.value.trim()) {
-                p.set('adxl345', 'rate', dom.adxlRate.value.trim());
+                p.set(targetAdxlSec, 'rate', dom.adxlRate.value.trim());
             }
         } else {
-            p.removeSection('adxl345');
+            for (const s of p.sectionOrder.filter(sec => sec === 'adxl345' || sec.startsWith('adxl345 '))) {
+                p.removeSection(s);
+            }
         }
 
         // Salva LED & Neopixel
         syncLedsFromDom();
-        for (const s of p.sectionOrder.filter(sec => sec.startsWith('neopixel ') || sec === 'neopixel')) {
+        if (state.loadedLedSections && Array.isArray(state.loadedLedSections)) {
+            for (const s of state.loadedLedSections) {
+                p.removeSection(s);
+            }
+        }
+        for (const s of p.sectionOrder.filter(sec => sec.startsWith('neopixel ') || sec === 'neopixel' || sec.startsWith('led ') || sec === 'led')) {
             p.removeSection(s);
         }
         for (const led of state.leds) {
@@ -3044,14 +3199,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         for (const led of state.leds) {
-            if (!led.name || !led.name.trim()) continue;
-            const secName = `${led.type} ${led.name.trim()}`;
-            if (led.pin) p.set(secName, 'pin', led.pin.trim());
+            const hasName = !!(led.name && led.name.trim().length > 0);
+            if (led.type !== 'led' && !hasName) continue;
+
+            const secName = hasName ? `${led.type} ${led.name.trim()}` : led.type;
+
             if (led.type === 'neopixel') {
+                if (led.pin) p.set(secName, 'pin', led.pin.trim());
                 if (led.chain_count) p.set(secName, 'chain_count', led.chain_count.trim());
                 if (led.color_order) p.set(secName, 'color_order', led.color_order.trim());
+                if (led.initial_red && parseFloat(led.initial_red) > 0) p.set(secName, 'initial_RED', led.initial_red.trim());
+                if (led.initial_green && parseFloat(led.initial_green) > 0) p.set(secName, 'initial_GREEN', led.initial_green.trim());
+                if (led.initial_blue && parseFloat(led.initial_blue) > 0) p.set(secName, 'initial_BLUE', led.initial_blue.trim());
+                if (led.initial_white && parseFloat(led.initial_white) > 0) p.set(secName, 'initial_WHITE', led.initial_white.trim());
+            } else if (led.type === 'output_pin') {
+                if (led.pin) p.set(secName, 'pin', led.pin.trim());
+            } else if (led.type === 'led') {
+                const whitePin = led.white_pin ? led.white_pin.trim() : (led.pin ? led.pin.trim() : '');
+                if (whitePin) p.set(secName, 'white_pin', whitePin);
+                if (led.red_pin && led.red_pin.trim()) p.set(secName, 'red_pin', led.red_pin.trim());
+                if (led.green_pin && led.green_pin.trim()) p.set(secName, 'green_pin', led.green_pin.trim());
+                if (led.blue_pin && led.blue_pin.trim()) p.set(secName, 'blue_pin', led.blue_pin.trim());
+                if (led.cycle_time && led.cycle_time.trim()) p.set(secName, 'cycle_time', led.cycle_time.trim());
+                if (led.initial_red && parseFloat(led.initial_red) > 0) p.set(secName, 'initial_RED', led.initial_red.trim());
+                if (led.initial_green && parseFloat(led.initial_green) > 0) p.set(secName, 'initial_GREEN', led.initial_green.trim());
+                if (led.initial_blue && parseFloat(led.initial_blue) > 0) p.set(secName, 'initial_BLUE', led.initial_blue.trim());
+                if (led.initial_white && parseFloat(led.initial_white) > 0) p.set(secName, 'initial_WHITE', led.initial_white.trim());
             }
         }
+        state.loadedLedSections = state.leds.map(led => (led.name && led.name.trim()) ? `${led.type} ${led.name.trim()}` : led.type);
 
         if (document.getElementById('check-virtual-sd').checked) {
             p.set('virtual_sdcard', 'path', document.getElementById('virtual-sd-path').value.trim());
